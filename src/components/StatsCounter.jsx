@@ -99,19 +99,19 @@ export const StatsCounter = ({ stats }) => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-neutral-50 via-primary-50/30 to-accent-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+      className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-neutral-50 via-primary-50/30 to-accent-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-neutral-900 dark:text-gray-100 mb-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-gray-100 mb-2 sm:mb-3 md:mb-4">
             Growing Together
           </h2>
-          <p className="text-xl text-neutral-600 dark:text-gray-300">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 dark:text-gray-300">
             Join thousands of alumni making an impact worldwide
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {statsData.map((stat, index) => {
             const Icon = stat.icon;
             return (
@@ -126,16 +126,16 @@ export const StatsCounter = ({ stats }) => {
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
-                <div className={`${stat.bgColor} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={`w-8 h-8 ${stat.iconColor}`} />
+                <div className={`${stat.bgColor} w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${stat.iconColor}`} />
                 </div>
 
                 <div className="relative">
-                  <div className={`text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
+                  <div className={`text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1 sm:mb-2`}>
                     {stat.count.toLocaleString()}
                     {stat.count >= 100 && '+'}
                   </div>
-                  <div className="text-neutral-600 dark:text-gray-300 font-medium text-lg">
+                  <div className="text-neutral-600 dark:text-gray-300 font-medium text-sm sm:text-base md:text-lg">
                     {stat.label}
                   </div>
                 </div>

@@ -53,18 +53,18 @@ export const FeatureHighlights = ({ onNavigate }) => {
   ];
 
   return (
-    <section className="py-20 bg-white dark:bg-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-neutral-900 dark:text-gray-100 mb-4">
+    <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-slate-900">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-gray-100 mb-2 sm:mb-3 md:mb-4">
             Everything You Need
           </h2>
-          <p className="text-xl text-neutral-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 dark:text-gray-300 max-w-3xl mx-auto">
             A comprehensive platform designed to keep our alumni community connected, engaged, and thriving
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
@@ -85,15 +85,15 @@ export const FeatureHighlights = ({ onNavigate }) => {
                     whileTap={{ scale: 0.98 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
-                <div className={`${feature.bgColor} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
-                  <Icon className={`w-8 h-8 ${feature.iconColor}`} />
+                <div className={`${feature.bgColor} w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                  <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${feature.iconColor}`} />
                 </div>
 
-                <h3 className="text-2xl font-bold text-neutral-900 dark:text-gray-100 mb-3 group-hover:text-primary-900 dark:group-hover:text-primary-400 transition-all duration-300">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-primary-900 dark:group-hover:text-primary-400 transition-all duration-300">
                   {feature.title}
                 </h3>
 
-                <p className="text-neutral-600 dark:text-gray-300 leading-relaxed mb-4">
+                <p className="text-sm sm:text-base text-neutral-600 dark:text-gray-300 leading-relaxed mb-3 sm:mb-4">
                   {feature.description}
                 </p>
 
