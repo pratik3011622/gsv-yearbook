@@ -65,256 +65,12 @@ export const Hero = ({ onNavigate }) => {
 
   return (
     <div className="relative">
-      {/* Top Navigation Bar - Ultimate Premium Theme */}
-      <div className="bg-gradient-to-r from-indigo-900 via-purple-800 via-pink-700 to-cyan-800 animate-glow shadow-2xl border-b border-indigo-400 relative overflow-hidden">
-        {/* Animated background particles */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-2 left-10 w-2 h-2 bg-white rounded-full animate-pulse"></div>
-          <div className="absolute top-6 right-20 w-1 h-1 bg-yellow-300 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-4 left-1/3 w-1.5 h-1.5 bg-pink-300 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-8 right-1/4 w-1 h-1 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        </div>
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
-          {/* Top Section with Logo, Title, and Auth Buttons */}
-          <div className="flex justify-between items-center py-3 sm:py-4 lg:py-6">
-            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-6">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
-                alt="Gati Shakti Vishwavidyalaya Logo"
-                className="h-8 sm:h-10 lg:h-12 xl:h-16 w-auto"
-              />
-              <div className="text-white">
-                <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold leading-tight text-white drop-shadow-lg">GSVConnect</h1>
-                <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-blue-200">Gati Shakti Vishwavidyalaya</p>
-              </div>
-            </div>
+      {/* Hero Section with Clean Slideshow - Full height */}
+      <div className="relative h-screen overflow-hidden">
+        {/* Gradient overlay for better text visibility and visual appeal */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-10"></div>
 
-            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 relative z-20">
-              <div className="hidden sm:flex items-center space-x-2 lg:space-x-3">
-                <button
-                  onClick={() => window.open('https://www.facebook.com/gsv.ac.in/', '_blank')}
-                  className="p-2 lg:p-3 text-white hover:text-yellow-400 transition-all duration-300 hover:scale-125 hover:rotate-12 hover:shadow-lg hover:shadow-blue-500/50 rounded-lg"
-                  title="Follow us on Facebook"
-                >
-                  <Facebook className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                </button>
-                <button
-                  onClick={() => window.open('https://www.linkedin.com/school/gatishaktivishwavidyalaya/', '_blank')}
-                  className="p-2 lg:p-3 text-white hover:text-yellow-400 transition-all duration-300 hover:scale-125 hover:rotate-12 hover:shadow-lg hover:shadow-blue-500/50 rounded-lg"
-                  title="Connect with us on LinkedIn"
-                >
-                  <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: 'GSVConnect - Gati Shakti Vishwavidyalaya Alumni Network',
-                        text: 'Join the official alumni network of Gati Shakti Vishwavidyalaya. Connect with fellow alumni, share experiences, and build lifelong relationships.',
-                        url: window.location.href,
-                      });
-                    } else {
-                      // Fallback: Copy URL to clipboard
-                      navigator.clipboard.writeText(window.location.href).then(() => {
-                        alert('Link copied to clipboard! Share it with your friends.');
-                      });
-                    }
-                  }}
-                  className="p-2 lg:p-3 text-white hover:text-yellow-400 transition-all duration-300 hover:scale-125 hover:rotate-12 hover:shadow-lg hover:shadow-blue-500/50 rounded-lg"
-                  title="Share GSVConnect"
-                >
-                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                </button>
-                <button
-                  onClick={() => window.open('https://x.com/gsv_vadodara?t=EfCgxwtFAx95GvtBgIJjbw&s=08', '_blank')}
-                  className="p-2 lg:p-3 text-white hover:text-yellow-400 transition-all duration-300 hover:scale-125 hover:rotate-12 hover:shadow-lg hover:shadow-blue-500/50 rounded-lg"
-                  title="Follow us on X"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                </button>
-                <button
-                  onClick={() => window.open('https://www.instagram.com/gsv.vadodara?igsh=MWpqaWxhbXIycGQzcA==', '_blank')}
-                  className="p-2 lg:p-3 text-white hover:text-yellow-400 transition-all duration-300 hover:scale-125 hover:rotate-12 hover:shadow-lg hover:shadow-blue-500/50 rounded-lg"
-                  title="Follow us on Instagram"
-                >
-                  <Instagram className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                </button>
-              </div>
-              <button
-                onClick={() => onNavigate('login')}
-                className="px-2 sm:px-3 lg:px-6 py-1.5 sm:py-2 lg:py-3 text-blue-200 hover:text-white font-medium transition-colors text-xs sm:text-sm lg:text-lg border border-blue-400 rounded-lg hover:border-blue-300"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => onNavigate('register')}
-                className="px-2 sm:px-3 lg:px-6 py-1.5 sm:py-2 lg:py-3 bg-white text-blue-900 rounded-lg hover:bg-blue-50 transition-colors font-semibold text-xs sm:text-sm lg:text-lg shadow-lg"
-              >
-                Join Now
-              </button>
-            </div>
-          </div>
-
-          {/* Navigation Menu Section */}
-          <div className="border-t border-purple-300/50 py-2 sm:py-3 lg:py-4 relative z-10">
-            <nav className="flex justify-center space-x-2 sm:space-x-4 lg:space-x-6 xl:space-x-8">
-              <button onClick={() => onNavigate('home')} className="text-white hover:text-yellow-300 font-semibold transition-all duration-300 text-xs sm:text-sm lg:text-base xl:text-lg px-2 sm:px-3 lg:px-4 xl:px-5 py-1.5 sm:py-2 lg:py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-yellow-400/20 hover:to-pink-400/20 backdrop-blur-sm border border-white/10 hover:border-yellow-300/30 hover:shadow-lg hover:shadow-yellow-400/20 transform hover:scale-105">Home</button>
-              <button onClick={() => onNavigate('directory')} className="text-white hover:text-yellow-300 font-semibold transition-all duration-300 text-xs sm:text-sm lg:text-base xl:text-lg px-2 sm:px-3 lg:px-4 xl:px-5 py-1.5 sm:py-2 lg:py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-yellow-400/20 hover:to-pink-400/20 backdrop-blur-sm border border-white/10 hover:border-yellow-300/30 hover:shadow-lg hover:shadow-yellow-400/20 transform hover:scale-105">Directory</button>
-              <button onClick={() => onNavigate('events')} className="text-white hover:text-yellow-300 font-semibold transition-all duration-300 text-xs sm:text-sm lg:text-base xl:text-lg px-2 sm:px-3 lg:px-4 xl:px-5 py-1.5 sm:py-2 lg:py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-yellow-400/20 hover:to-pink-400/20 backdrop-blur-sm border border-white/10 hover:border-yellow-300/30 hover:shadow-lg hover:shadow-yellow-400/20 transform hover:scale-105">Events</button>
-              {/* Yearbook Dropdown */}
-              <div className="relative yearbook-dropdown">
-                <button
-                  onClick={() => setIsYearbookDropdownOpen(!isYearbookDropdownOpen)}
-                  className="text-white hover:text-yellow-300 font-semibold transition-all duration-300 text-xs sm:text-sm lg:text-base xl:text-lg px-2 sm:px-3 lg:px-4 xl:px-5 py-1.5 sm:py-2 lg:py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-yellow-400/20 hover:to-pink-400/20 backdrop-blur-sm border border-white/10 hover:border-yellow-300/30 hover:shadow-lg hover:shadow-yellow-400/20 transform hover:scale-105 flex items-center space-x-1"
-                >
-                  <span>Yearbook</span>
-                  <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 ${isYearbookDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-
-                {/* Dropdown Menu - Positioned to overlay slideshow */}
-                {isYearbookDropdownOpen && (
-                  <div className="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 w-80 sm:w-96 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 dark:border-gray-700 overflow-hidden z-[70]">
-                    <div className="py-2 sm:py-3">
-                      <button
-                        onClick={() => {
-                          onNavigate('photo-gallery');
-                          setIsYearbookDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 sm:px-6 py-3 sm:py-5 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 dark:hover:from-blue-900/20 hover:to-purple-50 dark:hover:to-purple-900/20 hover:text-blue-700 dark:hover:text-blue-400 transition-all duration-200 flex items-center space-x-3 sm:space-x-4 group"
-                      >
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                          <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-gray-100">Photo Gallery</div>
-                          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Memorable moments captured</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          onNavigate('video-gallery');
-                          setIsYearbookDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 sm:px-6 py-3 sm:py-5 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-purple-50 dark:hover:from-purple-900/20 hover:to-pink-50 dark:hover:to-pink-900/20 hover:text-purple-700 dark:hover:text-purple-400 transition-all duration-200 flex items-center space-x-3 sm:space-x-4 group"
-                      >
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                          <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-gray-100">Video Gallery</div>
-                          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Cherished memories in motion</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          onNavigate('magazine');
-                          setIsYearbookDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 sm:px-6 py-3 sm:py-5 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-orange-50 dark:hover:from-orange-900/20 hover:to-red-50 dark:hover:to-red-900/20 hover:text-orange-700 dark:hover:text-orange-400 transition-all duration-200 flex items-center space-x-3 sm:space-x-4 group"
-                      >
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-orange-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                          <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-gray-100">Alumni Magazine</div>
-                          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Stories and achievements</div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* About Dropdown */}
-              <div className="relative about-dropdown">
-                <button
-                  onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
-                  className="text-white hover:text-yellow-300 font-semibold transition-all duration-300 text-xs sm:text-sm lg:text-base xl:text-lg px-2 sm:px-3 lg:px-4 xl:px-5 py-1.5 sm:py-2 lg:py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-yellow-400/20 hover:to-pink-400/20 backdrop-blur-sm border border-white/10 hover:border-yellow-300/30 hover:shadow-lg hover:shadow-yellow-400/20 transform hover:scale-105 flex items-center space-x-1"
-                >
-                  <span>About</span>
-                  <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 ${isAboutDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-
-                {/* Dropdown Menu - Positioned to overlay slideshow */}
-                {isAboutDropdownOpen && (
-                  <div className="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 w-80 sm:w-96 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 dark:border-gray-700 overflow-hidden z-[70]">
-                    <div className="py-2 sm:py-3">
-                      <button
-                        onClick={() => {
-                          onNavigate('vision-mission');
-                          setIsAboutDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 sm:px-6 py-3 sm:py-5 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 dark:hover:from-blue-900/20 hover:to-purple-50 dark:hover:to-purple-900/20 hover:text-blue-700 dark:hover:text-blue-400 transition-all duration-200 flex items-center space-x-3 sm:space-x-4 group"
-                      >
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                          <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-gray-100">Vision & Mission</div>
-                          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Our goals and objectives</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          onNavigate('leadership');
-                          setIsAboutDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 sm:px-6 py-3 sm:py-5 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-purple-50 dark:hover:from-purple-900/20 hover:to-pink-50 dark:hover:to-pink-900/20 hover:text-purple-700 dark:hover:text-purple-400 transition-all duration-200 flex items-center space-x-3 sm:space-x-4 group"
-                      >
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                          <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-gray-100">Leadership Messages</div>
-                          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Words from our leaders</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          onNavigate('team');
-                          setIsAboutDropdownOpen(false);
-                        }}
-                        className="w-full text-left px-4 sm:px-6 py-3 sm:py-5 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-orange-50 dark:hover:from-orange-900/20 hover:to-red-50 dark:hover:to-red-900/20 hover:text-orange-700 dark:hover:text-orange-400 transition-all duration-200 flex items-center space-x-3 sm:space-x-4 group"
-                      >
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-orange-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                          <svg className="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-gray-100">Our Team</div>
-                          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Meet our dedicated team</div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </nav>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Section with Clean Slideshow - Starts right after navbar */}
-      <div className="relative h-[calc(100vh-8rem)] sm:h-[calc(100vh-10rem)] lg:h-[calc(100vh-12rem)] overflow-hidden">
-        {/* Slideshow Background - No overlay */}
+        {/* Slideshow Background */}
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, index) => (
             <div
@@ -330,6 +86,177 @@ export const Hero = ({ onNavigate }) => {
               />
             </div>
           ))}
+        </div>
+
+        {/* Transparent Navigation Bar Overlay */}
+        <div className="absolute top-0 left-0 right-0 z-20">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
+            {/* Top Section with Logo, Title, and Auth Buttons */}
+            <div className="flex justify-between items-center py-3 sm:py-4">
+              <div className="flex items-center space-x-4 sm:space-x-6">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
+                  alt="Gati Shakti Vishwavidyalaya Logo"
+                  className="h-10 sm:h-12 w-auto"
+                />
+                <div className="text-white drop-shadow-lg">
+                  <h1 className="text-xl sm:text-2xl font-bold leading-tight text-white drop-shadow-lg">GSVConnect</h1>
+                  <p className="text-sm sm:text-base text-white/90 drop-shadow-lg">गति शक्ति विश्वविद्यालय</p>
+                  <p className="text-sm text-white/90 drop-shadow-lg">Gati Shakti Vishwavidyalaya</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <button
+                  onClick={() => onNavigate('login')}
+                  className="px-4 py-2 text-white hover:text-white font-semibold transition-all duration-300 text-sm border border-white/40 rounded-lg hover:border-white/60 hover:bg-white/20 hover:scale-105 drop-shadow-lg transform"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => onNavigate('register')}
+                  className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-300 font-semibold text-sm border border-white/30 hover:scale-105 drop-shadow-lg transform"
+                >
+                  Join Now
+                </button>
+              </div>
+            </div>
+
+            {/* Navigation Menu Section */}
+            <div className="py-1">
+              <nav className="flex justify-end space-x-6 sm:space-x-8">
+                <button onClick={() => onNavigate('home')} className="text-white hover:text-white font-semibold transition-all duration-300 text-sm px-4 py-2 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform">Home</button>
+                <button onClick={() => onNavigate('directory')} className="text-white hover:text-white font-semibold transition-all duration-300 text-sm px-4 py-2 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform">Directory</button>
+                <button onClick={() => onNavigate('events')} className="text-white hover:text-white font-semibold transition-all duration-300 text-sm px-4 py-2 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform">Events</button>
+                {/* Yearbook Dropdown */}
+                <div className="relative yearbook-dropdown">
+                  <button
+                    onClick={() => setIsYearbookDropdownOpen(!isYearbookDropdownOpen)}
+                    className="text-white hover:text-white font-semibold transition-all duration-300 text-sm px-4 py-2 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform flex items-center space-x-1"
+                  >
+                    <span>Yearbook</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isYearbookDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu - Positioned below the button */}
+                  {isYearbookDropdownOpen && (
+                    <div className="absolute top-full right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 overflow-hidden z-[70]">
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            onNavigate('photo-gallery');
+                            setIsYearbookDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                          <span className="font-medium text-sm">Photo Gallery</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            onNavigate('video-gallery');
+                            setIsYearbookDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200 flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                          <span className="font-medium text-sm">Video Gallery</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            onNavigate('magazine');
+                            setIsYearbookDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-all duration-200 flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                          </div>
+                          <span className="font-medium text-sm">Alumni Magazine</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* About Dropdown */}
+                <div className="relative about-dropdown">
+                  <button
+                    onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
+                    className="text-white hover:text-white font-semibold transition-all duration-300 text-sm px-4 py-2 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform flex items-center space-x-1"
+                  >
+                    <span>About</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isAboutDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu - Positioned below the button */}
+                  {isAboutDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 overflow-hidden z-[70]">
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            onNavigate('vision-mission');
+                            setIsAboutDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                          </div>
+                          <span className="font-medium text-sm">Vision & Mission</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            onNavigate('leadership');
+                            setIsAboutDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200 flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                          </div>
+                          <span className="font-medium text-sm">Leadership Messages</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            onNavigate('team');
+                            setIsAboutDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-all duration-200 flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                            </svg>
+                          </div>
+                          <span className="font-medium text-sm">Our Team</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </nav>
+            </div>
+          </div>
         </div>
 
         {/* Navigation Arrows - Hidden on mobile */}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Navigation } from './components/Navigation';
@@ -18,12 +18,41 @@ import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
 import { MagazinePage } from './pages/MagazinePage';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(() => {
+    // Get initial page from URL hash or default to home
+    const hash = window.location.hash.replace('#', '');
+    return hash || 'home';
+  });
 
   const handleNavigate = (page) => {
-    setCurrentPage(page); 
+    setCurrentPage(page);
+    // Update URL hash for browser back/forward support
+    window.location.hash = page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        setCurrentPage(hash);
+      } else {
+        setCurrentPage('home');
+      }
+    };
+
+    // Set initial hash if not present
+    if (!window.location.hash) {
+      window.location.hash = 'home';
+    }
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -42,17 +71,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <DirectoryPage />
             </div>
           </div>
@@ -62,17 +80,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <MemoriesPage />
             </div>
           </div>
@@ -82,17 +89,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <EventsPage onNavigate={handleNavigate} />
             </div>
           </div>
@@ -102,17 +98,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <JobsPage />
             </div>
           </div>
@@ -122,17 +107,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <StoriesPage />
             </div>
           </div>
@@ -140,20 +114,7 @@ function App() {
       case 'vision-mission':
         return (
           <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-            {/* Back Button */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-              <button
-                onClick={() => handleNavigate('home')}
-                className="inline-flex items-center space-x-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors mb-8"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span className="font-medium">Back to Home</span>
-              </button>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
               {/* Hero Banner Image */}
               <div className="mb-16">
                 <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
@@ -347,20 +308,7 @@ function App() {
       case 'leadership':
         return (
           <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-            {/* Back Button */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-              <button
-                onClick={() => handleNavigate('home')}
-                className="inline-flex items-center space-x-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors mb-8"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span className="font-medium">Back to Home</span>
-              </button>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
               <div className="text-center mb-16">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
                   Messages from Leadership
@@ -454,17 +402,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <VideoGalleryPage />
             </div>
           </div>
@@ -474,17 +411,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <PhotoGalleryPage />
             </div>
           </div>
@@ -494,17 +420,6 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <button
-                  onClick={() => handleNavigate('home')}
-                  className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="font-medium">Back to Home</span>
-                </button>
-              </div>
               <MagazinePage />
             </div>
           </div>

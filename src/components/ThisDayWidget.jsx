@@ -50,22 +50,21 @@ export const ThisDayWidget = () => {
   const event = historicalEvents[currentIndex];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=1920')] opacity-10 bg-cover bg-center"></div>
+    <section className="py-20 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 relative overflow-hidden">
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 mb-6 shadow-soft">
-            <Calendar className="w-5 h-5 text-accent-400" />
-            <span className="font-medium">This Day in College History</span>
+          <div className="inline-flex items-center space-x-3 bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 mb-6 shadow-soft">
+            <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <span className="font-medium text-gray-700 dark:text-gray-300">This Day in College History</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Walk Down Memory Lane
           </h2>
         </div>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl overflow-hidden border border-white/20 shadow-strong">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-strong">
             <div className="grid md:grid-cols-2 gap-0">
               <div className="relative h-80 md:h-auto">
                 <img
@@ -74,19 +73,19 @@ export const ThisDayWidget = () => {
                   className="w-full h-full object-cover object-center"
                   style={{ maxHeight: '400px' }}
                 />
-                <div className="absolute top-4 left-4 bg-accent-500 text-white px-4 py-2 rounded-xl font-bold">
+                <div className="absolute top-4 left-4 bg-blue-600 text-white px-4 py-2 rounded-xl font-bold">
                   {event.year}
                 </div>
               </div>
 
               <div className="p-8 md:p-12 flex flex-col justify-center">
-                <div className="text-accent-400 font-semibold text-sm mb-3">
+                <div className="text-blue-600 dark:text-blue-400 font-semibold text-sm mb-3">
                   {event.month} {event.day}
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-4">
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   {event.title}
                 </h3>
-                <p className="text-white/90 text-lg leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed">
                   {event.description}
                 </p>
               </div>
@@ -95,18 +94,18 @@ export const ThisDayWidget = () => {
 
           <button
             onClick={prevEvent}
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/20 backdrop-blur-md rounded-xl border border-white/30 hover:bg-white/30 transition-all group"
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 hover:bg-gray-50 transition-all group shadow-lg"
             aria-label="Previous event"
           >
-            <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+            <ChevronLeft className="w-6 h-6 text-gray-700 group-hover:scale-110 transition-transform" />
           </button>
 
           <button
             onClick={nextEvent}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/20 backdrop-blur-md rounded-xl border border-white/30 hover:bg-white/30 transition-all group"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 hover:bg-gray-50 transition-all group shadow-lg"
             aria-label="Next event"
           >
-            <ChevronRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+            <ChevronRight className="w-6 h-6 text-gray-700 group-hover:scale-110 transition-transform" />
           </button>
 
           <div className="flex justify-center space-x-2 mt-6">
@@ -115,7 +114,7 @@ export const ThisDayWidget = () => {
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'w-8 bg-accent-400' : 'w-2 bg-white/40'
+                  index === currentIndex ? 'w-8 bg-blue-600' : 'w-2 bg-gray-300'
                 }`}
                 aria-label={`Go to event ${index + 1}`}
               ></button>

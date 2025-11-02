@@ -50,13 +50,13 @@ export const Navigation = ({ onNavigate, currentPage }) => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        currentPage === 'home' && !isScrolled
-          ? 'bg-white/10 backdrop-blur-md dark:bg-black/20' // Only transparent on home page when not scrolled
-          : 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-medium' // Solid background on all other pages and when scrolled
+        currentPage === 'home'
+          ? 'bg-white backdrop-blur-xl shadow-medium'
+          : 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-medium'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-12 sm:h-16">
           <div
             className="flex items-center space-x-3 cursor-pointer group"
             onClick={() => onNavigate('home')}
@@ -66,18 +66,18 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                 src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
                 alt="Gati Shakti Vishwavidyalaya Logo"
                 className={`w-8 sm:w-10 h-8 sm:h-10 relative z-10 group-hover:scale-110 transition-all duration-300 object-contain ${
-                  currentPage === 'home' && !isScrolled ? 'brightness-0 invert' : ''
+                  currentPage === 'home' ? '' : 'brightness-0 invert dark:brightness-100 dark:invert-0'
                 }`}
               />
             </div>
             <div>
               <h1 className={`text-2xl font-bold transition-colors duration-300 ${
-                currentPage === 'home' && !isScrolled ? 'text-white drop-shadow-lg' : 'text-gray-900 dark:text-gray-100'
+                currentPage === 'home' ? 'text-gray-900' : 'text-gray-900 dark:text-gray-100'
               }`}>
                 GSVConnect
               </h1>
               <p className={`text-xs font-medium transition-colors duration-300 ${
-                currentPage === 'home' && !isScrolled ? 'text-white/80' : 'text-neutral-600 dark:text-neutral-300'
+                currentPage === 'home' ? 'text-neutral-600' : 'text-neutral-600 dark:text-neutral-300'
               }`}>
                 Where Memories Meet Futures
               </p>
@@ -92,21 +92,19 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                     <button
                       onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
                       className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 flex items-center space-x-1 ${
-                        item.subItems.some(subItem => currentPage === subItem.id)
-                          ? currentPage === 'home' && !isScrolled
-                            ? 'bg-white text-primary-900 shadow-soft'
-                            : 'bg-primary-900 text-white shadow-soft'
-                          : currentPage === 'home' && !isScrolled
-                          ? 'text-white/90 hover:bg-white/20 hover:text-white'
-                          : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
-                      }`}
+                          item.subItems.some(subItem => currentPage === subItem.id)
+                            ? 'bg-primary-900 text-white shadow-soft'
+                            : currentPage === 'home'
+                            ? 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900'
+                            : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
+                        }`}
                     >
                       <span>{item.label}</span>
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === item.id ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === item.id && (
-                      <div className={`absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 ${
-                        currentPage === 'home' && !isScrolled ? 'backdrop-blur-md bg-white/95' : ''
+                      <div className={`absolute top-full left-0 mt-2 w-48 rounded-xl shadow-xl border py-2 z-50 ${
+                        currentPage === 'home' ? 'bg-white border-gray-200' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
                       }`}>
                         {item.subItems.map((subItem) => (
                           <button
@@ -116,10 +114,12 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                               setOpenDropdown(null);
                             }}
                             className={`block w-full text-left px-4 py-3 text-sm font-medium transition-all duration-200 ${
-                              currentPage === subItem.id
-                                ? 'bg-primary-900 text-white'
-                                : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
-                            }`}
+                               currentPage === subItem.id
+                                 ? 'bg-primary-900 text-white'
+                                 : currentPage === 'home'
+                                 ? 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900'
+                                 : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
+                             }`}
                           >
                             {subItem.label}
                           </button>
@@ -131,14 +131,12 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                   <button
                     onClick={() => onNavigate(item.id)}
                     className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
-                      currentPage === item.id
-                        ? currentPage === 'home' && !isScrolled
-                          ? 'bg-white text-primary-900 shadow-soft'
-                          : 'bg-primary-900 text-white shadow-soft'
-                        : currentPage === 'home' && !isScrolled
-                        ? 'text-white/90 hover:bg-white/20 hover:text-white'
-                        : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
-                    }`}
+                       currentPage === item.id
+                         ? 'bg-primary-900 text-white shadow-soft'
+                         : currentPage === 'home'
+                         ? 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900'
+                         : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
+                     }`}
                   >
                     {item.label}
                   </button>
@@ -148,6 +146,13 @@ export const Navigation = ({ onNavigate, currentPage }) => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl font-medium text-sm transition-all duration-300 text-neutral-700 hover:bg-primary-50 hover:text-primary-900"
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             <div className="hidden lg:flex items-center space-x-3">
               <a
                 href="https://www.facebook.com/gsv.ac.in/"
@@ -199,12 +204,12 @@ export const Navigation = ({ onNavigate, currentPage }) => {
               <div className="hidden lg:flex items-center space-x-3">
                 <div className="text-right">
                   <p className={`text-sm font-medium transition-colors duration-300 ${
-                    currentPage === 'home' && !isScrolled ? 'text-white' : 'text-neutral-800 dark:text-neutral-200'
+                    currentPage === 'home' ? 'text-neutral-800' : 'text-neutral-800 dark:text-neutral-200'
                   }`}>
                     {profile?.full_name || 'User'}
                   </p>
                   <p className={`text-xs transition-colors duration-300 ${
-                    currentPage === 'home' && !isScrolled ? 'text-white/80' : 'text-neutral-600 dark:text-neutral-400'
+                    currentPage === 'home' ? 'text-neutral-600' : 'text-neutral-600 dark:text-neutral-400'
                   }`}>
                     {profile?.user_type === 'alumni' ? 'Alumni' : 'Student'}
                   </p>
@@ -220,34 +225,15 @@ export const Navigation = ({ onNavigate, currentPage }) => {
               <div className="hidden lg:flex items-center space-x-3">
                 <button
                   onClick={() => onNavigate('login')}
-                  className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
-                    currentPage === 'home' && !isScrolled
-                      ? 'text-white/90 hover:bg-white/20 hover:text-white'
-                      : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
-                  }`}
+                  className="px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 text-neutral-700 hover:bg-primary-50 hover:text-primary-900"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => onNavigate('register')}
-                  className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 shadow-soft ${
-                    currentPage === 'home' && !isScrolled
-                      ? 'bg-white text-primary-900 hover:bg-white/90'
-                      : 'bg-primary-900 text-white hover:bg-primary-800'
-                  }`}
+                  className="px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 shadow-soft bg-primary-900 text-white hover:bg-primary-800"
                 >
                   Join Now
-                </button>
-                <button
-                  onClick={toggleTheme}
-                  className={`p-2 rounded-xl font-medium text-sm transition-all duration-300 ${
-                    currentPage === 'home' && !isScrolled
-                      ? 'text-white/90 hover:bg-white/20 hover:text-white'
-                      : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
-                  }`}
-                  title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                >
-                  {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
               </div>
             )}
@@ -255,18 +241,16 @@ export const Navigation = ({ onNavigate, currentPage }) => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`lg:hidden p-2 rounded-xl transition-all duration-300 ${
-                currentPage === 'home' && !isScrolled
-                  ? 'bg-white/20 hover:bg-white/30'
-                  : 'bg-neutral-100 dark:bg-gray-800 hover:bg-neutral-200 dark:hover:bg-gray-700'
+                currentPage === 'home' ? 'bg-neutral-100 hover:bg-neutral-200' : 'bg-neutral-100 dark:bg-gray-800 hover:bg-neutral-200 dark:hover:bg-gray-700'
               }`}
             >
               {isMobileMenuOpen ? (
                 <X className={`w-6 h-6 transition-colors duration-300 ${
-                  currentPage === 'home' && !isScrolled ? 'text-white' : 'text-neutral-700 dark:text-neutral-300'
+                  currentPage === 'home' ? 'text-neutral-700' : 'text-neutral-700 dark:text-neutral-300'
                 }`} />
               ) : (
                 <Menu className={`w-6 h-6 transition-colors duration-300 ${
-                  currentPage === 'home' && !isScrolled ? 'text-white' : 'text-neutral-700 dark:text-neutral-300'
+                  currentPage === 'home' ? 'text-neutral-700' : 'text-neutral-700 dark:text-neutral-300'
                 }`} />
               )}
             </button>
@@ -276,9 +260,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
 
       {isMobileMenuOpen && (
         <div className={`lg:hidden border-t shadow-medium transition-all duration-300 ${
-          currentPage === 'home' && !isScrolled
-            ? 'bg-white/95 backdrop-blur-md border-white/20'
-            : 'bg-white dark:bg-gray-900 border-neutral-200 dark:border-gray-700'
+          currentPage === 'home' ? 'bg-white border-neutral-200' : 'bg-white dark:bg-gray-900 border-neutral-200 dark:border-gray-700'
         }`}>
           <div className="px-4 py-4 space-y-2">
             {navItems.map((item) => (
@@ -290,6 +272,8 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                       className={`flex items-center justify-between w-full px-4 py-3 rounded-xl font-medium transition-all ${
                         item.subItems.some(subItem => currentPage === subItem.id)
                           ? 'bg-primary-900 text-white'
+                          : currentPage === 'home'
+                          ? 'text-neutral-700 hover:bg-primary-50'
                           : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20'
                       }`}
                     >
@@ -309,6 +293,8 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                             className={`block w-full text-left px-4 py-2 rounded-lg font-medium text-sm transition-all ${
                               currentPage === subItem.id
                                 ? 'bg-primary-900 text-white'
+                                : currentPage === 'home'
+                                ? 'text-neutral-600 hover:bg-primary-50'
                                 : 'text-neutral-600 dark:text-neutral-400 hover:bg-primary-50 dark:hover:bg-primary-900/20'
                             }`}
                           >
@@ -327,6 +313,8 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                     className={`block w-full text-left px-4 py-3 rounded-xl font-medium transition-all ${
                       currentPage === item.id
                         ? 'bg-primary-900 text-white'
+                        : currentPage === 'home'
+                        ? 'text-neutral-700 hover:bg-primary-50'
                         : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20'
                     }`}
                   >
@@ -342,7 +330,9 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                     onNavigate('profile');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-3 text-primary-900 dark:text-primary-100 font-medium hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl"
+                  className={`block w-full text-left px-4 py-3 font-medium hover:bg-primary-50 rounded-xl ${
+                    currentPage === 'home' ? 'text-primary-900' : 'text-primary-900 dark:text-primary-100'
+                  }`}
                 >
                   My Profile
                 </button>
@@ -360,7 +350,9 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                     onNavigate('login');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-3 text-primary-900 dark:text-primary-100 font-medium hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl"
+                  className={`block w-full text-left px-4 py-3 font-medium hover:bg-primary-50 rounded-xl ${
+                    currentPage === 'home' ? 'text-primary-900' : 'text-primary-900 dark:text-primary-100'
+                  }`}
                 >
                   Sign In
                 </button>

@@ -13,8 +13,8 @@ export const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Side - Contact Information */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact Information */}
           <div className="space-y-8">
             {/* Logo */}
             <div className="flex items-center space-x-4">
@@ -104,14 +104,14 @@ export const ContactSection = () => {
             </div>
           </div>
 
-          {/* Right Side - Map */}
+          {/* Map Section */}
           <div className="relative">
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-neutral-200 dark:border-slate-700">
-              <div className="aspect-w-16 aspect-h-9">
+              <div className="relative h-96 lg:h-[500px]">
                 <iframe
                   src="https://maps.google.com/maps?q=Gati+Shakti+Vishwavidyalaya,+Vadodara,+Gujarat,+India&z=17&output=embed"
                   width="100%"
-                  height="400"
+                  height="100%"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
