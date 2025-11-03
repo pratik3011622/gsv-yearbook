@@ -75,7 +75,7 @@ export const FeatureHighlights = ({ onNavigate }) => {
                 className="group relative cursor-pointer overflow-hidden"
               >
                 <MagneticCard
-                  className="card-elevated hover:-translate-y-2"
+                  className="card-elevated card-smooth hover:-translate-y-2"
                   strength={0.4}
                   range={120}
                 >
@@ -85,11 +85,11 @@ export const FeatureHighlights = ({ onNavigate }) => {
                     whileTap={{ scale: 0.98 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
-                <div className={`${feature.bgColor} w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                <div className={`${feature.bgColor} w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 group-hover:rotate-6 smooth-hover`}>
                   <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${feature.iconColor}`} />
                 </div>
 
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-primary-900 dark:group-hover:text-primary-400 transition-all duration-300">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-primary-900 dark:group-hover:text-primary-400 smooth-hover">
                   {feature.title}
                 </h3>
 
@@ -97,7 +97,7 @@ export const FeatureHighlights = ({ onNavigate }) => {
                   {feature.description}
                 </p>
 
-                <div className="flex items-center text-sm font-medium text-primary-900 dark:text-primary-400 group-hover:translate-x-2 transition-transform duration-300">
+                <div className="flex items-center text-sm font-medium text-primary-900 dark:text-primary-400 group-hover:translate-x-2 smooth-hover">
                   Explore
                   <svg
                     className="w-4 h-4 ml-2"
@@ -114,9 +114,6 @@ export const FeatureHighlights = ({ onNavigate }) => {
                   </svg>
                 </div>
 
-                    <div
-                      className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                    ></div>
                   </motion.div>
                 </MagneticCard>
               </ScrollReveal>

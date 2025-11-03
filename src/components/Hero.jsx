@@ -14,6 +14,10 @@ const heroSlides = [
   {
     image: '/_DKK5312.JPG',
     alt: 'GSV Community and Events'
+  },
+  {
+    image: '/slide5.jpg',
+    alt: 'Additional Slide Image'
   }
 ];
 
@@ -28,7 +32,7 @@ export const Hero = ({ onNavigate }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
@@ -77,14 +81,18 @@ export const Hero = ({ onNavigate }) => {
           {heroSlides.map((slide, index) => (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              className={`absolute inset-0 transition-all duration-1500 ease-in-out ${
+                index === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
               }`}
+              style={{
+                transform: index === currentSlide ? 'scale(1)' : 'scale(1.05)',
+                transition: 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
             >
               <img
                 src={slide.image}
                 alt={slide.alt}
-                className="w-full h-full object-cover object-center scale-105"
+                className="w-full h-full object-cover object-center"
               />
             </div>
           ))}
@@ -260,7 +268,7 @@ export const Hero = ({ onNavigate }) => {
         {/* Navigation Arrows - Hidden on mobile */}
         <button
           onClick={prevSlide}
-          className="hidden md:flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/30 transition-all"
+          className="hidden md:flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/30 smooth-hover"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
@@ -268,7 +276,7 @@ export const Hero = ({ onNavigate }) => {
 
         <button
           onClick={nextSlide}
-          className="hidden md:flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/30 transition-all"
+          className="hidden md:flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/30 smooth-hover"
           aria-label="Next slide"
         >
           <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
@@ -292,7 +300,7 @@ export const Hero = ({ onNavigate }) => {
       </div>
 
       {/* Content Section Below Slideshow - Responsive */}
-      <div className="bg-white dark:bg-gray-900 py-4 sm:py-6 md:py-8 lg:py-12 xl:py-16">
+      <div className="bg-white dark:bg-gray-900 py-4 sm:py-6 md:py-8 lg:py-12 xl:py-16 parallax-bg">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 md:mb-4 lg:mb-6 leading-tight">
@@ -306,13 +314,13 @@ export const Hero = ({ onNavigate }) => {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center px-2 sm:px-4">
               <button
                 onClick={() => onNavigate('directory')}
-                className="w-full sm:w-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-2.5 md:py-3 lg:py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-xs sm:text-sm md:text-base lg:text-lg shadow-lg hover:shadow-xl"
+                className="w-full sm:w-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-2.5 md:py-3 lg:py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 btn-smooth font-semibold text-xs sm:text-sm md:text-base lg:text-lg shadow-lg hover:shadow-xl"
               >
                 Explore Directory
               </button>
               <button
                 onClick={() => onNavigate('register')}
-                className="w-full sm:w-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-2.5 md:py-3 lg:py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-semibold text-xs sm:text-sm md:text-base lg:text-lg"
+                className="w-full sm:w-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-2.5 md:py-3 lg:py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 btn-smooth font-semibold text-xs sm:text-sm md:text-base lg:text-lg"
               >
                 Join Community
               </button>
