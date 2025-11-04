@@ -444,7 +444,7 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
           {renderPage()}
         </div>
       </AuthProvider>
