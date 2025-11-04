@@ -58,8 +58,8 @@ export const Navigation = ({ onNavigate, currentPage }) => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-12 sm:h-16">
           <div
-            className="flex items-center space-x-3 cursor-pointer group"
-            onClick={() => onNavigate('home')}
+            className={`flex items-center space-x-3 cursor-pointer group ${currentPage === 'home' ? 'cursor-default' : ''}`}
+            onClick={() => currentPage !== 'home' && onNavigate('home')}
           >
             <div className="relative">
               <img
