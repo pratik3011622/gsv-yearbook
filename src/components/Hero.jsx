@@ -4,20 +4,32 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const heroSlides = [
   {
+    image: '/slide5.jpg',
+    alt: 'Additional Slide Image',
+    title: 'Welcome to GSV',
+    subtitle: 'Where Innovation Meets Excellence',
+    description: 'Discover a world of possibilities at Gati Shakti Vishwavidyalaya'
+  },
+  {
     image: 'https://gsv.ac.in/wp-content/uploads/slider/cache/c51c9c0e2027b0762605e4380a2439cd/new-slider-01.jpg',
-    alt: 'Gati Shakti Vishwavidyalaya Campus'
+    alt: 'Gati Shakti Vishwavidyalaya Campus',
+    title: 'Academic Excellence',
+    subtitle: 'Shaping Tomorrow\'s Leaders',
+    description: 'Experience world-class education in a vibrant campus environment'
   },
   {
     image: 'https://gsv.ac.in/wp-content/uploads/slider/cache/8bef1522bf9985ed15004d1a5d70af15/BOSS0373-scaled.jpg',
-    alt: 'GSV Campus Life'
+    alt: 'GSV Campus Life',
+    title: 'Innovation Hub',
+    subtitle: 'Research & Development',
+    description: 'Explore cutting-edge research and technological advancements'
   },
   {
     image: '/_DKK5312.JPG',
-    alt: 'GSV Community and Events'
-  },
-  {
-    image: '/slide5.jpg',
-    alt: 'Additional Slide Image'
+    alt: 'GSV Community and Events',
+    title: 'Community & Culture',
+    subtitle: 'Building Lasting Connections',
+    description: 'Join a diverse community of innovators and change-makers'
   }
 ];
 
@@ -27,11 +39,13 @@ export const Hero = ({ onNavigate }) => {
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isYearbookDropdownOpen, setIsYearbookDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [textKey, setTextKey] = useState(0);
   const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      setTextKey(prev => prev + 1); // Force text re-animation
     }, 6000);
 
     return () => clearInterval(interval);
@@ -63,10 +77,12 @@ export const Hero = ({ onNavigate }) => {
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    setTextKey(prev => prev + 1);
   };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    setTextKey(prev => prev + 1);
   };
 
   return (
@@ -74,7 +90,7 @@ export const Hero = ({ onNavigate }) => {
       {/* Hero Section with Clean Slideshow - Full height */}
       <div className="relative h-screen overflow-hidden">
         {/* Gradient overlay for better text visibility and visual appeal */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 z-10"></div>
 
         {/* Slideshow Background */}
         <div className="absolute inset-0 z-0">
@@ -94,6 +110,67 @@ export const Hero = ({ onNavigate }) => {
                 alt={slide.alt}
                 className="w-full h-full object-cover object-center"
               />
+
+              {/* Text Overlay */}
+              <div className={`absolute inset-0 flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
+                index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`} style={{
+                transitionDelay: index === currentSlide ? '1.5s' : '0s',
+                display: index === currentSlide ? 'flex' : 'none'
+              }}>
+                <div className="max-w-4xl mx-auto">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 drop-shadow-2xl whitespace-nowrap" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                    <span key={textKey + index} className="inline-block">
+                      {slide.title.split('').map((letter, letterIndex) => (
+                        <span
+                          key={`${textKey}-${index}-${letterIndex}`}
+                          className="inline-block animate-letter-bounce"
+                          style={{
+                            animationDelay: `${letterIndex * 0.1}s`,
+                            animationFillMode: 'both'
+                          }}
+                        >
+                          {letter === ' ' ? '\u00A0' : letter}
+                        </span>
+                      ))}
+                    </span>
+                  </h1>
+
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-white/90 mb-4 sm:mb-6 drop-shadow-lg whitespace-nowrap" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                    <span key={textKey + index + 1} className="inline-block">
+                      {slide.subtitle.split('').map((letter, letterIndex) => (
+                        <span
+                          key={`${textKey}-${index}-${letterIndex}-sub`}
+                          className="inline-block animate-letter-fade"
+                          style={{
+                            animationDelay: `${(letterIndex * 0.05) + 0.5}s`,
+                            animationFillMode: 'both'
+                          }}
+                        >
+                          {letter === ' ' ? '\u00A0' : letter}
+                        </span>
+                      ))}
+                    </span>
+                  </h2>
+
+                  <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto drop-shadow-md whitespace-nowrap" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                    <span key={textKey + index + 2} className="inline-block">
+                      {slide.description.split('').map((letter, letterIndex) => (
+                        <span
+                          key={`${textKey}-${index}-${letterIndex}-desc`}
+                          className="inline-block animate-letter-slide-up"
+                          style={{
+                            animationDelay: `${(letterIndex * 0.03) + 1}s`,
+                            animationFillMode: 'both'
+                          }}
+                        >
+                          {letter === ' ' ? '\u00A0' : letter}
+                        </span>
+                      ))}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
