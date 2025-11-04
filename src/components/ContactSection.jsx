@@ -124,6 +124,7 @@ export const ContactSection = () => {
             <div className="absolute -bottom-2 sm:-bottom-4 -right-2 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full opacity-20 animate-pulse"></div>
           </div>
         </div>
+
       </div>
     </section>
   );

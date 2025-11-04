@@ -220,22 +220,47 @@ export const HomePage = ({ onNavigate, currentPage }) => {
               </div>
             </div>
 
-            <div className="border-t border-gray-700 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8">
-              <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-4 md:space-y-0">
-                <p className="text-gray-400 text-xs sm:text-sm">
-                  &copy; 2025 Gati Shakti Vishwavidyalaya. All rights reserved.
-                </p>
-                <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm text-gray-400">
-                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                  <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-                  <a href="#" className="hover:text-white transition-colors">Contact Us</a>
-                </div>
-              </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-700 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-4 md:space-y-0">
+            <div className="flex items-center space-x-3">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
+                alt="Gati Shakti Vishwavidyalaya Logo"
+                className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
+              />
+              <p className="text-gray-400 text-xs sm:text-sm">
+                &copy; 2025 Gati Shakti Vishwavidyalaya. All rights reserved.
+              </p>
+            </div>
+            <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm text-gray-400">
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-white transition-colors">Contact Us</a>
             </div>
           </div>
         </div>
       </footer>
 
+      {/* Copyright Footer */}
+      <div className="bg-gray-900 py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-3">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
+                alt="Gati Shakti Vishwavidyalaya Logo"
+                className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+              />
+              <p className="text-sm sm:text-base text-gray-400">
+                © 2025 Gati Shakti Vishwavidyalaya. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {showScrollTop && (
         <button

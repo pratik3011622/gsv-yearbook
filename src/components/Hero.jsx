@@ -11,13 +11,6 @@ const heroSlides = [
     description: 'Discover a world of possibilities at Gati Shakti Vishwavidyalaya'
   },
   {
-    image: 'https://gsv.ac.in/wp-content/uploads/slider/cache/c51c9c0e2027b0762605e4380a2439cd/new-slider-01.jpg',
-    alt: 'Gati Shakti Vishwavidyalaya Campus',
-    title: '',
-    subtitle: '',
-    description: ''
-  },
-  {
     image: 'https://gsv.ac.in/wp-content/uploads/slider/cache/8bef1522bf9985ed15004d1a5d70af15/BOSS0373-scaled.jpg',
     alt: 'GSV Campus Life',
     title: '',
