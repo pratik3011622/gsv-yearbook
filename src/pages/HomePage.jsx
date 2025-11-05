@@ -115,9 +115,16 @@ export const HomePage = ({ onNavigate, currentPage }) => {
           <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-10 md:mb-12">
               <div className="lg:col-span-1">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6 text-white">
-                  GSVConnect
-                </h3>
+                <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
+                    alt="Gati Shakti Vishwavidyalaya Logo"
+                    className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+                  />
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                    GSVConnect
+                  </h3>
+                </div>
                 <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
                   Where Memories Meet Futures. Connecting Gati Shakti Vishwavidyalaya alumni worldwide.
                 </p>

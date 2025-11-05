@@ -126,7 +126,7 @@ export const StatsCounter = ({ stats }) => {
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
-                <div className={`${stat.bgColor} w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`${stat.bgColor} w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 group-hover:rotate-6 smooth-hover`}>
                   <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${stat.iconColor}`} />
                 </div>
 

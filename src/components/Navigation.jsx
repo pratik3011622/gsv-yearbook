@@ -15,9 +15,20 @@ export const Navigation = ({ onNavigate, currentPage }) => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    const handleClickOutside = (event) => {
+      if (openDropdown && !event.target.closest('.dropdown-container')) {
+        setOpenDropdown(null);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdown]);
 
   const baseNavItems = [
     { id: 'home', label: 'Home' },
@@ -61,15 +72,13 @@ export const Navigation = ({ onNavigate, currentPage }) => {
             className={`flex items-center space-x-3 cursor-pointer group ${currentPage === 'home' ? 'cursor-default' : ''}`}
             onClick={() => currentPage !== 'home' && onNavigate('home')}
           >
-            <div className="relative">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
-                alt="Gati Shakti Vishwavidyalaya Logo"
-                className={`w-8 sm:w-10 h-8 sm:h-10 relative z-10 group-hover:scale-110 transition-all duration-300 object-contain ${
-                  currentPage === 'home' ? '' : 'brightness-0 invert dark:brightness-100 dark:invert-0'
-                }`}
-              />
-            </div>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
+              alt="Gati Shakti Vishwavidyalaya Logo"
+              className={`w-8 sm:w-10 h-8 sm:h-10 group-hover:scale-110 transition-all duration-300 object-contain ${
+                currentPage === 'home' ? '' : isDark ? 'brightness-0 invert dark:brightness-100 dark:invert-0' : ''
+              }`}
+            />
             <div>
               <h1 className={`text-2xl font-bold transition-colors duration-300 ${
                 currentPage === 'home' ? 'text-gray-900' : 'text-gray-900 dark:text-gray-100'
@@ -86,7 +95,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
 
           <div className="hidden lg:flex items-center space-x-1">
             {navItems.map((item) => (
-              <div key={item.id} className="relative">
+              <div key={item.id} className="relative dropdown-container">
                 {item.subItems ? (
                   <div>
                     <button
@@ -264,7 +273,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
         }`}>
           <div className="px-4 py-4 space-y-2">
             {navItems.map((item) => (
-              <div key={item.id}>
+              <div key={item.id} className="dropdown-container">
                 {item.subItems ? (
                   <div>
                     <button
