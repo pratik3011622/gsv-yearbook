@@ -5,7 +5,8 @@ export const MagneticCard = ({
   children,
   className = '',
   strength = 0.3,
-  range = 100
+  range = 100,
+  onClick
 }) => {
   const ref = useRef(null);
   const x = useMotionValue(0);
@@ -67,6 +68,7 @@ export const MagneticCard = ({
         transition: { type: 'spring', stiffness: 300, damping: 20 }
       }}
       whileTap={{ scale: 0.95 }}
+      onClick={onClick}
     >
       {children}
     </motion.div>

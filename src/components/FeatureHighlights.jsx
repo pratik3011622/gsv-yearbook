@@ -78,9 +78,9 @@ export const FeatureHighlights = ({ onNavigate }) => {
                   className="card-elevated card-smooth hover:-translate-y-2"
                   strength={0.4}
                   range={120}
+                  onClick={() => onNavigate(feature.page)}
                 >
                   <motion.div
-                    onClick={() => onNavigate(feature.page)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
