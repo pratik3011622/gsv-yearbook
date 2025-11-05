@@ -119,7 +119,7 @@ export const Hero = ({ onNavigate }) => {
                           key={`${textKey}-${index}-${letterIndex}`}
                           className="inline-block animate-letter-bounce"
                           style={{
-                            animationDelay: `${letterIndex * 0.1}s`,
+                            animationDelay: `${letterIndex * 0.08}s`,
                             animationFillMode: 'both'
                           }}
                         >
