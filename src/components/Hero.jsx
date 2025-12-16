@@ -57,7 +57,7 @@ export const Hero = ({ onNavigate }) => {
               filter: 'contrast(1.1) brightness(1.05)'
             }}
           >
-            <source src="/hero-video.mp4" type="video/mp4" />
+            <source src="/hero-video-new.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
