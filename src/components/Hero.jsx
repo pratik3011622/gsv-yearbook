@@ -57,7 +57,7 @@ export const Hero = ({ onNavigate }) => {
               filter: 'contrast(1.1) brightness(1.05)'
             }}
           >
-            <source src="/induction-video.mov" type="video/quicktime" />
+            <source src="/induction-video.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
