@@ -1,4 +1,4 @@
-# 🎓 AlumniVerse - Where Memories Meet Futures
+# GSVConnect - Where Memories Meet Futures
 
 A modern, interactive university yearbook and alumni portal connecting students and alumni through memories, networking, mentorship, and opportunities.
 
@@ -16,8 +16,6 @@ A modern, interactive university yearbook and alumni portal connecting students 
 ### For Authenticated Users
 - **Personalized Dashboard** with gamified onboarding checklist
 - **Profile Management** - Complete profiles with skills, experience, and social links
-- **Session Booking** - Schedule mentorship sessions with alumni
-- **Event RSVPs** - Register for upcoming events and reunions
 - **Dark Mode** - Beautiful dark theme with smooth transitions
 
 ### For Administrators
