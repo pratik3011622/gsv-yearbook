@@ -111,25 +111,15 @@ export const VideoGalleryPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-25 via-indigo-25 to-purple-25 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-blue-500 via-indigo-500 via-purple-500 to-pink-500 text-white py-20 relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-indigo-300/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-purple-300/15 rounded-full blur-lg animate-pulse" style={{ animationDelay: '2s' }}></div>
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold mb-6 drop-shadow-2xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
             Video Gallery
           </h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto drop-shadow-lg">
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
             Relive the moments that shaped our Gati Shakti Vishwavidyalaya community through our video archives
           </p>
         </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Video Slideshow */}
         <div className="mb-16 relative">
           <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">

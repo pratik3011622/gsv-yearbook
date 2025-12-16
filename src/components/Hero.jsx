@@ -218,7 +218,10 @@ export const Hero = ({ onNavigate }) => {
                 {/* Yearbook Dropdown */}
                 <div className="relative yearbook-dropdown">
                   <button
-                    onClick={() => setIsYearbookDropdownOpen(!isYearbookDropdownOpen)}
+                    onClick={() => {
+                      setIsYearbookDropdownOpen(!isYearbookDropdownOpen);
+                      setIsAboutDropdownOpen(false);
+                    }}
                     className="text-white hover:text-white font-semibold transition-all duration-300 text-xs sm:text-sm px-1.5 sm:px-2 lg:px-3 py-1 sm:py-1.5 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform flex items-center space-x-1"
                   >
                     <span>Yearbook</span>
@@ -275,7 +278,10 @@ export const Hero = ({ onNavigate }) => {
                 {/* About Dropdown */}
                 <div className="relative about-dropdown">
                   <button
-                    onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
+                    onClick={() => {
+                      setIsAboutDropdownOpen(!isAboutDropdownOpen);
+                      setIsYearbookDropdownOpen(false);
+                    }}
                     className="text-white hover:text-white font-semibold transition-all duration-300 text-xs sm:text-sm px-1.5 sm:px-2 lg:px-3 py-1 sm:py-1.5 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform flex items-center space-x-1"
                   >
                     <span>About</span>
@@ -284,7 +290,7 @@ export const Hero = ({ onNavigate }) => {
 
                   {/* Dropdown Menu - Positioned below the button */}
                   {isAboutDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-44 sm:w-48 lg:w-56 bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 overflow-hidden z-[70]">
+                    <div className="absolute top-full -left-28 mt-2 w-44 sm:w-48 lg:w-56 bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 overflow-hidden z-[70]">
                       <div className="py-1">
                         <button
                           onClick={() => {

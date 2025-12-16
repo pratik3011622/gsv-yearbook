@@ -16,6 +16,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { VideoGalleryPage } from './pages/VideoGalleryPage';
 import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
 import { MagazinePage } from './pages/MagazinePage';
+import { TeamPage } from './pages/TeamPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(() => {
@@ -115,26 +116,13 @@ function App() {
         return (
           <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-              {/* Hero Banner Image */}
-              <div className="mb-16">
-                <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-                  <img
-                    src="https://corporate.apollotyres.com/content/dam/orbit/apollo-corporate/sustainability-and-ethics/health--safety-_-environment/health-_-safety/vision-_-mission/Vision%20and%20Mission%20-%20Banner%20image.jpg"
-                    alt="Vision and Mission - Excellence in Transportation and Logistics"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-purple-900/70 to-indigo-900/80"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white max-w-4xl px-6">
-                      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight">
-                          Vision & Mission
-                        </h1>
-                        <p className="text-xl sm:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-                          Our guiding principles and commitment to excellence in transportation and logistics education
-                        </p>
-                    </div>
-                  </div>
-                </div>
+              <div className="text-center mb-16">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
+                  Vision & Mission
+                </h1>
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                  Our guiding principles and commitment to excellence in transportation and logistics education
+                </p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
@@ -400,34 +388,25 @@ function App() {
       case 'video-gallery':
         return (
           <div className="min-h-screen">
-            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
-            <div className="pt-20">
-              <VideoGalleryPage />
-            </div>
+            <VideoGalleryPage />
           </div>
         );
       case 'photo-gallery':
         return (
           <div className="min-h-screen">
-            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
-            <div className="pt-20">
-              <PhotoGalleryPage />
-            </div>
+            <PhotoGalleryPage />
           </div>
         );
       case 'magazine':
         return (
           <div className="min-h-screen">
-            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
-            <div className="pt-20">
-              <MagazinePage />
-            </div>
+            <MagazinePage />
           </div>
         );
       case 'team':
         return (
           <div className="min-h-screen">
-            <HomePage onNavigate={handleNavigate} currentPage={currentPage} />
+            <TeamPage />
           </div>
         );
       case 'dashboard':
