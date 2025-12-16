@@ -1,48 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Share2, Facebook, Twitter, Linkedin, Instagram, ChevronLeft, ChevronRight, ChevronDown, Moon, Sun } from 'lucide-react';
+import { Share2, Facebook, Twitter, Linkedin, Instagram, ChevronDown, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-const heroSlides = [
-  {
-    image: '/slide5.jpg',
-    alt: 'Additional Slide Image',
-    title: 'Welcome to GSV',
-    subtitle: 'Where Innovation Meets Excellence',
-    description: 'Discover a world of possibilities at Gati Shakti Vishwavidyalaya'
-  },
-  {
-    image: 'https://gsv.ac.in/wp-content/uploads/slider/cache/8bef1522bf9985ed15004d1a5d70af15/BOSS0373-scaled.jpg',
-    alt: 'GSV Campus Life',
-    title: '',
-    subtitle: '',
-    description: ''
-  },
-  {
-    image: '/_DKK5312.JPG',
-    alt: 'GSV Community and Events',
-    title: '',
-    subtitle: '',
-    description: ''
-  }
-];
 
 export const Hero = ({ onNavigate }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isYearbookDropdownOpen, setIsYearbookDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [textKey, setTextKey] = useState(0);
   const { isDark, toggleTheme } = useTheme();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-      setTextKey(prev => prev + 1); // Force text re-animation
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -68,15 +34,6 @@ export const Hero = ({ onNavigate }) => {
     };
   }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    setTextKey(prev => prev + 1);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-    setTextKey(prev => prev + 1);
-  };
 
   return (
     <div className="relative">
@@ -85,87 +42,24 @@ export const Hero = ({ onNavigate }) => {
         {/* Gradient overlay for better text visibility and visual appeal */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 z-10"></div>
 
-        {/* Slideshow Background */}
+        {/* Video Background */}
         <div className="absolute inset-0 z-0">
-          {heroSlides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-all duration-1500 ease-in-out ${
-                index === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-              }`}
-              style={{
-                transform: index === currentSlide ? 'scale(1)' : 'scale(1.05)',
-                transition: 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            >
-              <img
-                src={slide.image}
-                alt={slide.alt}
-                className="w-full h-full object-cover object-center"
-              />
-
-              {/* Text Overlay */}
-              <div className={`absolute inset-0 flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-                index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`} style={{
-                transitionDelay: index === currentSlide ? '1.5s' : '0s',
-                display: index === currentSlide ? 'flex' : 'none'
-              }}>
-                <div className="max-w-4xl mx-auto">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-3 sm:mb-4 md:mb-5 lg:mb-6 drop-shadow-2xl leading-tight" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                    <span key={textKey + index} className="inline-block">
-                      {slide.title.split('').map((letter, letterIndex) => (
-                        <span
-                          key={`${textKey}-${index}-${letterIndex}`}
-                          className="inline-block animate-letter-bounce"
-                          style={{
-                            animationDelay: `${letterIndex * 0.08}s`,
-                            animationFillMode: 'both'
-                          }}
-                        >
-                          {letter === ' ' ? '\u00A0' : letter}
-                        </span>
-                      ))}
-                    </span>
-                  </h1>
-
-                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light text-white/90 mb-3 sm:mb-4 md:mb-5 lg:mb-6 drop-shadow-lg leading-tight" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                    <span key={textKey + index + 1} className="inline-block">
-                      {slide.subtitle.split('').map((letter, letterIndex) => (
-                        <span
-                          key={`${textKey}-${index}-${letterIndex}-sub`}
-                          className="inline-block animate-letter-fade"
-                          style={{
-                            animationDelay: `${(letterIndex * 0.05) + 0.5}s`,
-                            animationFillMode: 'both'
-                          }}
-                        >
-                          {letter === ' ' ? '\u00A0' : letter}
-                        </span>
-                      ))}
-                    </span>
-                  </h2>
-
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 max-w-2xl mx-auto drop-shadow-md leading-relaxed" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                    <span key={textKey + index + 2} className="inline-block">
-                      {slide.description.split('').map((letter, letterIndex) => (
-                        <span
-                          key={`${textKey}-${index}-${letterIndex}-desc`}
-                          className="inline-block animate-letter-slide-up"
-                          style={{
-                            animationDelay: `${(letterIndex * 0.03) + 1}s`,
-                            animationFillMode: 'both'
-                          }}
-                        >
-                          {letter === ' ' ? '\u00A0' : letter}
-                        </span>
-                      ))}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover object-center"
+            style={{
+              imageRendering: 'auto',
+              imageRendering: '-webkit-optimize-contrast',
+              filter: 'contrast(1.1) brightness(1.05)'
+            }}
+          >
+            <source src="/hero-video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
 
         {/* Transparent Navigation Bar Overlay */}
@@ -341,38 +235,6 @@ export const Hero = ({ onNavigate }) => {
         </div>
 
 
-        {/* Navigation Arrows - Hidden on mobile */}
-        <button
-          onClick={prevSlide}
-          className="hidden md:flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/30 smooth-hover"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
-        </button>
-
-        <button
-          onClick={nextSlide}
-          className="hidden md:flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/30 smooth-hover"
-          aria-label="Next slide"
-        >
-          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
-        </button>
-
-        {/* Slide Indicators - Responsive */}
-        <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-1 sm:space-x-2 md:space-x-3">
-          {heroSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`h-1 sm:h-1.5 md:h-2 lg:h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide
-                  ? 'w-4 sm:w-6 md:w-8 lg:w-12 bg-white'
-                  : 'w-1 sm:w-1.5 md:w-2 lg:w-3 bg-white/50 hover:bg-white/70'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            ></button>
-          ))}
-        </div>
       </div>
 
       {/* Content Section Below Slideshow - Responsive */}
