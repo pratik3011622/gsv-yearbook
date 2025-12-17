@@ -17,11 +17,11 @@ const teamMembers = [
     name: 'Vinamra Tiwari',
     role: 'Team Member',
     bio: 'Valuable contributor to the GSVConnect project, bringing innovative ideas and technical skills.',
-    photo: '/team/vinamra.jpg', // Placeholder - replace with actual photo
+    photo: '/vinamra.png',
     social: {
-      linkedin: '',
+      linkedin: 'https://www.linkedin.com/in/vinamra-tiwari-ba3653345?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       instagram: '',
-      github: ''
+      github: 'https://github.com/Vinamra-tech'
       
     }
   },

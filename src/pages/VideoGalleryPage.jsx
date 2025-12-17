@@ -71,6 +71,16 @@ const videoData = [
     date: '2023-12-01',
     category: 'Events',
     duration: '3:00:00'
+  },
+  {
+    id: 8,
+    title: 'Annual Cultural Fest Agnee 2025',
+    description: 'Highlights from the Annual Cultural Fest Agnee 2025.',
+    thumbnail: 'https://img.youtube.com/vi/qaoDi0DNOI8/maxresdefault.jpg',
+    videoUrl: 'https://www.youtube.com/embed/qaoDi0DNOI8',
+    date: '2025-12-01',
+    category: 'Events',
+    duration: '3:00:00'
   }
 ];
 
