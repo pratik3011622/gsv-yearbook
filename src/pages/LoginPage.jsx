@@ -25,6 +25,14 @@ export const LoginPage = ({ onNavigate }) => {
     }
   };
 
+  const handleForgotPassword = async (email) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://yearbook-gsv-runh.vercel.app/', 
+  });
+  if (error) alert(error.message);
+  else alert("Check your email for the reset link!");
+};
+
   return (
     <div className="min-h-screen pt-20 pb-12 bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <div className="max-w-md mx-auto px-4">

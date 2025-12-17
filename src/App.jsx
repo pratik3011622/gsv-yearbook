@@ -17,6 +17,7 @@ import { VideoGalleryPage } from './pages/VideoGalleryPage';
 import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
 import { MagazinePage } from './pages/MagazinePage';
 import { TeamPage } from './pages/TeamPage';
+import { UpdatePasswordPage } from './pages/UpdatePasswordPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(() => {
@@ -59,6 +60,13 @@ function App() {
     switch (currentPage) {
       case 'home':
         return <HomePage onNavigate={handleNavigate} currentPage={currentPage} />;
+      case 'update-password':
+      return (
+        <div className="min-h-screen">
+          <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
+          <UpdatePasswordPage onNavigate={handleNavigate} />
+        </div>
+      );  
       case 'login':
         return <LoginPage onNavigate={handleNavigate} />;
       case 'register':
