@@ -152,7 +152,7 @@ export const HomePage = ({ onNavigate, currentPage }) => {
                     </svg>
                   </a>
                   <a
-                    href="https://www.instagram.com/gsv.ac.in/"
+                    href="https://www.instagram.com/gsv_vadodara/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all hover:scale-110"
