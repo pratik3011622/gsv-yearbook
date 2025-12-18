@@ -186,7 +186,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/gsv_vadodara/"
+                href="https://www.instagram.com/gsv.vadodara/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-500 transition-all hover:scale-110 shadow-lg"
