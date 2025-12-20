@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Briefcase, MapPin, Building, ExternalLink, Clock, Tag } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 export const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -13,13 +13,7 @@ export const JobsPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const { data, error } = await supabase
-        .from('jobs')
-        .select('*, posted_by:profiles(full_name, current_company)')
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
+      const data = await api.getJobs();
       setJobs(data || []);
     } catch (error) {
       console.error('Error fetching jobs:', error);
@@ -30,11 +24,11 @@ export const JobsPage = () => {
 
   const filteredJobs = jobs.filter((job) => {
     if (filter === 'all') return true;
-    if (filter === 'featured') return job.is_featured;
-    return job.job_type === filter;
+    if (filter === 'featured') return job.isFeatured;
+    return job.jobType === filter;
   });
 
-  const featuredJobs = jobs.filter((job) => job.is_featured).slice(0, 3);
+  const featuredJobs = jobs.filter((job) => job.isFeatured).slice(0, 3);
 
   return (
     <div className="min-h-screen pt-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
@@ -187,7 +181,7 @@ export const JobsPage = () => {
           <div className="space-y-4">
             {filteredJobs.map((job) => (
               <div
-                key={job.id}
+                key={job._id || job.id}
                 className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-800"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -221,7 +215,7 @@ export const JobsPage = () => {
 
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium rounded-full">
-                        {job.job_type}
+                        {job.jobType}
                       </span>
                       <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-sm font-medium rounded-full">
                         {job.domain}
@@ -236,9 +230,9 @@ export const JobsPage = () => {
                       ))}
                     </div>
 
-                    {job.posted_by && (
+                    {job.postedBy && (
                       <div className="mt-3 text-sm text-slate-500 dark:text-slate-500">
-                        Posted by {job.posted_by.full_name}
+                        Posted by {job.postedBy.fullName}
                       </div>
                     )}
                   </div>
@@ -246,7 +240,7 @@ export const JobsPage = () => {
                   <div className="flex flex-col items-end space-y-2">
                     <div className="flex items-center text-sm text-slate-500 dark:text-slate-500">
                       <Clock className="w-4 h-4 mr-1" />
-                      <span>{new Date(job.created_at).toLocaleDateString()}</span>
+                      <span>{new Date(job.createdAt).toLocaleDateString()}</span>
                     </div>
 
                     <a

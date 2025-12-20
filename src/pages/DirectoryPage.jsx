@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, Filter, Grid3x3, MapPin, Linkedin, Briefcase, Calendar } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 export const DirectoryPage = () => {
   const [profiles, setProfiles] = useState([]);
@@ -24,13 +24,7 @@ export const DirectoryPage = () => {
 
   const fetchProfiles = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_type', 'alumni')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const data = await api.getProfiles();
       setProfiles(data || []);
       setFilteredProfiles(data || []);
     } catch (error) {
@@ -213,7 +207,7 @@ export const DirectoryPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProfiles.map((profile) => (
               <div
-                key={profile.id}
+                key={profile._id || profile.id}
                 className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-slate-200 dark:border-slate-800"
               >
                 <div className="h-32 bg-gradient-to-br from-blue-500 to-amber-500"></div>

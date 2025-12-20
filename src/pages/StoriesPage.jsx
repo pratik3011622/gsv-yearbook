@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Eye, Calendar, Tag, ChevronRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 export const StoriesPage = () => {
   const [stories, setStories] = useState([]);
@@ -23,18 +23,13 @@ export const StoriesPage = () => {
 
   const fetchStories = async () => {
     try {
-      const { data, error } = await supabase
-        .from('stories')
-        .select('*, author_id:profiles(full_name, current_company)')
-        .order('published_at', { ascending: false });
+      const [allStories, featured] = await Promise.all([
+        api.getStories(),
+        api.getFeaturedStories()
+      ]);
 
-      if (error) throw error;
-
-      const all = data || [];
-      const featured = all.filter((story) => story.is_featured);
-
-      setStories(all);
-      setFeaturedStories(featured);
+      setStories(allStories || []);
+      setFeaturedStories(featured || []);
     } catch (error) {
       console.error('Error fetching stories:', error);
     } finally {
@@ -90,15 +85,15 @@ export const StoriesPage = () => {
           <div className="mb-12 relative rounded-3xl overflow-hidden shadow-2xl">
             {featuredStories.map((story, index) => (
               <div
-                key={story.id}
+                key={story._id || story.id}
                 className={`transition-opacity duration-700 ${
                   index === currentFeatured ? 'opacity-100' : 'opacity-0 absolute inset-0'
                 }`}
               >
                 <div className="relative h-96 lg:h-[500px]">
-                  {story.cover_image_url && (
+                  {story.coverImageUrl && (
                     <img
-                      src={story.cover_image_url}
+                      src={story.coverImageUrl}
                       alt={story.title}
                       className="w-full h-full object-cover"
                     />
@@ -119,14 +114,14 @@ export const StoriesPage = () => {
                     </p>
 
                     <div className="flex items-center space-x-6 text-white/80">
-                      {story.author_id && (
+                      {story.authorId && (
                         <div className="flex items-center space-x-2">
-                          <span className="font-medium">{story.author_id.full_name}</span>
+                          <span className="font-medium">{story.authorId.fullName}</span>
                         </div>
                       )}
                       <div className="flex items-center space-x-2">
                         <Eye className="w-4 h-4" />
-                        <span>{story.views_count || 0} views</span>
+                        <span>{story.viewsCount || 0} views</span>
                       </div>
                     </div>
                   </div>
@@ -167,13 +162,13 @@ export const StoriesPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {stories.map((story) => (
               <article
-                key={story.id}
+                key={story._id || story.id}
                 className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-slate-200 dark:border-slate-800 group cursor-pointer"
               >
-                {story.cover_image_url && (
+                {story.coverImageUrl && (
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={story.cover_image_url}
+                      src={story.coverImageUrl}
                       alt={story.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -184,7 +179,7 @@ export const StoriesPage = () => {
                   <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-400 mb-3">
                     <Calendar className="w-4 h-4" />
                     <span>
-                      {new Date(story.published_at).toLocaleDateString('en-US', {
+                      {new Date(story.publishedAt).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -215,14 +210,14 @@ export const StoriesPage = () => {
                   )}
 
                   <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
-                    {story.author_id && (
+                    {story.authorId && (
                       <div className="text-sm">
                         <p className="font-medium text-slate-900 dark:text-white">
-                          {story.author_id.full_name}
+                          {story.authorId.fullName}
                         </p>
-                        {story.author_id.current_company && (
+                        {story.authorId.currentCompany && (
                           <p className="text-slate-600 dark:text-slate-400">
-                            {story.author_id.current_company}
+                            {story.authorId.currentCompany}
                           </p>
                         )}
                       </div>
@@ -236,7 +231,7 @@ export const StoriesPage = () => {
 
                   <div className="mt-3 flex items-center text-sm text-slate-500 dark:text-slate-500">
                     <Eye className="w-4 h-4 mr-1" />
-                    <span>{story.views_count || 0} views</span>
+                    <span>{story.viewsCount || 0} views</span>
                   </div>
                 </div>
               </article>

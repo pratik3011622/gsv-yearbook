@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar, MapPin, Users, Clock, CheckCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const EventsPage = ({ onNavigate }) => {
@@ -15,12 +15,7 @@ export const EventsPage = ({ onNavigate }) => {
 
   const fetchEvents = async () => {
     try {
-      const { data, error } = await supabase
-        .from('events')
-        .select('*, created_by:profiles(full_name)')
-        .order('event_date', { ascending: true });
-
-      if (error) throw error;
+      const data = await api.getEvents();
       setEvents(data || []);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -36,25 +31,8 @@ export const EventsPage = ({ onNavigate }) => {
     }
 
     try {
-      const { error } = await supabase
-        .from('event_rsvps')
-        .upsert([
-          {
-            event_id: eventId,
-            user_id: user.id,
-            status: 'attending',
-          },
-        ]);
-
-      if (error) throw error;
-
-      const event = events.find((e) => e.id === eventId);
-      await supabase
-        .from('events')
-        .update({ rsvp_count: (event.rsvp_count || 0) + 1 })
-        .eq('id', eventId);
-
-      fetchEvents();
+      await api.rsvpToEvent(eventId, 'attending');
+      fetchEvents(); // Refresh to show updated count
     } catch (error) {
       console.error('Error RSVPing:', error);
     }
@@ -75,7 +53,7 @@ export const EventsPage = ({ onNavigate }) => {
   };
 
   const filteredEvents = events.filter((event) => {
-    const isPast = new Date(event.event_date) < new Date();
+    const isPast = new Date(event.eventDate) < new Date();
     return filter === 'upcoming' ? !isPast : isPast;
   });
 
@@ -164,19 +142,19 @@ export const EventsPage = ({ onNavigate }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {filteredEvents.map((event) => (
               <div
-                key={event.id}
+                key={event._id || event.id}
                 className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-slate-200 dark:border-slate-800"
               >
-                {event.image_url && (
+                {event.imageUrl && (
                   <div className="h-48 relative overflow-hidden">
                     <img
-                      src={event.image_url}
+                      src={event.imageUrl}
                       alt={event.title}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-4 right-4 bg-amber-500 text-white px-4 py-2 rounded-full font-bold flex items-center space-x-2">
                       <Clock className="w-4 h-4" />
-                      <span>{getTimeRemaining(event.event_date)}</span>
+                      <span>{getTimeRemaining(event.eventDate)}</span>
                     </div>
                   </div>
                 )}
@@ -200,7 +178,7 @@ export const EventsPage = ({ onNavigate }) => {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                       <Calendar className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
-                      <span>{new Date(event.event_date).toLocaleDateString('en-US', {
+                      <span>{new Date(event.eventDate).toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
                         month: 'long',

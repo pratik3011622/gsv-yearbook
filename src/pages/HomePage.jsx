@@ -10,7 +10,7 @@ import { ScrollReveal } from '../components/ScrollReveal';
 import { ParallaxSection } from '../components/ParallaxSection';
 import { FloatingParticles } from '../components/FloatingParticles';
 import { Mail, ArrowUp, Moon, Sun } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 import { useTheme } from '../contexts/ThemeContext';
 
 export const HomePage = ({ onNavigate, currentPage }) => {
@@ -32,12 +32,7 @@ export const HomePage = ({ onNavigate, currentPage }) => {
 
   const fetchStats = async () => {
     try {
-      const { data, error } = await supabase
-        .from('platform_stats')
-        .select('*')
-        .maybeSingle();
-
-      if (error) throw error;
+      const data = await api.getPlatformStats();
       setStats(data || {});
     } catch (error) {
       console.error('Error fetching stats:', error);
