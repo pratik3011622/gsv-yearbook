@@ -4,7 +4,7 @@ import {
   Image, Briefcase, Calendar, BookOpen, AlertTriangle,
   Shield, Activity
 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const AdminDashboard = ({ onNavigate }) => {
@@ -30,14 +30,9 @@ export const AdminDashboard = ({ onNavigate }) => {
 
   const fetchPendingProfiles = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('approval_status', 'pending')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setPendingProfiles(data || []);
+      const data = await api.getAllProfiles();
+      const pending = data.filter(profile => profile.approvalStatus === 'pending');
+      setPendingProfiles(pending || []);
     } catch (error) {
       console.error('Error fetching pending profiles:', error);
     } finally {
@@ -47,23 +42,12 @@ export const AdminDashboard = ({ onNavigate }) => {
 
   const fetchStats = async () => {
     try {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('approval_status');
-
-      const { data: events } = await supabase
-        .from('events')
-        .select('id');
-
-      const { data: jobs } = await supabase
-        .from('jobs')
-        .select('id');
-
+      const statsData = await api.getAdminStats();
       setStats({
-        totalUsers: profiles?.filter(p => p.approval_status === 'approved').length || 0,
-        pendingApprovals: profiles?.filter(p => p.approval_status === 'pending').length || 0,
-        totalEvents: events?.length || 0,
-        totalJobs: jobs?.length || 0,
+        totalUsers: statsData.users?.approved || 0,
+        pendingApprovals: statsData.users?.pending || 0,
+        totalEvents: 0, // Will be updated when events are implemented
+        totalJobs: 0, // Will be updated when jobs are implemented
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -72,13 +56,7 @@ export const AdminDashboard = ({ onNavigate }) => {
 
   const fetchAdminLogs = async () => {
     try {
-      const { data, error } = await supabase
-        .from('admin_logs')
-        .select('*, admin_id:profiles(full_name)')
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (error) throw error;
+      const data = await api.getAdminLogs();
       setAdminLogs(data || []);
     } catch (error) {
       console.error('Error fetching admin logs:', error);
@@ -87,45 +65,10 @@ export const AdminDashboard = ({ onNavigate }) => {
 
   const handleApproval = async (profileId, status, reason = null) => {
     try {
-      const updateData = {
-        approval_status: status,
-        approved_by: profile.id,
-        approved_at: new Date().toISOString(),
-      };
-
-      if (reason) {
-        updateData.rejection_reason = reason;
-      }
-
-      const { error } = await supabase
-        .from('profiles')
-        .update(updateData)
-        .eq('id', profileId);
-
-      if (error) throw error;
-
-      await supabase.from('admin_logs').insert([
-        {
-          admin_id: profile.id,
-          action: status === 'approved' ? 'APPROVE_USER' : 'REJECT_USER',
-          target_type: 'profile',
-          target_id: profileId,
-          details: { reason },
-        },
-      ]);
-
       if (status === 'approved') {
-        const { data: statsData } = await supabase
-          .from('platform_stats')
-          .select('*')
-          .maybeSingle();
-
-        if (statsData) {
-          await supabase
-            .from('platform_stats')
-            .update({ total_alumni: (statsData.total_alumni || 0) + 1 })
-            .eq('id', statsData.id);
-        }
+        await api.approveUser(profileId);
+      } else {
+        await api.rejectUser(profileId, reason);
       }
 
       fetchPendingProfiles();
@@ -267,12 +210,12 @@ export const AdminDashboard = ({ onNavigate }) => {
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-4 flex-1">
                           <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-amber-500 rounded-full flex items-center justify-center text-2xl font-bold text-white">
-                            {user.full_name?.charAt(0) || '?'}
+                            {user.fullName?.charAt(0) || '?'}
                           </div>
 
                           <div className="flex-1">
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                              {user.full_name}
+                              {user.fullName}
                             </h3>
                             <p className="text-slate-600 dark:text-slate-400 mb-2">
                               {user.email}
@@ -282,13 +225,13 @@ export const AdminDashboard = ({ onNavigate }) => {
                               <div>
                                 <span className="text-slate-500 dark:text-slate-500">Type:</span>
                                 <span className="ml-2 font-medium text-slate-700 dark:text-slate-300">
-                                  {user.user_type}
+                                  {user.userType}
                                 </span>
                               </div>
                               <div>
                                 <span className="text-slate-500 dark:text-slate-500">Batch:</span>
                                 <span className="ml-2 font-medium text-slate-700 dark:text-slate-300">
-                                  {user.batch_year}
+                                  {user.batchYear}
                                 </span>
                               </div>
                               <div>
@@ -297,18 +240,18 @@ export const AdminDashboard = ({ onNavigate }) => {
                                   {user.department}
                                 </span>
                               </div>
-                              {user.current_company && (
+                              {user.currentCompany && (
                                 <div>
                                   <span className="text-slate-500 dark:text-slate-500">Company:</span>
                                   <span className="ml-2 font-medium text-slate-700 dark:text-slate-300">
-                                    {user.current_company}
+                                    {user.currentCompany}
                                   </span>
                                 </div>
                               )}
                             </div>
 
                             <p className="text-xs text-slate-500 dark:text-slate-500 mt-3">
-                              Registered: {new Date(user.created_at).toLocaleDateString()}
+                              Registered: {new Date(user.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
@@ -369,7 +312,7 @@ export const AdminDashboard = ({ onNavigate }) => {
                             </span>
                           </div>
                           <p className="text-sm text-slate-600 dark:text-slate-400">
-                            by {log.admin_id?.full_name || 'Unknown Admin'}
+                            by {log.adminId?.fullName || 'Unknown Admin'}
                           </p>
                           {log.details?.reason && (
                             <p className="text-sm text-slate-500 dark:text-slate-500 mt-1">
@@ -378,7 +321,7 @@ export const AdminDashboard = ({ onNavigate }) => {
                           )}
                         </div>
                         <span className="text-xs text-slate-500 dark:text-slate-500">
-                          {new Date(log.created_at).toLocaleString()}
+                          {new Date(log.createdAt).toLocaleString()}
                         </span>
                       </div>
                     </div>

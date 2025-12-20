@@ -4,7 +4,7 @@ import {
   CheckCircle, Circle, Sparkles, TrendingUp
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 export const DashboardPage = ({ onNavigate }) => {
   const { profile, user } = useAuth();
@@ -30,14 +30,12 @@ export const DashboardPage = ({ onNavigate }) => {
 
   const fetchDashboardData = async () => {
     try {
-      const { data: rsvps } = await supabase
-        .from('event_rsvps')
-        .select('*')
-        .eq('user_id', user.id);
+      // Get user's mentorship sessions as a proxy for activity
+      const sessions = await api.getMySessions();
 
       setStats((prev) => ({
         ...prev,
-        eventsAttending: rsvps?.length || 0,
+        eventsAttending: sessions?.length || 0,
       }));
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -49,7 +47,7 @@ export const DashboardPage = ({ onNavigate }) => {
       let completed = false;
 
       if (item.id === 1) {
-        completed = !!(profile?.full_name && profile?.department && profile?.batch_year);
+        completed = !!(profile?.fullName && profile?.department && profile?.batchYear);
       }
 
       return { ...item, completed };
@@ -121,7 +119,7 @@ export const DashboardPage = ({ onNavigate }) => {
           <div className="flex items-center space-x-4 mb-4">
             <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
             <h1 className="text-4xl sm:text-5xl font-serif font-bold text-slate-900 dark:text-white">
-              Welcome back, {profile?.full_name?.split(' ')[0] || 'Friend'}!
+              Welcome back, {profile?.fullName?.split(' ')[0] || 'Friend'}!
             </h1>
           </div>
           <p className="text-xl text-slate-600 dark:text-slate-400">
@@ -205,23 +203,23 @@ export const DashboardPage = ({ onNavigate }) => {
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-6 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-amber-500 rounded-full flex items-center justify-center text-2xl font-bold text-white">
-                  {profile?.full_name?.charAt(0) || '?'}
+                  {profile?.fullName?.charAt(0) || '?'}
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 dark:text-white">
-                    {profile?.full_name}
+                    {profile?.fullName}
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {profile?.user_type === 'alumni' ? 'Alumni' : 'Student'}
+                    {profile?.userType === 'alumni' ? 'Alumni' : 'Student'}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-3">
-                {profile?.batch_year && (
+                {profile?.batchYear && (
                   <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                     <span className="font-medium mr-2">Batch:</span>
-                    <span>{profile.batch_year}</span>
+                    <span>{profile.batchYear}</span>
                   </div>
                 )}
                 {profile?.department && (
@@ -230,10 +228,10 @@ export const DashboardPage = ({ onNavigate }) => {
                     <span>{profile.department}</span>
                   </div>
                 )}
-                {profile?.current_company && (
+                {profile?.currentCompany && (
                   <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                     <span className="font-medium mr-2">Company:</span>
-                    <span>{profile.current_company}</span>
+                    <span>{profile.currentCompany}</span>
                   </div>
                 )}
               </div>

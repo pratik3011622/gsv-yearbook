@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, ChevronUp, Heart, Upload } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const MemoriesPage = () => {
@@ -16,12 +16,7 @@ export const MemoriesPage = () => {
 
   const fetchMemories = async () => {
     try {
-      const { data, error } = await supabase
-        .from('memories')
-        .select('*, uploaded_by:profiles(full_name)')
-        .order('year', { ascending: false });
-
-      if (error) throw error;
+      const data = await api.getMemories();
       setMemories(data || []);
     } catch (error) {
       console.error('Error fetching memories:', error);
@@ -41,18 +36,8 @@ export const MemoriesPage = () => {
   const years = Object.keys(groupedMemories).sort((a, b) => b - a);
 
   const handleLike = async (memoryId) => {
-    try {
-      const memory = memories.find((m) => m.id === memoryId);
-      const { error } = await supabase
-        .from('memories')
-        .update({ likes_count: (memory.likes_count || 0) + 1 })
-        .eq('id', memoryId);
-
-      if (error) throw error;
-      fetchMemories();
-    } catch (error) {
-      console.error('Error liking memory:', error);
-    }
+    // Like functionality not implemented in current API
+    console.log('Like functionality not available yet');
   };
 
   const getRandomMemory = () => {
@@ -125,7 +110,7 @@ export const MemoriesPage = () => {
           <div className="mb-12 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden max-w-4xl mx-auto">
             <div className="relative">
               <img
-                src={selectedMemory.image_url}
+                src={selectedMemory.imageUrl}
                 alt={selectedMemory.title}
                 className="w-full h-96 object-cover"
               />
@@ -205,12 +190,12 @@ export const MemoriesPage = () => {
                   <div className="p-6 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {groupedMemories[year].map((memory) => (
                       <div
-                        key={memory.id}
+                        key={memory._id || memory.id}
                         className="group relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-500 hover:-translate-y-2 border border-white/50 dark:border-slate-700/50"
                       >
                         <div className="relative h-64 overflow-hidden">
                           <img
-                            src={memory.image_url}
+                            src={memory.imageUrl}
                             alt={memory.title}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
@@ -235,16 +220,16 @@ export const MemoriesPage = () => {
 
                           <div className="flex items-center justify-between">
                             <button
-                              onClick={() => handleLike(memory.id)}
+                              onClick={() => handleLike(memory._id || memory.id)}
                               className="flex items-center space-x-1 text-slate-600 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                             >
                               <Heart className="w-4 h-4" />
-                              <span className="text-sm">{memory.likes_count || 0}</span>
+                              <span className="text-sm">{memory.likesCount || 0}</span>
                             </button>
 
-                            {memory.uploaded_by && (
+                            {memory.uploadedBy && (
                               <span className="text-xs text-slate-500 dark:text-slate-500">
-                                by {memory.uploaded_by.full_name}
+                                by {memory.uploadedBy.fullName}
                               </span>
                             )}
                           </div>

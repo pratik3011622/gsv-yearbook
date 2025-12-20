@@ -78,6 +78,11 @@ class ApiClient {
     return result.data;
   }
 
+  async getAllProfiles() {
+    const result = await this.request('/profiles/admin/all');
+    return result.data;
+  }
+
   async approveUser(userId) {
     const result = await this.request(`/profiles/${userId}/approve`, {
       method: 'PUT',

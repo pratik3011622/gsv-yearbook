@@ -7,11 +7,11 @@ export const RegisterPage = ({ onNavigate }) => {
     email: '',
     password: '',
     confirmPassword: '',
-    full_name: '',
-    user_type: 'alumni',
-    batch_year: '',
+    fullName: '',
+    userType: 'alumni',
+    batchYear: '',
     department: '',
-    current_company: '',
+    currentCompany: '',
     location: '',
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -44,9 +44,9 @@ export const RegisterPage = ({ onNavigate }) => {
 
     try {
       const { confirmPassword, ...userData } = formData;
-      userData.batch_year = parseInt(userData.batch_year);
+      userData.batchYear = parseInt(userData.batchYear);
 
-      await signUp(formData.email, formData.password, userData);
+      await signUp(userData);
       alert('Registration successful! Your account is pending approval. You will be notified once an administrator approves your registration.');
       onNavigate('login');
     } catch (err) {
@@ -90,9 +90,9 @@ export const RegisterPage = ({ onNavigate }) => {
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, user_type: 'alumni' })}
+                  onClick={() => setFormData({ ...formData, userType: 'alumni' })}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.user_type === 'alumni'
+                    formData.userType === 'alumni'
                       ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-slate-300 dark:border-slate-600'
                   }`}
@@ -100,12 +100,12 @@ export const RegisterPage = ({ onNavigate }) => {
                   <div className="text-center">
                     <GraduationCap
                       className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.user_type === 'alumni' ? 'text-blue-600' : 'text-slate-400'
+                        formData.userType === 'alumni' ? 'text-blue-600' : 'text-slate-400'
                       }`}
                     />
                     <span
                       className={`font-medium ${
-                        formData.user_type === 'alumni'
+                        formData.userType === 'alumni'
                           ? 'text-blue-600'
                           : 'text-slate-700 dark:text-slate-300'
                       }`}
@@ -116,9 +116,9 @@ export const RegisterPage = ({ onNavigate }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, user_type: 'student' })}
+                  onClick={() => setFormData({ ...formData, userType: 'student' })}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.user_type === 'student'
+                    formData.userType === 'student'
                       ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/20'
                       : 'border-slate-300 dark:border-slate-600'
                   }`}
@@ -126,12 +126,12 @@ export const RegisterPage = ({ onNavigate }) => {
                   <div className="text-center">
                     <User
                       className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.user_type === 'student' ? 'text-amber-600' : 'text-slate-400'
+                        formData.userType === 'student' ? 'text-amber-600' : 'text-slate-400'
                       }`}
                     />
                     <span
                       className={`font-medium ${
-                        formData.user_type === 'student'
+                        formData.userType === 'student'
                           ? 'text-amber-600'
                           : 'text-slate-700 dark:text-slate-300'
                       }`}
@@ -152,8 +152,8 @@ export const RegisterPage = ({ onNavigate }) => {
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input
                     type="text"
-                    name="full_name"
-                    value={formData.full_name}
+                    name="fullName"
+                    value={formData.fullName}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
                     placeholder="Your name"
@@ -233,8 +233,8 @@ export const RegisterPage = ({ onNavigate }) => {
                 </label>
                 <input
                   type="number"
-                  name="batch_year"
-                  value={formData.batch_year}
+                  name="batchYear"
+                  value={formData.batchYear}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
                   placeholder="2020"
@@ -261,17 +261,17 @@ export const RegisterPage = ({ onNavigate }) => {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  {formData.user_type === 'alumni' ? 'Current Company' : 'College/University'}
+                  {formData.userType === 'alumni' ? 'Current Company' : 'College/University'}
                 </label>
                 <div className="relative">
                   <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input
                     type="text"
-                    name="current_company"
-                    value={formData.current_company}
+                    name="currentCompany"
+                    value={formData.currentCompany}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
-                    placeholder={formData.user_type === 'alumni' ? 'Your company' : 'Your college'}
+                    placeholder={formData.userType === 'alumni' ? 'Your company' : 'Your college'}
                   />
                 </div>
               </div>

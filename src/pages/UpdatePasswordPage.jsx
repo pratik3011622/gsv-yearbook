@@ -1,18 +1,14 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 export const UpdatePasswordPage = ({ onNavigate }) => {
   const [newPassword, setNewPassword] = useState('');
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    
-    if (error) alert(error.message);
-    else {
-      alert("Password updated successfully!");
-      onNavigate('login');
-    }
+    // TODO: Implement password update with new backend
+    alert("Password update functionality will be available soon!");
+    onNavigate('login');
   };
 
   return (

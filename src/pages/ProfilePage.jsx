@@ -4,24 +4,24 @@ import {
   Mail, Phone, Globe, Linkedin, Github, Award, Calendar, CheckCircle
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 export const ProfilePage = ({ onNavigate }) => {
   const { profile, user, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    full_name: '',
+    fullName: '',
     bio: '',
-    batch_year: '',
+    batchYear: '',
     department: '',
-    current_company: '',
-    position: '',
+    currentCompany: '',
+    jobTitle: '',
     location: '',
     phone: '',
-    linkedin: '',
-    github: '',
-    website: '',
+    linkedinUrl: '',
+    githubUrl: '',
+    websiteUrl: '',
     skills: [],
     interests: [],
     achievements: []
@@ -30,17 +30,17 @@ export const ProfilePage = ({ onNavigate }) => {
   useEffect(() => {
     if (profile) {
       setFormData({
-        full_name: profile.full_name || '',
+        fullName: profile.fullName || '',
         bio: profile.bio || '',
-        batch_year: profile.batch_year || '',
+        batchYear: profile.batchYear || '',
         department: profile.department || '',
-        current_company: profile.current_company || '',
-        position: profile.position || '',
+        currentCompany: profile.currentCompany || '',
+        jobTitle: profile.jobTitle || '',
         location: profile.location || '',
         phone: profile.phone || '',
-        linkedin: profile.linkedin || '',
-        github: profile.github || '',
-        website: profile.website || '',
+        linkedinUrl: profile.linkedinUrl || '',
+        githubUrl: profile.githubUrl || '',
+        websiteUrl: profile.websiteUrl || '',
         skills: profile.skills || [],
         interests: profile.interests || [],
         achievements: profile.achievements || []
@@ -66,13 +66,7 @@ export const ProfilePage = ({ onNavigate }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update(formData)
-        .eq('id', user.id);
-
-      if (error) throw error;
-
+      await api.updateProfile(formData);
       await updateProfile(formData);
       setIsEditing(false);
       alert('Profile updated successfully!');
@@ -86,8 +80,8 @@ export const ProfilePage = ({ onNavigate }) => {
 
   const calculateProfileCompletion = () => {
     const fields = [
-      'full_name', 'bio', 'batch_year', 'department',
-      'current_company', 'position', 'location'
+      'fullName', 'bio', 'batchYear', 'department',
+      'currentCompany', 'jobTitle', 'location'
     ];
     const completedFields = fields.filter(field => formData[field]).length;
     return Math.round((completedFields / fields.length) * 100);
@@ -123,7 +117,7 @@ export const ProfilePage = ({ onNavigate }) => {
             <div className="absolute bottom-6 left-6 flex items-end space-x-6">
               <div className="relative">
                 <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-3xl font-bold text-blue-600 border-4 border-white shadow-lg">
-                  {formData.full_name?.charAt(0) || '?'}
+                  {formData.fullName?.charAt(0) || '?'}
                 </div>
                 {isEditing && (
                   <button className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
@@ -132,9 +126,9 @@ export const ProfilePage = ({ onNavigate }) => {
                 )}
               </div>
               <div className="text-white">
-                <h1 className="text-3xl font-bold mb-1">{formData.full_name || 'Your Name'}</h1>
+                <h1 className="text-3xl font-bold mb-1">{formData.fullName || 'Your Name'}</h1>
                 <p className="text-white/90">
-                  {profile?.user_type === 'alumni' ? 'Alumni' : 'Student'} • {formData.batch_year || 'Batch Year'}
+                  {profile?.userType === 'alumni' ? 'Alumni' : 'Student'} • {formData.batchYear || 'Batch Year'}
                 </p>
                 <div className="flex items-center mt-2">
                   <div className="flex items-center space-x-1">
@@ -213,12 +207,12 @@ export const ProfilePage = ({ onNavigate }) => {
                         {isEditing ? (
                           <input
                             type="number"
-                            value={formData.batch_year}
-                            onChange={(e) => handleInputChange('batch_year', e.target.value)}
+                            value={formData.batchYear}
+                            onChange={(e) => handleInputChange('batchYear', e.target.value)}
                             className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                           />
                         ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.batch_year || 'Not specified'}</p>
+                          <p className="text-slate-900 dark:text-white">{formData.batchYear || 'Not specified'}</p>
                         )}
                       </div>
                       <div>
@@ -255,12 +249,12 @@ export const ProfilePage = ({ onNavigate }) => {
                         {isEditing ? (
                           <input
                             type="text"
-                            value={formData.current_company}
-                            onChange={(e) => handleInputChange('current_company', e.target.value)}
+                            value={formData.currentCompany}
+                            onChange={(e) => handleInputChange('currentCompany', e.target.value)}
                             className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                           />
                         ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.current_company || 'Not specified'}</p>
+                          <p className="text-slate-900 dark:text-white">{formData.currentCompany || 'Not specified'}</p>
                         )}
                       </div>
                       <div>
@@ -270,12 +264,12 @@ export const ProfilePage = ({ onNavigate }) => {
                         {isEditing ? (
                           <input
                             type="text"
-                            value={formData.position}
-                            onChange={(e) => handleInputChange('position', e.target.value)}
+                            value={formData.jobTitle}
+                            onChange={(e) => handleInputChange('jobTitle', e.target.value)}
                             className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                           />
                         ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.position || 'Not specified'}</p>
+                          <p className="text-slate-900 dark:text-white">{formData.jobTitle || 'Not specified'}</p>
                         )}
                       </div>
                     </div>
@@ -365,19 +359,19 @@ export const ProfilePage = ({ onNavigate }) => {
                     Social Links
                   </h2>
                   <div className="space-y-3">
-                    {formData.linkedin && (
+                    {formData.linkedinUrl && (
                       <div className="flex items-center space-x-3">
                         <Linkedin className="w-4 h-4 text-blue-600" />
                         {isEditing ? (
                           <input
                             type="url"
-                            value={formData.linkedin}
-                            onChange={(e) => handleInputChange('linkedin', e.target.value)}
+                            value={formData.linkedinUrl}
+                            onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
                             className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
                           />
                         ) : (
                           <a
-                            href={formData.linkedin}
+                            href={formData.linkedinUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:text-blue-700 transition-colors"
@@ -387,19 +381,19 @@ export const ProfilePage = ({ onNavigate }) => {
                         )}
                       </div>
                     )}
-                    {formData.github && (
+                    {formData.githubUrl && (
                       <div className="flex items-center space-x-3">
                         <Github className="w-4 h-4 text-slate-700 dark:text-slate-300" />
                         {isEditing ? (
                           <input
                             type="url"
-                            value={formData.github}
-                            onChange={(e) => handleInputChange('github', e.target.value)}
+                            value={formData.githubUrl}
+                            onChange={(e) => handleInputChange('githubUrl', e.target.value)}
                             className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
                           />
                         ) : (
                           <a
-                            href={formData.github}
+                            href={formData.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
@@ -409,19 +403,19 @@ export const ProfilePage = ({ onNavigate }) => {
                         )}
                       </div>
                     )}
-                    {formData.website && (
+                    {formData.websiteUrl && (
                       <div className="flex items-center space-x-3">
                         <Globe className="w-4 h-4 text-green-600" />
                         {isEditing ? (
                           <input
                             type="url"
-                            value={formData.website}
-                            onChange={(e) => handleInputChange('website', e.target.value)}
+                            value={formData.websiteUrl}
+                            onChange={(e) => handleInputChange('websiteUrl', e.target.value)}
                             className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
                           />
                         ) : (
                           <a
-                            href={formData.website}
+                            href={formData.websiteUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-green-600 hover:text-green-700 transition-colors"

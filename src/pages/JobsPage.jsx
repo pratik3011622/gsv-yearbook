@@ -125,7 +125,7 @@ export const JobsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {featuredJobs.map((job) => (
                 <div
-                  key={job.id}
+                  key={job._id || job.id}
                   className="relative bg-gradient-to-br from-blue-600 to-amber-600 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 >
                   <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">

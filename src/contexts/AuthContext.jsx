@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 
 const AuthContext = createContext({});
 
@@ -17,132 +17,62 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      (async () => {
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        } else {
-          setProfile(null);
-          setLoading(false);
-        }
-      })();
-    });
-
-    return () => subscription.unsubscribe();
+    // Check for existing token and validate it
+    const token = localStorage.getItem('token');
+    if (token) {
+      validateToken();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  const fetchProfile = async (userId) => {
+  const validateToken = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles') // Ensure your table in Supabase is named 'profiles' (lowercase)
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error) throw error;
-      setProfile(data);
+      const userData = await api.getCurrentUser();
+      setUser(userData.user);
+      // Get full profile data
+      const profileData = await api.getProfile(userData.user.id);
+      setProfile(profileData);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('Token validation failed:', error);
+      localStorage.removeItem('token');
     } finally {
       setLoading(false);
     }
   };
 
-  const signUp = async (email, password, userData) => {
-    // 1. Create the user in Supabase Auth (Secure)
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) throw error;
-
-    // 2. Create the public profile (Do NOT send password here)
-    if (data.user) {
-      const { error: profileError } = await supabase.from('profiles').insert([
-        {
-          id: data.user.id,
-          email: data.user.email,
-          // Explicitly map fields to avoid sending 'password' or 'confirmPassword'
-          full_name: userData.full_name,
-          batch_year: userData.batch_year,
-          department: userData.department,
-          current_company: userData.current_company,
-          location: userData.location,
-          user_type: userData.user_type,
-          // Set roles/status
-          role: userData.user_type, // or 'student'/'alumni' based on your logic
-          approval_status: 'pending',
-        },
-      ]);
-
-      if (profileError) throw profileError;
+  const signUp = async (userData) => {
+    const result = await api.register(userData);
+    if (result.user) {
+      setUser(result.user);
+      // Get full profile data
+      const profileData = await api.getProfile(result.user.id);
+      setProfile(profileData);
     }
-
-    return data;
+    return result;
   };
 
   const signIn = async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) throw error;
-
-    if (data.user) {
-      // Check if user is approved before letting them fully in
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('approval_status')
-        .eq('id', data.user.id)
-        .maybeSingle();
-
-      if (profileError) throw profileError;
-
-      if (profile && profile.approval_status === 'pending') {
-        await supabase.auth.signOut();
-        throw new Error('Your account is pending approval. Please wait for an administrator to approve your registration.');
-      }
-
-      if (profile && profile.approval_status === 'rejected') {
-        await supabase.auth.signOut();
-        throw new Error('Your account registration was rejected. Please contact support for more information.');
-      }
+    const result = await api.login({ email, password });
+    if (result.user) {
+      setUser(result.user);
+      // Get full profile data
+      const profileData = await api.getProfile(result.user.id);
+      setProfile(profileData);
     }
-
-    return data;
+    return result;
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    localStorage.removeItem('token');
+    setUser(null);
+    setProfile(null);
   };
 
   const updateProfile = async (updatedData) => {
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update(updatedData)
-        .eq('id', user.id);
-
-      if (error) throw error;
-
-      setProfile(prev => ({ ...prev, ...updatedData }));
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      throw error;
-    }
+    const result = await api.updateProfile(updatedData);
+    setProfile(prev => ({ ...prev, ...result }));
+    return result;
   };
 
   const value = {
