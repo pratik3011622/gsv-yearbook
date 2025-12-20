@@ -29,4 +29,18 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = { auth, isAdmin };
+const isAlumni = (req, res, next) => {
+  if (req.user.role !== 'alumni') {
+    return res.status(403).json({ message: 'Access denied. Alumni only.' });
+  }
+  next();
+};
+
+const isAlumniOrAdmin = (req, res, next) => {
+  if (req.user.role !== 'alumni' && req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Access denied. Alumni or Admin only.' });
+  }
+  next();
+};
+
+module.exports = { auth, isAdmin, isAlumni, isAlumniOrAdmin };

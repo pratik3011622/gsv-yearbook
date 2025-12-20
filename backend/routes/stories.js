@@ -1,6 +1,6 @@
 const express = require('express');
 const Story = require('../models/Story');
-const { auth, isAdmin } = require('../middleware/auth');
+const { auth, isAdmin, isAlumni } = require('../middleware/auth');
 const { validateStory } = require('../middleware/validation');
 
 const router = express.Router();
@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create story
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, isAlumni, async (req, res) => {
   try {
     const story = new Story({
       ...req.body,

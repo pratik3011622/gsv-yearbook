@@ -3,10 +3,13 @@ import { BookOpen, Eye, Calendar, Tag, ChevronRight } from 'lucide-react';
 import { api } from '../lib/api';
 
 export const StoriesPage = () => {
-  const [stories, setStories] = useState([]);
-  const [featuredStories, setFeaturedStories] = useState([]);
-  const [currentFeatured, setCurrentFeatured] = useState(0);
-  const [loading, setLoading] = useState(true);
+   const [stories, setStories] = useState([]);
+   const [featuredStories, setFeaturedStories] = useState([]);
+   const [currentFeatured, setCurrentFeatured] = useState(0);
+   const [loading, setLoading] = useState(true);
+   const { profile } = useAuth();
+
+   const isAlumni = profile?.role === 'alumni';
 
   useEffect(() => {
     fetchStories();
@@ -149,15 +152,18 @@ export const StoriesPage = () => {
             <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : stories.length === 0 ? (
-          <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
-            <BookOpen className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
-              No stories yet
-            </h3>
-            <p className="text-slate-600 dark:text-slate-400">
-              Be the first to share your journey
-            </p>
-          </div>
+           <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
+             <BookOpen className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+             <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+               No stories yet
+             </h3>
+             <p className="text-slate-600 dark:text-slate-400">
+               {isAlumni
+                 ? "Be the first to share your journey"
+                 : "Check back later for inspiring stories from alumni"
+               }
+             </p>
+           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {stories.map((story) => (

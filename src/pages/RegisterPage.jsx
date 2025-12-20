@@ -8,7 +8,7 @@ export const RegisterPage = ({ onNavigate }) => {
     password: '',
     confirmPassword: '',
     fullName: '',
-    userType: 'alumni',
+    role: 'guest',
     batchYear: '',
     department: '',
     currentCompany: '',
@@ -44,10 +44,14 @@ export const RegisterPage = ({ onNavigate }) => {
 
     try {
       const { confirmPassword, ...userData } = formData;
-      userData.batchYear = parseInt(userData.batchYear);
+      userData.batchYear = parseInt(userData.batchYear) || null;
 
       await signUp(userData);
-      alert('Registration successful! Your account is pending approval. You will be notified once an administrator approves your registration.');
+      if (userData.role === 'alumni') {
+        alert('Registration successful! Your account is pending approval. You will be notified once an administrator approves your registration.');
+      } else {
+        alert('Registration successful! You can now explore the platform as a guest.');
+      }
       onNavigate('login');
     } catch (err) {
       setError(err.message || 'Failed to create account. Please try again.');
@@ -85,14 +89,14 @@ export const RegisterPage = ({ onNavigate }) => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                I am a
+                I want to join as
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, userType: 'alumni' })}
+                  onClick={() => setFormData({ ...formData, role: 'alumni' })}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.userType === 'alumni'
+                    formData.role === 'alumni'
                       ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-slate-300 dark:border-slate-600'
                   }`}
@@ -100,44 +104,46 @@ export const RegisterPage = ({ onNavigate }) => {
                   <div className="text-center">
                     <GraduationCap
                       className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.userType === 'alumni' ? 'text-blue-600' : 'text-slate-400'
+                        formData.role === 'alumni' ? 'text-blue-600' : 'text-slate-400'
                       }`}
                     />
                     <span
                       className={`font-medium ${
-                        formData.userType === 'alumni'
+                        formData.role === 'alumni'
                           ? 'text-blue-600'
                           : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       Alumni
                     </span>
+                    <p className="text-xs mt-1 text-slate-500">Can post stories, jobs, memories</p>
                   </div>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, userType: 'student' })}
+                  onClick={() => setFormData({ ...formData, role: 'guest' })}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.userType === 'student'
-                      ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/20'
+                    formData.role === 'guest'
+                      ? 'border-green-600 bg-green-50 dark:bg-green-900/20'
                       : 'border-slate-300 dark:border-slate-600'
                   }`}
                 >
                   <div className="text-center">
                     <User
                       className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.userType === 'student' ? 'text-amber-600' : 'text-slate-400'
+                        formData.role === 'guest' ? 'text-green-600' : 'text-slate-400'
                       }`}
                     />
                     <span
                       className={`font-medium ${
-                        formData.userType === 'student'
-                          ? 'text-amber-600'
+                        formData.role === 'guest'
+                          ? 'text-green-600'
                           : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
-                      Student
+                      Guest
                     </span>
+                    <p className="text-xs mt-1 text-slate-500">View-only access</p>
                   </div>
                 </button>
               </div>
@@ -226,73 +232,77 @@ export const RegisterPage = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Batch Year
-                </label>
-                <input
-                  type="number"
-                  name="batchYear"
-                  value={formData.batchYear}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
-                  placeholder="2020"
-                  required
-                />
-              </div>
+            {formData.role === 'alumni' && (
+              <>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Batch Year
+                    </label>
+                    <input
+                      type="number"
+                      name="batchYear"
+                      value={formData.batchYear}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                      placeholder="2020"
+                      required
+                    />
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Department
-                </label>
-                <input
-                  type="text"
-                  name="department"
-                  value={formData.department}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
-                  placeholder="Computer Science"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  {formData.userType === 'alumni' ? 'Current Company' : 'College/University'}
-                </label>
-                <div className="relative">
-                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input
-                    type="text"
-                    name="currentCompany"
-                    value={formData.currentCompany}
-                    onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
-                    placeholder={formData.userType === 'alumni' ? 'Your company' : 'Your college'}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Department
+                    </label>
+                    <input
+                      type="text"
+                      name="department"
+                      value={formData.department}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                      placeholder="Computer Science"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Location
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
-                    placeholder="City, Country"
-                  />
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Current Company
+                    </label>
+                    <div className="relative">
+                      <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type="text"
+                        name="currentCompany"
+                        value={formData.currentCompany}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                        placeholder="Your company"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Location
+                    </label>
+                    <div className="relative">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                        placeholder="City, Country"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
 
             <button
               type="submit"

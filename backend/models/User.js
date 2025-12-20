@@ -37,8 +37,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'alumni', 'admin'],
-    default: 'alumni',
+    enum: ['guest', 'student', 'alumni', 'admin'],
+    default: 'guest',
     required: true,
   },
   approvalStatus: {

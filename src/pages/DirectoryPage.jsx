@@ -40,15 +40,15 @@ export const DirectoryPage = () => {
     if (searchTerm) {
       filtered = filtered.filter(
         (profile) =>
-          profile.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          profile.current_company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          profile.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          profile.currentCompany?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           profile.department?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (filters.batch_year) {
       filtered = filtered.filter(
-        (profile) => profile.batch_year === parseInt(filters.batch_year)
+        (profile) => profile.batchYear === parseInt(filters.batch_year)
       );
     }
 
@@ -67,7 +67,7 @@ export const DirectoryPage = () => {
     setFilteredProfiles(filtered);
   };
 
-  const uniqueBatchYears = [...new Set(profiles.map((p) => p.batch_year))].filter(Boolean).sort((a, b) => b - a);
+  const uniqueBatchYears = [...new Set(profiles.map((p) => p.batchYear))].filter(Boolean).sort((a, b) => b - a);
   const uniqueDepartments = [...new Set(profiles.map((p) => p.department))].filter(Boolean).sort();
 
   return (
@@ -215,32 +215,32 @@ export const DirectoryPage = () => {
                 <div className="relative px-6 pb-6">
                   <div className="absolute -top-16 left-6">
                     <div className="w-32 h-32 bg-slate-200 dark:bg-slate-700 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center text-4xl font-bold text-blue-600 dark:text-blue-400">
-                      {profile.full_name?.charAt(0) || '?'}
+                      {profile.fullName?.charAt(0) || '?'}
                     </div>
                   </div>
 
                   <div className="pt-20">
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                      {profile.full_name}
+                      {profile.fullName}
                     </h3>
 
-                    {profile.batch_year && (
+                    {profile.batchYear && (
                       <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 mb-3">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>Class of {profile.batch_year}</span>
+                        <span>Class of {profile.batchYear}</span>
                       </div>
                     )}
 
-                    {profile.current_company && (
+                    {profile.currentCompany && (
                       <div className="flex items-center text-sm text-slate-700 dark:text-slate-300 mb-2">
                         <Briefcase className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
-                        <span className="font-medium">{profile.current_company}</span>
+                        <span className="font-medium">{profile.currentCompany}</span>
                       </div>
                     )}
 
-                    {profile.job_title && (
+                    {profile.jobTitle && (
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-                        {profile.job_title}
+                        {profile.jobTitle}
                       </p>
                     )}
 
@@ -264,9 +264,9 @@ export const DirectoryPage = () => {
                       </div>
                     )}
 
-                    {profile.linkedin_url && (
+                    {profile.linkedinUrl && (
                       <a
-                        href={profile.linkedin_url}
+                        href={profile.linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors"

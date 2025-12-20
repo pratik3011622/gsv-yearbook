@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const Memory = require('../models/Memory');
 const PhotoUpload = require('../models/PhotoUpload');
-const { auth, isAdmin } = require('../middleware/auth');
+const { auth, isAdmin, isAlumni } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -56,7 +56,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create memory
-router.post('/', auth, upload.single('image'), async (req, res) => {
+router.post('/', auth, isAlumni, upload.single('image'), async (req, res) => {
   try {
     const { title, description, year, eventType } = req.body;
 
@@ -129,7 +129,7 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 // Upload photo for moderation
-router.post('/upload', auth, upload.single('image'), async (req, res) => {
+router.post('/upload', auth, isAlumni, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Image file is required' });

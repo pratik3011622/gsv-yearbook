@@ -48,7 +48,11 @@ export const Navigation = ({ onNavigate, currentPage }) => {
   const userNavItems = user
     ? [
         ...baseNavItems,
-        { id: 'jobs', label: 'Jobs' },
+        ...(profile?.role === 'alumni' ? [
+          { id: 'jobs', label: 'Jobs' },
+          { id: 'stories', label: 'Stories' },
+          { id: 'memories', label: 'Memories' },
+        ] : []),
         { id: 'profile', label: 'Profile' },
         { id: 'dashboard', label: 'Dashboard' },
       ]
@@ -215,12 +219,12 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                   <p className={`text-sm font-medium transition-colors duration-300 ${
                     currentPage === 'home' ? 'text-neutral-800' : 'text-neutral-800 dark:text-neutral-200'
                   }`}>
-                    {profile?.full_name || 'User'}
+                    {profile?.fullName || 'User'}
                   </p>
                   <p className={`text-xs transition-colors duration-300 ${
                     currentPage === 'home' ? 'text-neutral-600' : 'text-neutral-600 dark:text-neutral-400'
                   }`}>
-                    {profile?.user_type === 'alumni' ? 'Alumni' : 'Student'}
+                    {profile?.role === 'alumni' ? 'Alumni' : profile?.role === 'guest' ? 'Guest' : 'Student'}
                   </p>
                 </div>
                 <button

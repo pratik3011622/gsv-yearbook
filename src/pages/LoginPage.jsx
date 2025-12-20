@@ -17,7 +17,7 @@ export const LoginPage = ({ onNavigate }) => {
 
     try {
       await signIn(email, password);
-      onNavigate('profile'); // Changed from 'dashboard' to 'profile' for testing
+      onNavigate('home');
     } catch (err) {
       setError(err.message || 'Failed to sign in. Please check your credentials.');
     } finally {

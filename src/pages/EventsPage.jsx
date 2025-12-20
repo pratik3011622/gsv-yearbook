@@ -200,7 +200,7 @@ export const EventsPage = ({ onNavigate }) => {
 
                   {filter === 'upcoming' && (
                     <button
-                      onClick={() => handleRSVP(event.id)}
+                      onClick={() => handleRSVP(event._id || event.id)}
                       className="w-full py-3 bg-gradient-to-r from-blue-600 to-amber-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all flex items-center justify-center space-x-2"
                     >
                       <CheckCircle className="w-5 h-5" />

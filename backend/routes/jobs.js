@@ -1,6 +1,6 @@
 const express = require('express');
 const Job = require('../models/Job');
-const { auth, isAdmin } = require('../middleware/auth');
+const { auth, isAdmin, isAlumni } = require('../middleware/auth');
 const { validateJob } = require('../middleware/validation');
 
 const router = express.Router();
@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create job
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, isAlumni, async (req, res) => {
   try {
     const job = new Job({
       ...req.body,

@@ -9,15 +9,19 @@ import { AnimatedText } from '../components/AnimatedText';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { ParallaxSection } from '../components/ParallaxSection';
 import { FloatingParticles } from '../components/FloatingParticles';
-import { Mail, ArrowUp, Moon, Sun } from 'lucide-react';
+import { Mail, ArrowUp, Moon, Sun, User, Briefcase, BookOpen, Image, Users, TrendingUp } from 'lucide-react';
 import { api } from '../lib/api';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export const HomePage = ({ onNavigate, currentPage }) => {
-  const [stats, setStats] = useState({});
-  const [email, setEmail] = useState('');
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const { isDark, toggleTheme } = useTheme();
+   const [stats, setStats] = useState({});
+   const [email, setEmail] = useState('');
+   const [showScrollTop, setShowScrollTop] = useState(false);
+   const { isDark, toggleTheme } = useTheme();
+   const { user, profile } = useAuth();
+
+   const isAlumni = profile?.role === 'alumni';
 
   useEffect(() => {
     fetchStats();
@@ -52,6 +56,128 @@ export const HomePage = ({ onNavigate, currentPage }) => {
   return (
     <div className="relative">
       <Hero onNavigate={onNavigate} currentPage={currentPage} />
+
+      {/* User Dashboard Section */}
+      {user && (
+        <div className="relative py-8 sm:py-12 md:py-16 bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+          <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+            <ScrollReveal direction="up" delay={0.1}>
+              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 sm:p-8 mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 dark:text-white mb-2">
+                      Welcome back, {profile?.fullName?.split(' ')[0] || 'User'}!
+                    </h2>
+                    <p className="text-slate-600 dark:text-slate-400">
+                      {isAlumni ? 'Alumni Dashboard' : 'Guest Dashboard'} • {profile?.role === 'alumni' ? 'Full Access' : 'View Only'}
+                    </p>
+                  </div>
+                  <div className="hidden sm:flex items-center space-x-4">
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-slate-900 dark:text-white">
+                        {profile?.fullName}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">
+                        {profile?.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white">
+                    <Users className="w-8 h-8 mb-2" />
+                    <h3 className="font-bold text-lg">Directory</h3>
+                    <p className="text-sm opacity-90">Connect with alumni</p>
+                    <button
+                      onClick={() => onNavigate('directory')}
+                      className="mt-2 px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-colors"
+                    >
+                      Explore
+                    </button>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white">
+                    <TrendingUp className="w-8 h-8 mb-2" />
+                    <h3 className="font-bold text-lg">Events</h3>
+                    <p className="text-sm opacity-90">Upcoming reunions</p>
+                    <button
+                      onClick={() => onNavigate('events')}
+                      className="mt-2 px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-colors"
+                    >
+                      View Events
+                    </button>
+                  </div>
+
+                  {isAlumni && (
+                    <>
+                      <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-4 text-white">
+                        <Briefcase className="w-8 h-8 mb-2" />
+                        <h3 className="font-bold text-lg">Jobs</h3>
+                        <p className="text-sm opacity-90">Post opportunities</p>
+                        <button
+                          onClick={() => onNavigate('jobs')}
+                          className="mt-2 px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-colors"
+                        >
+                          Post Job
+                        </button>
+                      </div>
+
+                      <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl p-4 text-white">
+                        <BookOpen className="w-8 h-8 mb-2" />
+                        <h3 className="font-bold text-lg">Stories</h3>
+                        <p className="text-sm opacity-90">Share your journey</p>
+                        <button
+                          onClick={() => onNavigate('stories')}
+                          className="mt-2 px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-colors"
+                        >
+                          Write Story
+                        </button>
+                      </div>
+
+                      <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-4 text-white md:col-span-2">
+                        <Image className="w-8 h-8 mb-2" />
+                        <h3 className="font-bold text-lg">Memories</h3>
+                        <p className="text-sm opacity-90">Upload college memories</p>
+                        <button
+                          onClick={() => onNavigate('memories')}
+                          className="mt-2 px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-colors"
+                        >
+                          Upload Memory
+                        </button>
+                      </div>
+                    </>
+                  )}
+
+                  {!isAlumni && (
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white md:col-span-2">
+                      <User className="w-8 h-8 mb-2" />
+                      <h3 className="font-bold text-lg">Guest Access</h3>
+                      <p className="text-sm opacity-90">View content from alumni</p>
+                      <button
+                        onClick={() => onNavigate('register')}
+                        className="mt-2 px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-colors"
+                      >
+                        Become Alumni
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {isAlumni && (
+                  <div className="bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-900/20 dark:to-amber-900/20 rounded-xl p-4">
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-2">Alumni Privileges</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      As an alumni, you can post jobs, share stories, upload memories, and connect with fellow graduates.
+                      Your contributions help build our vibrant community!
+                    </p>
+                  </div>
+                )}
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      )}
 
       {/* Professional Section */}
       <div className="relative py-8 sm:py-12 md:py-16 overflow-hidden bg-white">

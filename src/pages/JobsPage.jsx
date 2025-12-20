@@ -3,9 +3,12 @@ import { Briefcase, MapPin, Building, ExternalLink, Clock, Tag } from 'lucide-re
 import { api } from '../lib/api';
 
 export const JobsPage = () => {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+   const [jobs, setJobs] = useState([]);
+   const [loading, setLoading] = useState(true);
+   const [filter, setFilter] = useState('all');
+   const { profile } = useAuth();
+
+   const isAlumni = profile?.role === 'alumni';
 
   useEffect(() => {
     fetchJobs();
@@ -168,15 +171,18 @@ export const JobsPage = () => {
             <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : filteredJobs.length === 0 ? (
-          <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
-            <Briefcase className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
-              No jobs found
-            </h3>
-            <p className="text-slate-600 dark:text-slate-400">
-              Check back later for new opportunities
-            </p>
-          </div>
+           <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
+             <Briefcase className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+             <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+               No jobs found
+             </h3>
+             <p className="text-slate-600 dark:text-slate-400">
+               {isAlumni
+                 ? "Be the first to post a job opportunity"
+                 : "Check back later for new opportunities posted by alumni"
+               }
+             </p>
+           </div>
         ) : (
           <div className="space-y-4">
             {filteredJobs.map((job) => (
