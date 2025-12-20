@@ -152,7 +152,7 @@ export const HomePage = ({ onNavigate, currentPage }) => {
                     </svg>
                   </a>
                   <a
-                    href="https://www.instagram.com/gsv.ac.in/"
+                    href="https://www.instagram.com/gsv.vadodara/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all hover:scale-110"
@@ -272,7 +272,7 @@ export const HomePage = ({ onNavigate, currentPage }) => {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 sm:bottom-8 right-4 sm:right-8 p-3 sm:p-4 bg-gradient-to-r from-primary-600 to-accent-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 z-40"
+          className="fixed bottom-6 sm:bottom-8 right-4 sm:right-8 p-3 sm:p-4 bg-gradient-to-r from-blue-600 to-amber-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 z-40"
           aria-label="Scroll to top"
         >
           <ArrowUp className="w-5 h-5 sm:w-6 sm:h-6" />

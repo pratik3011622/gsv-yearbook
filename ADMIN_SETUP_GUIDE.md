@@ -1,8 +1,8 @@
-# 🛡️ Admin Setup Guide - AlumniVerse
+# 🛡️ Admin Setup Guide - GSVConnect
 
 ## Overview
 
-AlumniVerse now includes a comprehensive admin system with user approval workflows, content moderation, and activity logging.
+GSVConnect now includes a comprehensive admin system with user approval workflows, content moderation, and activity logging.
 
 ## Admin Features
 
@@ -53,7 +53,7 @@ Since you're creating the first admin, you'll need database access:
 
 ### Step 3: Login
 
-1. Return to AlumniVerse
+1. Return to GSVConnect
 2. Click "Sign In"
 3. Enter your credentials
 4. You should now see an "Admin" link in the navigation

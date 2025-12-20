@@ -37,14 +37,18 @@ export const LoginPage = ({ onNavigate }) => {
     <div className="min-h-screen pt-20 pb-12 bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <div className="max-w-md mx-auto px-4">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-amber-500 rounded-full mb-4 shadow-lg">
-            <GraduationCap className="w-10 h-10 text-white" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-amber-500 rounded-full mb-4 shadow-lg overflow-hidden">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
+              alt="Gati Shakti Vishwavidyalaya Logo"
+              className="w-12 h-12 object-contain"
+            />
           </div>
           <h1 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mb-2">
             Welcome Back
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
-            Sign in to continue your AlumniVerse journey
+            Sign in to continue your GSVConnect journey
           </p>
         </div>
 
@@ -113,7 +117,7 @@ export const LoginPage = ({ onNavigate }) => {
                 onClick={() => onNavigate('register')}
                 className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
               >
-                Join AlumniVerse
+                Join GSVConnect
               </button>
             </p>
           </div>
