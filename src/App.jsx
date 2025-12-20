@@ -57,6 +57,7 @@ function App() {
   }, []);
 
   const renderPage = () => {
+    console.log("Supabase URL:", import.meta.env.VITE_SUPABASE_URL);
     switch (currentPage) {
       case 'home':
         return <HomePage onNavigate={handleNavigate} currentPage={currentPage} />;

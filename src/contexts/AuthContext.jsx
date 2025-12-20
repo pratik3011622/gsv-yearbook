@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   const fetchProfile = async (userId) => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('profiles') // Ensure your table in Supabase is named 'profiles' (lowercase)
         .select('*')
         .eq('id', userId)
         .maybeSingle();
@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signUp = async (email, password, userData) => {
+    // 1. Create the user in Supabase Auth (Secure)
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -66,13 +67,21 @@ export const AuthProvider = ({ children }) => {
 
     if (error) throw error;
 
+    // 2. Create the public profile (Do NOT send password here)
     if (data.user) {
       const { error: profileError } = await supabase.from('profiles').insert([
         {
           id: data.user.id,
           email: data.user.email,
-          ...userData,
-          role: userData.user_type,
+          // Explicitly map fields to avoid sending 'password' or 'confirmPassword'
+          full_name: userData.full_name,
+          batch_year: userData.batch_year,
+          department: userData.department,
+          current_company: userData.current_company,
+          location: userData.location,
+          user_type: userData.user_type,
+          // Set roles/status
+          role: userData.user_type, // or 'student'/'alumni' based on your logic
           approval_status: 'pending',
         },
       ]);
@@ -92,6 +101,7 @@ export const AuthProvider = ({ children }) => {
     if (error) throw error;
 
     if (data.user) {
+      // Check if user is approved before letting them fully in
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('approval_status')
@@ -128,7 +138,6 @@ export const AuthProvider = ({ children }) => {
 
       if (error) throw error;
 
-      // Update local state
       setProfile(prev => ({ ...prev, ...updatedData }));
     } catch (error) {
       console.error('Error updating profile:', error);
