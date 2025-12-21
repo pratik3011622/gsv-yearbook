@@ -57,6 +57,9 @@ export const AuthProvider = ({ children }) => {
     if (!result.user) {
       throw new Error(result.message || 'Login failed');
     }
+    // Clear previous user data before setting new one
+    setUser(null);
+    setProfile(null);
     setUser(result.user);
     // Get full profile data
     try {
