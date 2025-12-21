@@ -57,8 +57,20 @@ export const AuthProvider = ({ children }) => {
     if (result.user) {
       setUser(result.user);
       // Get full profile data
-      const profileData = await api.getProfile(result.user.id);
-      setProfile(profileData);
+      try {
+        const profileData = await api.getProfile(result.user.id);
+        setProfile(profileData);
+      } catch (error) {
+        console.error('Error fetching profile after login:', error);
+        // Set basic profile from login response as fallback
+        setProfile({
+          id: result.user.id,
+          email: result.user.email,
+          fullName: result.user.fullName,
+          role: result.user.role,
+          approvalStatus: result.user.approvalStatus,
+        });
+      }
     }
     return result;
   };
