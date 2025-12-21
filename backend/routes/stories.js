@@ -55,10 +55,11 @@ router.post('/', auth, async (req, res) => {
     const story = new Story({
       ...req.body,
       authorId: req.user._id,
+      approvalStatus: 'approved', // Auto-approve stories from authenticated alumni
     });
 
     await story.save();
-    await story.populate('authorId', 'fullName');
+    await story.populate('authorId', 'fullName batchYear');
 
     res.status(201).json(story);
   } catch (error) {

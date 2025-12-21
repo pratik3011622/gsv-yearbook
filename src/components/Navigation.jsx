@@ -34,15 +34,6 @@ export const Navigation = ({ onNavigate, currentPage }) => {
     { id: 'home', label: 'Home' },
     { id: 'directory', label: 'Directory' },
     { id: 'events', label: 'Events' },
-    {
-      id: 'yearbook',
-      label: 'Yearbook',
-      subItems: [
-        { id: 'photo-gallery', label: 'Photo Gallery' },
-        { id: 'video-gallery', label: 'Video Gallery' },
-        { id: 'magazine', label: 'Alumni Magazine' },
-      ]
-    },
   ];
 
   const userNavItems = user

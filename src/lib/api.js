@@ -217,6 +217,11 @@ class ApiClient {
     return result.data;
   }
 
+  async getStory(storyId) {
+    const result = await this.request(`/stories/${storyId}`);
+    return result.data;
+  }
+
   async createStory(storyData) {
     const result = await this.request('/stories', {
       method: 'POST',

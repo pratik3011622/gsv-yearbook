@@ -46,22 +46,22 @@ export const StoryDetailPage = ({ onNavigate }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="inline-block w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (error || !story) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-bold text-white mb-4">
             {error || 'Story not found'}
           </h2>
           <button
             onClick={() => onNavigate('stories')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-amber-500 text-slate-900 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
           >
             Back to Stories
           </button>
@@ -71,18 +71,27 @@ export const StoryDetailPage = ({ onNavigate }) => {
   }
 
   return (
-    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-950">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10 w-32 h-32 border border-slate-700 rounded-lg rotate-12"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 border border-slate-700 rounded-full"></div>
+        <div className="absolute bottom-32 left-1/4 w-40 h-40 border border-slate-700 rounded-lg -rotate-6"></div>
+        <div className="absolute top-1/3 right-10 w-28 h-28 border border-slate-700 rounded-full"></div>
+        <div className="absolute bottom-20 right-1/3 w-36 h-36 border border-slate-700 rounded-lg rotate-45"></div>
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Back Button */}
         <button
           onClick={() => onNavigate('stories')}
-          className="flex items-center space-x-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors mb-8"
+          className="flex items-center space-x-2 text-slate-400 hover:text-amber-400 transition-colors mb-8"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Back to Stories</span>
         </button>
 
-        <article className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden">
+        <article className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-800 overflow-hidden">
           {/* Cover Image */}
           {story.coverImageUrl && (
             <div className="relative h-64 lg:h-96">
@@ -180,10 +189,10 @@ export const StoryDetailPage = ({ onNavigate }) => {
             )}
 
             {/* Share Button */}
-            <div className="flex justify-center mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex justify-center mt-12 pt-8 border-t border-slate-700">
               <button
                 onClick={handleShare}
-                className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-1 font-bold"
               >
                 <Share2 className="w-5 h-5" />
                 <span>Share This Story</span>

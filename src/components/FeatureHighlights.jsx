@@ -15,15 +15,6 @@ export const FeatureHighlights = ({ onNavigate }) => {
       page: 'directory',
     },
     {
-      icon: BookOpen,
-      title: 'Yearbook Memories',
-      description: 'Relive the golden days through photos, stories, and shared moments from college.',
-      color: 'from-accent-500 to-accent-600',
-      bgColor: 'bg-accent-500/10',
-      iconColor: 'text-accent-600',
-      page: 'memories',
-    },
-    {
       icon: Calendar,
       title: 'Events & Reunions',
       description: 'Stay updated on upcoming reunions, networking events, and college celebrations.',
