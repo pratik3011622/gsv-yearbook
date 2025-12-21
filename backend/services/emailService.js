@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 class EmailService {
   constructor() {
     // For development/testing - log emails instead of sending
-    if (process.env.NODE_ENV === 'development' || !process.env.EMAIL_USER || process.env.EMAIL_USER === 'your-actual-gmail@gmail.com') {
+    if (process.env.NODE_ENV === 'development' || !process.env.EMAIL_USER || process.env.EMAIL_USER === 'your-actual-gmail@gmail.com' || process.env.EMAIL_USER.includes('debug')) {
       console.log('📧 Email service in development mode - emails will be logged to console');
       this.transporter = null;
       return;
