@@ -32,18 +32,29 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
       fullName,
       ...otherFields,
-      verificationToken,
-      verificationTokenExpires,
+      ...(process.env.NODE_ENV === 'development' ? {
+        emailVerified: true,
+        approvalStatus: 'approved'
+      } : {
+        verificationToken,
+        verificationTokenExpires,
+      })
     });
 
     await user.save();
 
-    // Send verification email
-    try {
-      await emailService.sendVerificationEmail(user, verificationToken);
-    } catch (emailError) {
-      console.error('Error sending verification email:', emailError);
-      // Don't fail registration if email fails, but log it
+    // Send verification email (skip in development)
+    if (process.env.NODE_ENV !== 'development') {
+      try {
+        await emailService.sendVerificationEmail(user, verificationToken);
+      } catch (emailError) {
+        console.error('Error sending verification email:', emailError);
+        // Don't fail registration if email fails, but log it
+      }
+    } else {
+      console.log('📧 Development mode: Skipping email verification for user:', user.email);
+      console.log('Verification token (for manual testing):', verificationToken);
+      console.log('Verification URL:', `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`);
     }
 
     res.status(201).json({

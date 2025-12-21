@@ -2,6 +2,13 @@ const nodemailer = require('nodemailer');
 
 class EmailService {
   constructor() {
+    // For development/testing - log emails instead of sending
+    if (process.env.NODE_ENV === 'development' || !process.env.EMAIL_USER || process.env.EMAIL_USER === 'your-actual-gmail@gmail.com') {
+      console.log('📧 Email service in development mode - emails will be logged to console');
+      this.transporter = null;
+      return;
+    }
+
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -66,6 +73,17 @@ class EmailService {
       `
     };
 
+    // Development mode - log email instead of sending
+    if (!this.transporter) {
+      console.log('📧 VERIFICATION EMAIL (Development Mode)');
+      console.log('To:', user.email);
+      console.log('Subject:', mailOptions.subject);
+      console.log('Verification URL:', verificationUrl);
+      console.log('--- Email HTML ---');
+      console.log(mailOptions.html);
+      return;
+    }
+
     try {
       await this.transporter.sendMail(mailOptions);
       console.log('Verification email sent to:', user.email);
@@ -127,6 +145,15 @@ class EmailService {
         </div>
       `
     };
+
+    // Development mode - log email instead of sending
+    if (!this.transporter) {
+      console.log('📧 WELCOME EMAIL (Development Mode)');
+      console.log('To:', user.email);
+      console.log('Subject:', mailOptions.subject);
+      console.log('Login URL:', `${process.env.FRONTEND_URL}/login`);
+      return;
+    }
 
     try {
       await this.transporter.sendMail(mailOptions);
