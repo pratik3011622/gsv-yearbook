@@ -53,6 +53,12 @@ const userSchema = new mongoose.Schema({
     ref: 'User',
   },
   approvedAt: Date,
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: String,
+  verificationTokenExpires: Date,
 }, {
   timestamps: true,
 });

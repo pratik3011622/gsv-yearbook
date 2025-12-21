@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Mail, Lock, GraduationCap, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, GraduationCap, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { api } from '../lib/api';
 
 export const LoginPage = ({ onNavigate }) => {
   const [email, setEmail] = useState('');
@@ -8,18 +9,45 @@ export const LoginPage = ({ onNavigate }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [verificationRequired, setVerificationRequired] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState('');
   const { signIn } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setVerificationRequired(false);
+    setPendingEmail('');
     setLoading(true);
 
     try {
       await signIn(email, password);
       onNavigate('home');
     } catch (err) {
-      setError(err.message || 'Failed to sign in. Please check your credentials.');
+      const errorMessage = err.message || 'Failed to sign in. Please check your credentials.';
+
+      // Check if email verification is required
+      if (err.requiresVerification) {
+        setVerificationRequired(true);
+        setPendingEmail(err.email || email);
+        setError('Please verify your email address before logging in.');
+      } else {
+        setError(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!pendingEmail) return;
+
+    setLoading(true);
+    try {
+      await api.resendVerificationEmail(pendingEmail);
+      alert('Verification email sent successfully! Please check your inbox.');
+    } catch (error) {
+      alert('Failed to resend verification email: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -53,6 +81,22 @@ export const LoginPage = ({ onNavigate }) => {
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
               {error}
+              {verificationRequired && (
+                <div className="mt-4 pt-4 border-t border-red-200 dark:border-red-700">
+                  <button
+                    onClick={handleResendVerification}
+                    disabled={loading}
+                    className="w-full py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm"
+                  >
+                    {loading ? (
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Mail className="w-4 h-4" />
+                    )}
+                    <span>{loading ? 'Sending...' : 'Resend Verification Email'}</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

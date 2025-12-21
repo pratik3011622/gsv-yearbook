@@ -11,6 +11,70 @@ class EmailService {
     });
   }
 
+  async sendVerificationEmail(user, verificationToken) {
+    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: 'Verify Your Email - GSV Connect',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">Verify Your Email</h1>
+          </div>
+
+          <div style="background: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin-top: 0;">Welcome to GSV Connect, ${user.fullName}!</h2>
+
+            <p style="color: #666; line-height: 1.6; font-size: 16px;">
+              Thank you for registering with Gati Shakti Vishwavidyalaya's alumni network. To complete your registration and start connecting with fellow alumni, please verify your email address.
+            </p>
+
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationUrl}"
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 15px 30px;
+                        text-decoration: none;
+                        border-radius: 25px;
+                        font-weight: bold;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                Verify Email Address
+              </a>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
+              <p style="color: #666; margin: 0; font-size: 14px;">
+                <strong>Important:</strong> This verification link will expire in 24 hours. If you didn't create an account with GSV Connect, please ignore this email.
+              </p>
+            </div>
+
+            <p style="color: #666; font-size: 14px; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+              If the button doesn't work, copy and paste this link into your browser:<br>
+              <a href="${verificationUrl}" style="color: #667eea; word-break: break-all;">${verificationUrl}</a>
+            </p>
+
+            <p style="color: #666; font-size: 14px; text-align: center; margin-top: 20px;">
+              Best regards,<br>
+              <strong>GSV Connect Team</strong><br>
+              Gati Shakti Vishwavidyalaya
+            </p>
+          </div>
+        </div>
+      `
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      console.log('Verification email sent to:', user.email);
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+      throw error;
+    }
+  }
+
   async sendWelcomeEmail(user) {
     const mailOptions = {
       from: process.env.EMAIL_USER,

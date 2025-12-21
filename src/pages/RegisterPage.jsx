@@ -47,7 +47,7 @@ export const RegisterPage = ({ onNavigate }) => {
       userData.batchYear = parseInt(userData.batchYear) || null;
 
       await signUp(userData);
-      alert('Registration successful! You can now explore the platform.');
+      alert('Registration successful! Please check your email to verify your account before logging in.');
       onNavigate('login');
     } catch (err) {
       setError(err.message || 'Failed to create account. Please try again.');
