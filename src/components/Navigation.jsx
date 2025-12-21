@@ -38,6 +38,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
 
   const userNavItems = user
     ? [
+        { id: 'dashboard', label: 'Dashboard' },
         ...baseNavItems,
         { id: 'jobs', label: 'Jobs' },
         ...(profile?.role === 'alumni' ? [

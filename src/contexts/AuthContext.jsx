@@ -54,23 +54,24 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (email, password) => {
     const result = await api.login({ email, password });
-    if (result.user) {
-      setUser(result.user);
-      // Get full profile data
-      try {
-        const profileData = await api.getProfile(result.user.id);
-        setProfile(profileData);
-      } catch (error) {
-        console.error('Error fetching profile after login:', error);
-        // Set basic profile from login response as fallback
-        setProfile({
-          id: result.user.id,
-          email: result.user.email,
-          fullName: result.user.fullName,
-          role: result.user.role,
-          approvalStatus: result.user.approvalStatus,
-        });
-      }
+    if (!result.user) {
+      throw new Error(result.message || 'Login failed');
+    }
+    setUser(result.user);
+    // Get full profile data
+    try {
+      const profileData = await api.getProfile(result.user.id);
+      setProfile(profileData);
+    } catch (error) {
+      console.error('Error fetching profile after login:', error);
+      // Set basic profile from login response as fallback
+      setProfile({
+        id: result.user.id,
+        email: result.user.email,
+        fullName: result.user.fullName,
+        role: result.user.role,
+        approvalStatus: result.user.approvalStatus,
+      });
     }
     return result;
   };

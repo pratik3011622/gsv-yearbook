@@ -66,6 +66,11 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    // Check if user is approved
+    if (user.approvalStatus !== 'approved') {
+      return res.status(403).json({ message: 'Your account is pending approval. Please wait for admin approval.' });
+    }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '7d',
     });
