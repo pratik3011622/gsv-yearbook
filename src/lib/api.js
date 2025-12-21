@@ -59,22 +59,6 @@ class ApiClient {
     return result.data;
   }
 
-  async verifyEmail(token) {
-    const result = await this.request('/auth/verify-email', {
-      method: 'POST',
-      body: JSON.stringify({ token }),
-    });
-    return result.data;
-  }
-
-  async resendVerificationEmail(email) {
-    const result = await this.request('/auth/resend-verification', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    });
-    return result.data;
-  }
-
   // Profile endpoints
   async getProfiles() {
     const result = await this.request('/profiles');

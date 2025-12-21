@@ -18,7 +18,6 @@ import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
 import { MagazinePage } from './pages/MagazinePage';
 import { TeamPage } from './pages/TeamPage';
 import { UpdatePasswordPage } from './pages/UpdatePasswordPage';
-import { VerifyEmailPage } from './pages/VerifyEmailPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(() => {
@@ -76,8 +75,6 @@ function App() {
             <RegisterPage onNavigate={handleNavigate} />
           </div>
         );
-      case 'verify-email':
-        return <VerifyEmailPage onNavigate={handleNavigate} />;
       case 'directory':
         return (
           <div className="min-h-screen">
