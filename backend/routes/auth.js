@@ -32,29 +32,28 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
       fullName,
       ...otherFields,
-      // Force email verification for testing (remove this line for production)
-      verificationToken,
-      verificationTokenExpires,
+      ...(process.env.NODE_ENV === 'development' ? {
+        emailVerified: true,
+        approvalStatus: 'approved'
+      } : {
+        verificationToken,
+        verificationTokenExpires,
+      })
     });
 
     await user.save();
 
-    // Send verification email (always send for testing)
-    console.log('🔄 Attempting to send verification email for user:', user.email);
-    try {
-      await emailService.sendVerificationEmail(user, verificationToken);
-      console.log('✅ Verification email process completed for:', user.email);
-    } catch (emailError) {
-      console.error('❌ Error sending verification email:', emailError);
-      // Don't fail registration if email fails, but log it
+    // Send verification email (skip in development)
+    if (process.env.NODE_ENV !== 'development') {
+      try {
+        await emailService.sendVerificationEmail(user, verificationToken);
+      } catch (emailError) {
+        console.error('Error sending verification email:', emailError);
+        // Don't fail registration if email fails, but log it
+      }
+    } else {
+      console.log('📧 Development mode: Skipping email verification for user:', user.email);
     }
-
-    // Always log verification details for testing
-    console.log('📧 VERIFICATION DETAILS:');
-    console.log('To:', user.email);
-    console.log('Verification Token:', verificationToken);
-    console.log('Verification URL:', `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`);
-    console.log('Expires:', new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString());
 
     res.status(201).json({
       message: 'Registration successful! Please check your email to verify your account.',
@@ -84,15 +83,6 @@ router.post('/login', async (req, res) => {
     const isMatch = password === user.password; // TODO: Use proper comparison
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Check if email is verified
-    if (!user.emailVerified) {
-      return res.status(403).json({
-        message: 'Please verify your email address before logging in.',
-        requiresVerification: true,
-        email: user.email
-      });
     }
 
     // Check if user is approved
