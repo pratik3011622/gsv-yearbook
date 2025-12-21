@@ -1,27 +1,33 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Eye, Calendar, Tag, ChevronRight, Plus, X, Upload, Save, Clock, Quote } from 'lucide-react';
+import { BookOpen, Eye, Calendar, Tag, ChevronRight, Plus, X, Upload, Save, Clock, Quote, User } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const StoriesPage = ({ onNavigate }) => {
-     const [stories, setStories] = useState([]);
-     const [featuredStory, setFeaturedStory] = useState(null);
-     const [loading, setLoading] = useState(true);
-     const [showCreateModal, setShowCreateModal] = useState(false);
-     const [creating, setCreating] = useState(false);
-     const [storyForm, setStoryForm] = useState({
-         title: '',
-         excerpt: '',
-         content: '',
-         highlightQuote: '',
-         tags: [],
-         coverImageUrl: ''
-     });
-     const { profile } = useAuth();
+      const [stories, setStories] = useState([]);
+      const [featuredStory, setFeaturedStory] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [showCreateModal, setShowCreateModal] = useState(false);
+      const [creating, setCreating] = useState(false);
+      const [storyForm, setStoryForm] = useState({
+          title: '',
+          excerpt: '',
+          content: '',
+          highlightQuote: '',
+          tags: [],
+          coverImageUrl: ''
+      });
+      const { profile } = useAuth();
 
-     const isAlumni = profile?.role === 'alumni';
+      const isAlumni = profile?.role === 'alumni';
+
+      // Calculate stats
+      const totalStories = stories.length;
+      const totalViews = stories.reduce((sum, story) => sum + (story.viewsCount || 0), 0);
+      const uniqueAuthors = new Set(stories.map(story => story.authorId?._id).filter(Boolean)).size;
+      const featuredCount = stories.filter(story => story.isFeatured).length;
 
    useEffect(() => {
      fetchStories();
@@ -139,6 +145,54 @@ export const StoriesPage = ({ onNavigate }) => {
           <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Inspiring journeys and success stories from our distinguished alumni community
           </p>
+        </div>
+
+        {/* Stats Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-xl p-6 border border-slate-800 hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-blue-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{totalStories}</p>
+                <p className="text-slate-400 text-sm">Success Stories</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-xl p-6 border border-slate-800 hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                <Eye className="w-5 h-5 text-green-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{totalViews.toLocaleString()}</p>
+                <p className="text-slate-400 text-sm">Total Views</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-xl p-6 border border-slate-800 hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <User className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{uniqueAuthors}</p>
+                <p className="text-slate-400 text-sm">Storytellers</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-xl p-6 border border-slate-800 hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                <Tag className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{featuredCount}</p>
+                <p className="text-slate-400 text-sm">Featured</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* FEATURED STORY SECTION */}
@@ -310,25 +364,43 @@ export const StoriesPage = ({ onNavigate }) => {
         </div>
 
         {/* SHARE A STORY SECTION */}
-        {isAlumni && (
-          <div className="text-center py-16 bg-slate-900/30 backdrop-blur-sm rounded-3xl border border-slate-800">
-            <div className="max-w-2xl mx-auto">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                Share Your Story
-              </h2>
-              <p className="text-lg text-slate-400 mb-8">
-                Inspire the next generation with your journey. Your story could be the motivation someone needs.
-              </p>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-1"
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                Share Your Story
-              </button>
-            </div>
+        <div className="text-center py-16 bg-slate-900/30 backdrop-blur-sm rounded-3xl border border-slate-800">
+          <div className="max-w-2xl mx-auto">
+            {isAlumni ? (
+              <>
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  Share Your Story
+                </h2>
+                <p className="text-lg text-slate-400 mb-8">
+                  Inspire the next generation with your journey. Your story could be the motivation someone needs.
+                </p>
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-1"
+                >
+                  <Plus className="w-5 h-5 mr-2" />
+                  Share Your Story
+                </button>
+              </>
+            ) : (
+              <>
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  Join Our Community
+                </h2>
+                <p className="text-lg text-slate-400 mb-8">
+                  Become an alumni to share your inspiring journey and connect with fellow graduates.
+                </p>
+                <button
+                  onClick={() => onNavigate('register')}
+                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-1"
+                >
+                  <User className="w-5 h-5 mr-2" />
+                  Become Alumni
+                </button>
+              </>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Create Story Modal */}
