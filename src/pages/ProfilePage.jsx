@@ -1,30 +1,50 @@
 import { useState, useEffect } from 'react';
 import {
   User, Edit3, Save, X, Camera, MapPin, Briefcase, GraduationCap,
-  Mail, Phone, Globe, Linkedin, Github, Award, Calendar, CheckCircle
+  Mail, Globe, Linkedin, Github, Award, Calendar, CheckCircle,
+  LogOut, Settings, ChevronDown, ChevronUp, Plus, Minus, BookOpen,
+  TrendingUp, Users, Star, Shield, Eye, EyeOff
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../lib/api';
 
 export const ProfilePage = ({ onNavigate }) => {
-  const { profile, user, updateProfile } = useAuth();
+  const { profile, user, updateProfile, signOut } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
   const [formData, setFormData] = useState({
     fullName: '',
     bio: '',
+    tagline: '',
     batchYear: '',
     department: '',
+    universityName: 'Gati Shakti Vishwavidyalaya',
+    degree: 'Bachelor of Technology',
+    specialization: '',
+    graduationStart: '',
+    graduationEnd: '',
     currentCompany: '',
     jobTitle: '',
+    industry: '',
+    yearsOfExperience: '',
+    pastCompanies: [],
     location: '',
-    phone: '',
+    country: 'India',
     linkedinUrl: '',
     githubUrl: '',
     websiteUrl: '',
     skills: [],
-    interests: [],
-    achievements: []
+    achievements: [],
+    certifications: [],
+    isProfilePublic: true
   });
 
   useEffect(() => {
@@ -32,18 +52,28 @@ export const ProfilePage = ({ onNavigate }) => {
       setFormData({
         fullName: profile.fullName || '',
         bio: profile.bio || '',
+        tagline: profile.tagline || '',
         batchYear: profile.batchYear || '',
         department: profile.department || '',
+        universityName: profile.universityName || 'Gati Shakti Vishwavidyalaya',
+        degree: profile.degree || 'Bachelor of Technology',
+        specialization: profile.specialization || '',
+        graduationStart: profile.graduationStart || '',
+        graduationEnd: profile.graduationEnd || '',
         currentCompany: profile.currentCompany || '',
         jobTitle: profile.jobTitle || '',
+        industry: profile.industry || '',
+        yearsOfExperience: profile.yearsOfExperience || '',
+        pastCompanies: profile.pastCompanies || [],
         location: profile.location || '',
-        phone: profile.phone || '',
+        country: profile.country || 'India',
         linkedinUrl: profile.linkedinUrl || '',
         githubUrl: profile.githubUrl || '',
         websiteUrl: profile.websiteUrl || '',
         skills: profile.skills || [],
-        interests: profile.interests || [],
-        achievements: profile.achievements || []
+        achievements: profile.achievements || [],
+        certifications: profile.certifications || [],
+        isProfilePublic: profile.isProfilePublic !== false
       });
     }
   }, [profile]);
@@ -78,25 +108,55 @@ export const ProfilePage = ({ onNavigate }) => {
     }
   };
 
+  const handlePasswordChange = async () => {
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert('New passwords do not match');
+      return;
+    }
+    if (passwordData.newPassword.length < 6) {
+      alert('Password must be at least 6 characters');
+      return;
+    }
+    // TODO: Implement password change API
+    alert('Password change functionality will be available soon');
+  };
+
+  const handleDeleteAccount = () => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      // TODO: Implement account deletion
+      alert('Account deletion functionality will be available soon');
+    }
+  };
+
   const calculateProfileCompletion = () => {
     const fields = [
       'fullName', 'bio', 'batchYear', 'department',
-      'currentCompany', 'jobTitle', 'location'
+      'currentCompany', 'jobTitle', 'location', 'skills'
     ];
-    const completedFields = fields.filter(field => formData[field]).length;
+    const completedFields = fields.filter(field => {
+      if (Array.isArray(formData[field])) {
+        return formData[field].length > 0;
+      }
+      return formData[field];
+    }).length;
     return Math.round((completedFields / fields.length) * 100);
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    onNavigate('home');
   };
 
   if (!user) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-950">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-bold text-white mb-4">
             Please login to view your profile
           </h2>
           <button
             onClick={() => onNavigate('login')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 rounded-lg font-semibold hover:shadow-lg transition-all"
           >
             Login
           </button>
@@ -106,342 +166,629 @@ export const ProfilePage = ({ onNavigate }) => {
   }
 
   const completionPercentage = calculateProfileCompletion();
+  const isAlumni = profile?.role === 'alumni';
 
   return (
-    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-950">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header Section */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden mb-8">
-          <div className="relative h-48 bg-gradient-to-r from-blue-600 via-purple-600 to-amber-600">
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="absolute bottom-6 left-6 flex items-end space-x-6">
-              <div className="relative">
-                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-3xl font-bold text-blue-600 border-4 border-white shadow-lg">
-                  {formData.fullName?.charAt(0) || '?'}
-                </div>
-                {isEditing && (
-                  <button className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
-                    <Camera className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-              <div className="text-white">
-                <h1 className="text-3xl font-bold mb-1">{formData.fullName || 'Your Name'}</h1>
-                <p className="text-white/90">
-                  {profile?.userType === 'alumni' ? 'Alumni' : 'Student'} • {formData.batchYear || 'Batch Year'}
-                </p>
-                <div className="flex items-center mt-2">
-                  <div className="flex items-center space-x-1">
-                    <CheckCircle className="w-4 h-4 text-green-400" />
-                    <span className="text-sm text-white/90">Profile {completionPercentage}% Complete</span>
+    <div className="min-h-screen pt-20 bg-slate-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+          {/* LEFT COLUMN - PROFILE CARD */}
+          <div className="lg:col-span-1">
+            <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden hover:shadow-amber-500/10 transition-all duration-300">
+              {/* Profile Header */}
+              <div className="relative h-32 bg-gradient-to-r from-slate-800 to-slate-900">
+                <div className="absolute -bottom-12 left-6">
+                  <div className="relative">
+                    <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center text-2xl font-bold text-slate-900 border-4 border-slate-900 shadow-lg">
+                      {formData.fullName?.charAt(0)?.toUpperCase() || '?'}
+                    </div>
+                    {isEditing && (
+                      <button className="absolute bottom-0 right-0 w-8 h-8 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors shadow-lg">
+                        <Camera className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute top-6 right-6">
-              {!isEditing ? (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-colors flex items-center space-x-2"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  <span>Edit Profile</span>
-                </button>
-              ) : (
-                <div className="flex space-x-2">
-                  <button
-                    onClick={handleSave}
-                    disabled={loading}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2 disabled:opacity-50"
-                  >
-                    <Save className="w-4 h-4" />
-                    <span>{loading ? 'Saving...' : 'Save'}</span>
-                  </button>
-                  <button
-                    onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2"
-                  >
-                    <X className="w-4 h-4" />
-                    <span>Cancel</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* Profile Content */}
-          <div className="p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left Column - Basic Info */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* About Section */}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">About</h2>
-                  {isEditing ? (
-                    <textarea
-                      value={formData.bio}
-                      onChange={(e) => handleInputChange('bio', e.target.value)}
-                      placeholder="Tell us about yourself..."
-                      className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white resize-none"
-                      rows={4}
-                    />
-                  ) : (
-                    <p className="text-slate-600 dark:text-slate-400">
-                      {formData.bio || 'No bio added yet.'}
-                    </p>
-                  )}
-                </div>
-
-                {/* Education */}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center">
-                    <GraduationCap className="w-5 h-5 mr-2" />
-                    Education
-                  </h2>
-                  <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                          Batch Year
-                        </label>
-                        {isEditing ? (
-                          <input
-                            type="number"
-                            value={formData.batchYear}
-                            onChange={(e) => handleInputChange('batchYear', e.target.value)}
-                            className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                          />
-                        ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.batchYear || 'Not specified'}</p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                          Department
-                        </label>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={formData.department}
-                            onChange={(e) => handleInputChange('department', e.target.value)}
-                            className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                          />
-                        ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.department || 'Not specified'}</p>
-                        )}
-                      </div>
-                    </div>
+              {/* Profile Content */}
+              <div className="pt-16 pb-6 px-6">
+                <div className="text-center mb-6">
+                  <h2 className="text-xl font-bold text-white mb-1">{formData.fullName || 'Your Name'}</h2>
+                  <p className="text-amber-400 text-sm mb-2">
+                    {formData.jobTitle && formData.currentCompany
+                      ? `${formData.jobTitle} at ${formData.currentCompany}`
+                      : 'Professional Title'
+                    }
+                  </p>
+                  <div className="flex items-center justify-center space-x-4 text-sm text-slate-400">
+                    <span>Batch of {formData.batchYear || '20XX'}</span>
                   </div>
-                </div>
-
-                {/* Career */}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center">
-                    <Briefcase className="w-5 h-5 mr-2" />
-                    Career
-                  </h2>
-                  <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                          Current Company
-                        </label>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={formData.currentCompany}
-                            onChange={(e) => handleInputChange('currentCompany', e.target.value)}
-                            className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                          />
-                        ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.currentCompany || 'Not specified'}</p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                          Position
-                        </label>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={formData.jobTitle}
-                            onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-                            className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                          />
-                        ) : (
-                          <p className="text-slate-900 dark:text-white">{formData.jobTitle || 'Not specified'}</p>
-                        )}
-                      </div>
-                    </div>
+                  <div className="flex items-center justify-center space-x-4 text-sm text-slate-400 mt-1">
+                    <span>{formData.department || 'Department'}</span>
                   </div>
-                </div>
-
-                {/* Skills */}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Skills</h2>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.skills.join(', ')}
-                      onChange={(e) => handleArrayChange('skills', e.target.value)}
-                      placeholder="Enter skills separated by commas"
-                      className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    />
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {formData.skills.length > 0 ? (
-                        formData.skills.map((skill, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
-                          >
-                            {skill}
-                          </span>
-                        ))
-                      ) : (
-                        <p className="text-slate-600 dark:text-slate-400">No skills added yet.</p>
-                      )}
+                  {formData.location && (
+                    <div className="flex items-center justify-center space-x-2 text-sm text-slate-400 mt-2">
+                      <MapPin className="w-4 h-4" />
+                      <span>{formData.location}, {formData.country}</span>
                     </div>
                   )}
-                </div>
-              </div>
-
-              {/* Right Column - Contact & Stats */}
-              <div className="space-y-6">
-                {/* Contact Information */}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center">
-                    <Mail className="w-5 h-5 mr-2" />
-                    Contact
-                  </h2>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <Mail className="w-4 h-4 text-slate-500" />
-                      <span className="text-slate-600 dark:text-slate-400">{user.email}</span>
-                    </div>
-                    {formData.phone && (
-                      <div className="flex items-center space-x-3">
-                        <Phone className="w-4 h-4 text-slate-500" />
-                        {isEditing ? (
-                          <input
-                            type="tel"
-                            value={formData.phone}
-                            onChange={(e) => handleInputChange('phone', e.target.value)}
-                            className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
-                          />
-                        ) : (
-                          <span className="text-slate-600 dark:text-slate-400">{formData.phone}</span>
-                        )}
-                      </div>
-                    )}
-                    {formData.location && (
-                      <div className="flex items-center space-x-3">
-                        <MapPin className="w-4 h-4 text-slate-500" />
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={formData.location}
-                            onChange={(e) => handleInputChange('location', e.target.value)}
-                            className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
-                          />
-                        ) : (
-                          <span className="text-slate-600 dark:text-slate-400">{formData.location}</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Social Links */}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center">
-                    <Globe className="w-5 h-5 mr-2" />
-                    Social Links
-                  </h2>
-                  <div className="space-y-3">
-                    {formData.linkedinUrl && (
-                      <div className="flex items-center space-x-3">
-                        <Linkedin className="w-4 h-4 text-blue-600" />
-                        {isEditing ? (
-                          <input
-                            type="url"
-                            value={formData.linkedinUrl}
-                            onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
-                            className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
-                          />
-                        ) : (
-                          <a
-                            href={formData.linkedinUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-700 transition-colors"
-                          >
-                            LinkedIn Profile
-                          </a>
-                        )}
-                      </div>
-                    )}
-                    {formData.githubUrl && (
-                      <div className="flex items-center space-x-3">
-                        <Github className="w-4 h-4 text-slate-700 dark:text-slate-300" />
-                        {isEditing ? (
-                          <input
-                            type="url"
-                            value={formData.githubUrl}
-                            onChange={(e) => handleInputChange('githubUrl', e.target.value)}
-                            className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
-                          />
-                        ) : (
-                          <a
-                            href={formData.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
-                          >
-                            GitHub Profile
-                          </a>
-                        )}
-                      </div>
-                    )}
-                    {formData.websiteUrl && (
-                      <div className="flex items-center space-x-3">
-                        <Globe className="w-4 h-4 text-green-600" />
-                        {isEditing ? (
-                          <input
-                            type="url"
-                            value={formData.websiteUrl}
-                            onChange={(e) => handleInputChange('websiteUrl', e.target.value)}
-                            className="flex-1 p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
-                          />
-                        ) : (
-                          <a
-                            href={formData.websiteUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-green-600 hover:text-green-700 transition-colors"
-                          >
-                            Personal Website
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
                 </div>
 
                 {/* Profile Completion */}
-                <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2">Profile Completion</h3>
-                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-2">
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-slate-300">Profile Completion</span>
+                    <span className="text-sm text-amber-400">{completionPercentage}%</span>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-amber-500 to-yellow-500 h-2 rounded-full transition-all duration-500"
                       style={{ width: `${completionPercentage}%` }}
                     ></div>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {completionPercentage}% complete
-                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                  {!isEditing ? (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 rounded-lg font-semibold hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                      <span>Edit Profile</span>
+                    </button>
+                  ) : (
+                    <div className="space-y-2">
+                      <button
+                        onClick={handleSave}
+                        disabled={loading}
+                        className="w-full py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 disabled:opacity-50 flex items-center justify-center space-x-2"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{loading ? 'Saving...' : 'Save Changes'}</span>
+                      </button>
+                      <button
+                        onClick={() => setIsEditing(false)}
+                        className="w-full py-3 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-all duration-300"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full py-3 bg-slate-800 text-slate-300 rounded-lg font-semibold hover:bg-slate-700 hover:text-white transition-all duration-300 flex items-center justify-center space-x-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN - DETAILED INFORMATION */}
+          <div className="lg:col-span-2 space-y-6">
+
+            {/* ABOUT SECTION */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <User className="w-5 h-5 mr-2 text-amber-400" />
+                About
+              </h3>
+              {isEditing ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Tagline</label>
+                    <input
+                      type="text"
+                      value={formData.tagline}
+                      onChange={(e) => handleInputChange('tagline', e.target.value)}
+                      placeholder="A short personal quote or tagline"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Bio</label>
+                    <textarea
+                      value={formData.bio}
+                      onChange={(e) => handleInputChange('bio', e.target.value)}
+                      placeholder="Tell us about your journey, experiences, and aspirations..."
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                      rows={4}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {formData.tagline && (
+                    <p className="text-amber-400 font-medium italic">"{formData.tagline}"</p>
+                  )}
+                  <p className="text-slate-300 leading-relaxed">
+                    {formData.bio || 'No bio added yet. Share your story with the community.'}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* EDUCATION DETAILS */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <GraduationCap className="w-5 h-5 mr-2 text-amber-400" />
+                Education Details
+              </h3>
+              {isEditing ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">University</label>
+                    <input
+                      type="text"
+                      value={formData.universityName}
+                      onChange={(e) => handleInputChange('universityName', e.target.value)}
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Degree</label>
+                    <input
+                      type="text"
+                      value={formData.degree}
+                      onChange={(e) => handleInputChange('degree', e.target.value)}
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Specialization</label>
+                    <input
+                      type="text"
+                      value={formData.specialization}
+                      onChange={(e) => handleInputChange('specialization', e.target.value)}
+                      placeholder="e.g., Computer Science"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">Start Year</label>
+                      <input
+                        type="number"
+                        value={formData.graduationStart}
+                        onChange={(e) => handleInputChange('graduationStart', e.target.value)}
+                        className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">End Year</label>
+                      <input
+                        type="number"
+                        value={formData.graduationEnd}
+                        onChange={(e) => handleInputChange('graduationEnd', e.target.value)}
+                        className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <GraduationCap className="w-5 h-5 text-amber-400" />
+                    <div>
+                      <p className="text-white font-medium">{formData.universityName}</p>
+                      <p className="text-slate-400 text-sm">{formData.degree} in {formData.specialization || 'Specialization'}</p>
+                      <p className="text-slate-500 text-sm">
+                        {formData.graduationStart && formData.graduationEnd
+                          ? `${formData.graduationStart} - ${formData.graduationEnd}`
+                          : 'Graduation year not specified'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* PROFESSIONAL DETAILS */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <Briefcase className="w-5 h-5 mr-2 text-amber-400" />
+                Professional Details
+              </h3>
+              {isEditing ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Current Company</label>
+                    <input
+                      type="text"
+                      value={formData.currentCompany}
+                      onChange={(e) => handleInputChange('currentCompany', e.target.value)}
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Job Title</label>
+                    <input
+                      type="text"
+                      value={formData.jobTitle}
+                      onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Industry</label>
+                    <input
+                      type="text"
+                      value={formData.industry}
+                      onChange={(e) => handleInputChange('industry', e.target.value)}
+                      placeholder="e.g., Technology, Finance"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Years of Experience</label>
+                    <input
+                      type="number"
+                      value={formData.yearsOfExperience}
+                      onChange={(e) => handleInputChange('yearsOfExperience', e.target.value)}
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Past Companies</label>
+                    <input
+                      type="text"
+                      value={formData.pastCompanies.join(', ')}
+                      onChange={(e) => handleArrayChange('pastCompanies', e.target.value)}
+                      placeholder="Company A, Company B, Company C"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-slate-400 text-sm">Current Company</p>
+                      <p className="text-white font-medium">{formData.currentCompany || 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-400 text-sm">Job Title</p>
+                      <p className="text-white font-medium">{formData.jobTitle || 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-400 text-sm">Industry</p>
+                      <p className="text-white font-medium">{formData.industry || 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-400 text-sm">Experience</p>
+                      <p className="text-white font-medium">{formData.yearsOfExperience ? `${formData.yearsOfExperience} years` : 'Not specified'}</p>
+                    </div>
+                  </div>
+                  {formData.pastCompanies.length > 0 && (
+                    <div>
+                      <p className="text-slate-400 text-sm mb-2">Past Companies</p>
+                      <div className="flex flex-wrap gap-2">
+                        {formData.pastCompanies.map((company, index) => (
+                          <span key={index} className="px-3 py-1 bg-slate-800 text-slate-300 rounded-full text-sm">
+                            {company}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* SKILLS SECTION */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <Star className="w-5 h-5 mr-2 text-amber-400" />
+                Skills
+              </h3>
+              {isEditing ? (
+                <div>
+                  <input
+                    type="text"
+                    value={formData.skills.join(', ')}
+                    onChange={(e) => handleArrayChange('skills', e.target.value)}
+                    placeholder="React, Python, Machine Learning, Electronics, etc."
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  />
+                  <p className="text-slate-400 text-sm mt-2">Separate skills with commas</p>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {formData.skills.length > 0 ? (
+                    formData.skills.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-2 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-500/30 rounded-full text-sm font-medium hover:bg-amber-500/30 transition-colors"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-slate-400">No skills added yet. Add your technical and professional skills.</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* SOCIAL & LINKS */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <Globe className="w-5 h-5 mr-2 text-amber-400" />
+                Social & Links
+              </h3>
+              {isEditing ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">LinkedIn</label>
+                    <input
+                      type="url"
+                      value={formData.linkedinUrl}
+                      onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
+                      placeholder="https://linkedin.com/in/yourprofile"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">GitHub</label>
+                    <input
+                      type="url"
+                      value={formData.githubUrl}
+                      onChange={(e) => handleInputChange('githubUrl', e.target.value)}
+                      placeholder="https://github.com/yourusername"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Personal Website</label>
+                    <input
+                      type="url"
+                      value={formData.websiteUrl}
+                      onChange={(e) => handleInputChange('websiteUrl', e.target.value)}
+                      placeholder="https://yourwebsite.com"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={user.email}
+                      readOnly
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-500 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {formData.linkedinUrl && (
+                    <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer"
+                       className="flex items-center space-x-3 text-blue-400 hover:text-blue-300 transition-colors">
+                      <Linkedin className="w-5 h-5" />
+                      <span>LinkedIn Profile</span>
+                    </a>
+                  )}
+                  {formData.githubUrl && (
+                    <a href={formData.githubUrl} target="_blank" rel="noopener noreferrer"
+                       className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
+                      <Github className="w-5 h-5" />
+                      <span>GitHub Profile</span>
+                    </a>
+                  )}
+                  {formData.websiteUrl && (
+                    <a href={formData.websiteUrl} target="_blank" rel="noopener noreferrer"
+                       className="flex items-center space-x-3 text-green-400 hover:text-green-300 transition-colors">
+                      <Globe className="w-5 h-5" />
+                      <span>Personal Website</span>
+                    </a>
+                  )}
+                  <div className="flex items-center space-x-3 text-slate-400">
+                    <Mail className="w-5 h-5" />
+                    <span>{user.email}</span>
+                  </div>
+                  {!formData.linkedinUrl && !formData.githubUrl && !formData.websiteUrl && (
+                    <p className="text-slate-400">No social links added yet. Connect your professional profiles.</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* ACHIEVEMENTS & HIGHLIGHTS */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <Award className="w-5 h-5 mr-2 text-amber-400" />
+                Achievements & Highlights
+              </h3>
+              {isEditing ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Key Achievements</label>
+                    <textarea
+                      value={formData.achievements.join('\n')}
+                      onChange={(e) => handleArrayChange('achievements', e.target.value)}
+                      placeholder="• Led a team of 10 developers&#10;• Published 5 research papers&#10;• Won Best Student Award"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                      rows={4}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Certifications</label>
+                    <input
+                      type="text"
+                      value={formData.certifications.join(', ')}
+                      onChange={(e) => handleArrayChange('certifications', e.target.value)}
+                      placeholder="AWS Certified, PMP, Google Cloud Professional"
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {formData.achievements.length > 0 && (
+                    <div>
+                      <p className="text-slate-400 text-sm mb-2">Key Achievements</p>
+                      <ul className="space-y-1">
+                        {formData.achievements.map((achievement, index) => (
+                          <li key={index} className="text-slate-300 flex items-start">
+                            <span className="text-amber-400 mr-2">•</span>
+                            {achievement}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {formData.certifications.length > 0 && (
+                    <div>
+                      <p className="text-slate-400 text-sm mb-2">Certifications</p>
+                      <div className="flex flex-wrap gap-2">
+                        {formData.certifications.map((cert, index) => (
+                          <span key={index} className="px-3 py-1 bg-slate-800 text-amber-300 border border-amber-500/30 rounded-full text-sm">
+                            {cert}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {formData.achievements.length === 0 && formData.certifications.length === 0 && (
+                    <p className="text-slate-400">No achievements or certifications added yet. Showcase your accomplishments.</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* ACTIVITY / CONTRIBUTIONS */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                <TrendingUp className="w-5 h-5 mr-2 text-amber-400" />
+                Activity & Contributions
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-slate-800 rounded-lg">
+                  <BookOpen className="w-8 h-8 text-amber-400 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-white">0</p>
+                  <p className="text-slate-400 text-sm">Stories Published</p>
+                </div>
+                <div className="text-center p-4 bg-slate-800 rounded-lg">
+                  <Briefcase className="w-8 h-8 text-amber-400 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-white">0</p>
+                  <p className="text-slate-400 text-sm">Jobs Posted</p>
+                </div>
+                <div className="text-center p-4 bg-slate-800 rounded-lg">
+                  <Users className="w-8 h-8 text-amber-400 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-white">0</p>
+                  <p className="text-slate-400 text-sm">Events Attended</p>
+                </div>
+              </div>
+            </div>
+
+            {/* ACCOUNT SETTINGS */}
+            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 overflow-hidden hover:shadow-amber-500/10 transition-all duration-300">
+              <button
+                onClick={() => setShowAccountSettings(!showAccountSettings)}
+                className="w-full p-6 text-left flex items-center justify-between hover:bg-slate-800/50 transition-colors"
+              >
+                <h3 className="text-lg font-bold text-white flex items-center">
+                  <Settings className="w-5 h-5 mr-2 text-amber-400" />
+                  Account Settings
+                </h3>
+                {showAccountSettings ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+              </button>
+
+              {showAccountSettings && (
+                <div className="px-6 pb-6 space-y-6">
+                  {/* Profile Privacy */}
+                  <div>
+                    <h4 className="text-white font-medium mb-3">Profile Privacy</h4>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-slate-300">Public Profile</p>
+                        <p className="text-slate-500 text-sm">Allow others to view your profile</p>
+                      </div>
+                      {isEditing ? (
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={formData.isProfilePublic}
+                            onChange={(e) => handleInputChange('isProfilePublic', e.target.checked)}
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                        </label>
+                      ) : (
+                        <span className={`px-3 py-1 rounded-full text-sm ${formData.isProfilePublic ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                          {formData.isProfilePublic ? 'Public' : 'Private'}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Change Password */}
+                  <div>
+                    <h4 className="text-white font-medium mb-3">Change Password</h4>
+                    <div className="space-y-3">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Current password"
+                        value={passwordData.currentPassword}
+                        onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                        className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="New password"
+                        value={passwordData.newPassword}
+                        onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                        className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Confirm new password"
+                        value={passwordData.confirmPassword}
+                        onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                        className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      />
+                      <div className="flex items-center space-x-3">
+                        <button
+                          onClick={handlePasswordChange}
+                          className="px-4 py-2 bg-amber-500 text-slate-900 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
+                        >
+                          Change Password
+                        </button>
+                        <button
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="text-slate-400 hover:text-white transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Delete Account */}
+                  <div className="border-t border-slate-700 pt-6">
+                    <h4 className="text-red-400 font-medium mb-3">Danger Zone</h4>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-slate-300">Delete Account</p>
+                        <p className="text-slate-500 text-sm">Permanently delete your account and all data</p>
+                      </div>
+                      <button
+                        onClick={handleDeleteAccount}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                      >
+                        Delete Account
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
