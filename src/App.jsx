@@ -6,10 +6,10 @@ import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DirectoryPage } from './pages/DirectoryPage';
-import { MemoriesPage } from './pages/MemoriesPage';
 import { EventsPage } from './pages/EventsPage';
 import { JobsPage } from './pages/JobsPage';
 import { StoriesPage } from './pages/StoriesPage';
+import { StoryDetailPage } from './pages/StoryDetailPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { ProfilePage } from './pages/ProfilePage';
@@ -84,15 +84,6 @@ function App() {
             </div>
           </div>
         );
-      case 'memories':
-        return (
-          <div className="min-h-screen">
-            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
-            <div className="pt-20">
-              <MemoriesPage />
-            </div>
-          </div>
-        );
       case 'events':
         return (
           <div className="min-h-screen">
@@ -116,7 +107,16 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <StoriesPage />
+              <StoriesPage onNavigate={handleNavigate} />
+            </div>
+          </div>
+        );
+      case 'story-detail':
+        return (
+          <div className="min-h-screen">
+            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
+            <div className="pt-20">
+              <StoryDetailPage onNavigate={handleNavigate} />
             </div>
           </div>
         );

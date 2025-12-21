@@ -48,19 +48,14 @@ export const Navigation = ({ onNavigate, currentPage }) => {
   const userNavItems = user
     ? [
         ...baseNavItems,
+        { id: 'jobs', label: 'Jobs' },
         ...(profile?.role === 'alumni' ? [
-          { id: 'jobs', label: 'Jobs' },
           { id: 'stories', label: 'Stories' },
-          { id: 'memories', label: 'Memories' },
         ] : []),
-        { id: 'profile', label: 'Profile' },
-        { id: 'dashboard', label: 'Dashboard' },
       ]
     : baseNavItems;
 
-  const navItems = profile?.role === 'admin'
-    ? [...userNavItems, { id: 'admin', label: 'Admin' }]
-    : userNavItems;
+  const navItems = userNavItems;
 
   return (
     <nav
@@ -213,43 +208,6 @@ export const Navigation = ({ onNavigate, currentPage }) => {
               </a>
             </div>
 
-          {user ? (
-              <div className="hidden lg:flex items-center space-x-3">
-                <div className="text-right">
-                  <p className={`text-sm font-medium transition-colors duration-300 ${
-                    currentPage === 'home' ? 'text-neutral-800' : 'text-neutral-800 dark:text-neutral-200'
-                  }`}>
-                    {profile?.fullName || 'User'}
-                  </p>
-                  <p className={`text-xs transition-colors duration-300 ${
-                    currentPage === 'home' ? 'text-neutral-600' : 'text-neutral-600 dark:text-neutral-400'
-                  }`}>
-                    {profile?.role === 'alumni' ? 'Alumni' : profile?.role === 'guest' ? 'Guest' : 'Student'}
-                  </p>
-                </div>
-                <button
-                  onClick={signOut}
-                  className="px-4 py-2 bg-red-600 text-white rounded-xl font-medium text-sm hover:bg-red-700 transition-colors"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <div className="hidden lg:flex items-center space-x-3">
-                <button
-                  onClick={() => onNavigate('login')}
-                  className="px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 text-neutral-700 hover:bg-primary-50 hover:text-primary-900"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => onNavigate('register')}
-                  className="px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 shadow-soft bg-primary-900 text-white hover:bg-primary-800"
-                >
-                  Join Now
-                </button>
-              </div>
-            )}
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -336,50 +294,6 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                 )}
               </div>
             ))}
-            {user ? (
-              <>
-                <button
-                  onClick={() => {
-                    onNavigate('profile');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`block w-full text-left px-4 py-3 font-medium hover:bg-primary-50 rounded-xl ${
-                    currentPage === 'home' ? 'text-primary-900' : 'text-primary-900 dark:text-primary-100'
-                  }`}
-                >
-                  My Profile
-                </button>
-                <button
-                  onClick={signOut}
-                  className="block w-full text-left px-4 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition-colors"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => {
-                    onNavigate('login');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`block w-full text-left px-4 py-3 font-medium hover:bg-primary-50 rounded-xl ${
-                    currentPage === 'home' ? 'text-primary-900' : 'text-primary-900 dark:text-primary-100'
-                  }`}
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => {
-                    onNavigate('register');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-3 bg-primary-900 text-white rounded-xl font-medium hover:bg-primary-800"
-                >
-                  Join Now
-                </button>
-              </>
-            )}
           </div>
         </div>
       )}

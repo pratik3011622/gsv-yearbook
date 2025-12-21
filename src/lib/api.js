@@ -84,14 +84,14 @@ class ApiClient {
   }
 
   async approveUser(userId) {
-    const result = await this.request(`/profiles/${userId}/approve`, {
+    const result = await this.request(`/admin/users/${userId}/approve`, {
       method: 'PUT',
     });
     return result.data;
   }
 
   async rejectUser(userId, reason) {
-    const result = await this.request(`/profiles/${userId}/reject`, {
+    const result = await this.request(`/admin/users/${userId}/reject`, {
       method: 'PUT',
       body: JSON.stringify({ reason }),
     });
@@ -292,14 +292,14 @@ class ApiClient {
   }
 
   async approvePhoto(uploadId) {
-    const result = await this.request(`/memories/admin/approve/${uploadId}`, {
+    const result = await this.request(`/admin/photos/${uploadId}/approve`, {
       method: 'PUT',
     });
     return result.data;
   }
 
   async rejectPhoto(uploadId, notes) {
-    const result = await this.request(`/memories/admin/reject/${uploadId}`, {
+    const result = await this.request(`/admin/photos/${uploadId}/reject`, {
       method: 'PUT',
       body: JSON.stringify({ notes }),
     });

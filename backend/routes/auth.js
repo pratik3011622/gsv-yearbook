@@ -27,6 +27,7 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
       fullName,
       ...otherFields,
+      approvalStatus: 'approved',
     });
 
     await user.save();

@@ -14,6 +14,11 @@ const storySchema = new mongoose.Schema({
     required: true,
   },
   coverImageUrl: String,
+  highlightQuote: String,
+  readTime: {
+    type: Number,
+    default: 0,
+  },
   authorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -25,6 +30,11 @@ const storySchema = new mongoose.Schema({
   isFeatured: {
     type: Boolean,
     default: false,
+  },
+  approvalStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending',
   },
   viewsCount: {
     type: Number,

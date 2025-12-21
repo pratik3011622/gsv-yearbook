@@ -2,9 +2,165 @@ const express = require('express');
 const User = require('../models/User');
 const AdminLog = require('../models/AdminLog');
 const PhotoUpload = require('../models/PhotoUpload');
+const Memory = require('../models/Memory');
 const { auth, isAdmin } = require('../middleware/auth');
+const emailService = require('../services/emailService');
 
 const router = express.Router();
+
+// Approve user profile (equivalent to Supabase function)
+router.put('/users/:userId/approve', auth, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        approvalStatus: 'approved',
+        approvedBy: req.user._id,
+        approvedAt: new Date(),
+        rejectionReason: null,
+      },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Log admin action
+    await AdminLog.create({
+      adminId: req.user._id,
+      action: 'approve_profile',
+      targetType: 'profile',
+      targetId: user._id,
+    });
+
+    // Send welcome email
+    try {
+      await emailService.sendWelcomeEmail(user);
+    } catch (emailError) {
+      console.error('Error sending welcome email:', emailError);
+      // Don't fail the approval if email fails
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Reject user profile (equivalent to Supabase function)
+router.put('/users/:userId/reject', auth, isAdmin, async (req, res) => {
+  try {
+    const { reason } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        approvalStatus: 'rejected',
+        rejectionReason: reason,
+        approvedBy: req.user._id,
+        approvedAt: new Date(),
+      },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Log admin action
+    await AdminLog.create({
+      adminId: req.user._id,
+      action: 'reject_profile',
+      targetType: 'profile',
+      targetId: user._id,
+      details: { reason },
+    });
+
+    // Send rejection email
+    try {
+      await emailService.sendRejectionEmail(user, reason);
+    } catch (emailError) {
+      console.error('Error sending rejection email:', emailError);
+      // Don't fail the rejection if email fails
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Approve photo upload
+router.put('/photos/:uploadId/approve', auth, isAdmin, async (req, res) => {
+  try {
+    const upload = await PhotoUpload.findById(req.params.uploadId);
+    if (!upload) {
+      return res.status(404).json({ message: 'Photo upload not found' });
+    }
+
+    upload.status = 'approved';
+    upload.moderatedBy = req.user._id;
+    upload.moderatedAt = new Date();
+    await upload.save();
+
+    // Create memory from approved photo (equivalent to Supabase trigger)
+    await Memory.create({
+      title: 'Untitled Memory',
+      imageUrl: upload.fileUrl,
+      year: new Date().getFullYear(),
+      eventType: 'user_upload',
+      uploadedBy: upload.uploaderId,
+    });
+
+    // Log admin action
+    await AdminLog.create({
+      adminId: req.user._id,
+      action: 'approve_photo',
+      targetType: 'photo',
+      targetId: upload._id,
+    });
+
+    res.json({ message: 'Photo approved and memory created' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Reject photo upload
+router.put('/photos/:uploadId/reject', auth, isAdmin, async (req, res) => {
+  try {
+    const { notes } = req.body;
+
+    const upload = await PhotoUpload.findByIdAndUpdate(
+      req.params.uploadId,
+      {
+        status: 'rejected',
+        moderationNotes: notes,
+        moderatedBy: req.user._id,
+        moderatedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!upload) {
+      return res.status(404).json({ message: 'Photo upload not found' });
+    }
+
+    // Log admin action
+    await AdminLog.create({
+      adminId: req.user._id,
+      action: 'reject_photo',
+      targetType: 'photo',
+      targetId: upload._id,
+      details: { notes },
+    });
+
+    res.json({ message: 'Photo rejected' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Get admin dashboard stats
 router.get('/dashboard/stats', auth, isAdmin, async (req, res) => {

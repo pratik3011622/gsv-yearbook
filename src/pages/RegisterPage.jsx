@@ -8,7 +8,7 @@ export const RegisterPage = ({ onNavigate }) => {
     password: '',
     confirmPassword: '',
     fullName: '',
-    role: 'guest',
+    role: 'student',
     batchYear: '',
     department: '',
     currentCompany: '',
@@ -47,11 +47,7 @@ export const RegisterPage = ({ onNavigate }) => {
       userData.batchYear = parseInt(userData.batchYear) || null;
 
       await signUp(userData);
-      if (userData.role === 'alumni') {
-        alert('Registration successful! Your account is pending approval. You will be notified once an administrator approves your registration.');
-      } else {
-        alert('Registration successful! You can now explore the platform as a guest.');
-      }
+      alert('Registration successful! You can now explore the platform.');
       onNavigate('login');
     } catch (err) {
       setError(err.message || 'Failed to create account. Please try again.');
@@ -121,9 +117,9 @@ export const RegisterPage = ({ onNavigate }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, role: 'guest' })}
+                  onClick={() => setFormData({ ...formData, role: 'student' })}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.role === 'guest'
+                    formData.role === 'student'
                       ? 'border-green-600 bg-green-50 dark:bg-green-900/20'
                       : 'border-slate-300 dark:border-slate-600'
                   }`}
@@ -131,19 +127,19 @@ export const RegisterPage = ({ onNavigate }) => {
                   <div className="text-center">
                     <User
                       className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.role === 'guest' ? 'text-green-600' : 'text-slate-400'
+                        formData.role === 'student' ? 'text-green-600' : 'text-slate-400'
                       }`}
                     />
                     <span
                       className={`font-medium ${
-                        formData.role === 'guest'
+                        formData.role === 'student'
                           ? 'text-green-600'
                           : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
-                      Guest
+                      Student
                     </span>
-                    <p className="text-xs mt-1 text-slate-500">View-only access</p>
+                    <p className="text-xs mt-1 text-slate-500">Current student access</p>
                   </div>
                 </button>
               </div>
@@ -232,7 +228,7 @@ export const RegisterPage = ({ onNavigate }) => {
               </div>
             </div>
 
-            {formData.role === 'alumni' && (
+            {(formData.role === 'alumni' || formData.role === 'student') && (
               <>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>

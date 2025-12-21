@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const AdminLog = require('../models/AdminLog');
 const { auth, isAdmin } = require('../middleware/auth');
+const emailService = require('../services/emailService');
 
 const router = express.Router();
 
@@ -39,8 +40,8 @@ router.get('/me/profile', auth, async (req, res) => {
 router.put('/me', auth, async (req, res) => {
   try {
     const allowedFields = [
-      'fullName', 'batchYear', 'department', 'currentCompany',
-      'jobTitle', 'location', 'country', 'bio', 'profileImageUrl',
+      'fullName', 'batchYear', 'department', 'company',
+      'jobTitle', 'location', 'country', 'bio', 'avatarUrl',
       'linkedinUrl', 'rollNumber', 'isMentor', 'skills'
     ];
 
@@ -101,6 +102,14 @@ router.put('/:id/approve', auth, isAdmin, async (req, res) => {
       targetId: user._id,
     });
 
+    // Send welcome email
+    try {
+      await emailService.sendWelcomeEmail(user);
+    } catch (emailError) {
+      console.error('Error sending welcome email:', emailError);
+      // Don't fail the approval if email fails
+    }
+
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -135,6 +144,14 @@ router.put('/:id/reject', auth, isAdmin, async (req, res) => {
       targetId: user._id,
       details: { reason },
     });
+
+    // Send rejection email
+    try {
+      await emailService.sendRejectionEmail(user, reason);
+    } catch (emailError) {
+      console.error('Error sending rejection email:', emailError);
+      // Don't fail the rejection if email fails
+    }
 
     res.json(user);
   } catch (error) {

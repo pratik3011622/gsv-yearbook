@@ -1,6 +1,8 @@
 const express = require('express');
 const MentorshipSession = require('../models/MentorshipSession');
+const User = require('../models/User');
 const { auth } = require('../middleware/auth');
+const emailService = require('../services/emailService');
 
 const router = express.Router();
 
@@ -48,20 +50,32 @@ router.get('/:id', auth, async (req, res) => {
 // Create mentorship request (mentee only)
 router.post('/request', auth, async (req, res) => {
   try {
-    const { mentorId, sessionDate, durationMinutes, topic } = req.body;
+    const { mentorId, topic, message, preferredTime } = req.body;
 
     const session = new MentorshipSession({
       mentorId,
       menteeId: req.user._id,
-      sessionDate,
-      durationMinutes,
       topic,
+      message,
+      preferredTime,
       status: 'pending',
     });
 
     await session.save();
-    await session.populate('mentorId', 'fullName currentCompany jobTitle');
+    await session.populate('mentorId', 'fullName email currentCompany jobTitle');
     await session.populate('menteeId', 'fullName batchYear department');
+
+    // Send email notification to mentor
+    try {
+      await emailService.sendMentorshipRequestEmail(session.mentorId, session.menteeId, {
+        topic,
+        message,
+        preferredTime
+      });
+    } catch (emailError) {
+      console.error('Error sending mentorship request email:', emailError);
+      // Don't fail the request if email fails
+    }
 
     res.status(201).json(session);
   } catch (error) {

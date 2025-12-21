@@ -5,11 +5,11 @@ const { validateStory } = require('../middleware/validation');
 
 const router = express.Router();
 
-// Get all stories
+// Get all approved stories (public)
 router.get('/', async (req, res) => {
   try {
-    const stories = await Story.find({})
-      .populate('authorId', 'fullName')
+    const stories = await Story.find({ approvalStatus: 'approved' })
+      .populate('authorId', 'fullName batchYear')
       .sort({ publishedAt: -1 });
     res.json(stories);
   } catch (error) {
@@ -17,13 +17,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get featured stories
+// Get featured story (only the most recent one)
 router.get('/featured', async (req, res) => {
   try {
-    const stories = await Story.find({ isFeatured: true })
-      .populate('authorId', 'fullName')
+    const story = await Story.findOne({ isFeatured: true, approvalStatus: 'approved' })
+      .populate('authorId', 'fullName batchYear')
       .sort({ publishedAt: -1 });
-    res.json(stories);
+    res.json(story ? [story] : []);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create story
-router.post('/', auth, isAlumni, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const story = new Story({
       ...req.body,
@@ -132,6 +132,56 @@ router.delete('/admin/:id', auth, isAdmin, async (req, res) => {
       return res.status(404).json({ message: 'Story not found' });
     }
     res.json({ message: 'Story deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Admin: Approve story
+router.put('/:id/approve', auth, isAdmin, async (req, res) => {
+  try {
+    const story = await Story.findByIdAndUpdate(
+      req.params.id,
+      { approvalStatus: 'approved' },
+      { new: true }
+    ).populate('authorId', 'fullName batchYear');
+
+    if (!story) {
+      return res.status(404).json({ message: 'Story not found' });
+    }
+
+    res.json(story);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Admin: Reject story
+router.put('/:id/reject', auth, isAdmin, async (req, res) => {
+  try {
+    const story = await Story.findByIdAndUpdate(
+      req.params.id,
+      { approvalStatus: 'rejected' },
+      { new: true }
+    ).populate('authorId', 'fullName batchYear');
+
+    if (!story) {
+      return res.status(404).json({ message: 'Story not found' });
+    }
+
+    res.json(story);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get all stories for admin (including pending)
+router.get('/admin/all', auth, isAdmin, async (req, res) => {
+  try {
+    const stories = await Story.find({})
+      .populate('authorId', 'fullName batchYear')
+      .sort({ createdAt: -1 });
+    res.json(stories);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

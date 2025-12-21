@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Share2, Facebook, Twitter, Linkedin, Instagram, ChevronDown, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
+import { ProfileSection } from './ProfileSection';
 
 
 export const Hero = ({ onNavigate }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
-  const [isYearbookDropdownOpen, setIsYearbookDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isDark, toggleTheme } = useTheme();
+   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+   const [isYearbookDropdownOpen, setIsYearbookDropdownOpen] = useState(false);
+   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+   const { isDark, toggleTheme } = useTheme();
+   const { user } = useAuth();
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -88,18 +91,24 @@ export const Hero = ({ onNavigate }) => {
                 >
                   {isDark ? <Sun className="w-3 h-3 sm:w-4 sm:h-4" /> : <Moon className="w-3 h-3 sm:w-4 sm:h-4" />}
                 </button>
-                <button
-                  onClick={() => onNavigate('login')}
-                  className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 text-white hover:text-white font-semibold transition-all duration-300 text-xs sm:text-sm border border-white/40 rounded-lg hover:border-white/60 hover:bg-white/20 hover:scale-105 drop-shadow-lg transform"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => onNavigate('register')}
-                  className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-300 font-semibold text-xs sm:text-sm border border-white/30 hover:scale-105 drop-shadow-lg transform"
-                >
-                  Join Now
-                </button>
+                {user ? (
+                  <ProfileSection onNavigate={onNavigate} />
+                ) : (
+                  <>
+                    <button
+                      onClick={() => onNavigate('login')}
+                      className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 text-white hover:text-white font-semibold transition-all duration-300 text-xs sm:text-sm border border-white/40 rounded-lg hover:border-white/60 hover:bg-white/20 hover:scale-105 drop-shadow-lg transform"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => onNavigate('register')}
+                      className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-300 font-semibold text-xs sm:text-sm border border-white/30 hover:scale-105 drop-shadow-lg transform"
+                    >
+                      Join Now
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
@@ -247,7 +256,7 @@ export const Hero = ({ onNavigate }) => {
               <span className="text-blue-600 dark:text-blue-400">Alumni Network</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed">
-              Connect with fellow alumni, share experiences, and build lifelong relationships that transcend time and distance.
+              Connect & Celebrate with fellow alumni, share experiences, and build lifelong relationships that transcend time and distance.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center">
               <button

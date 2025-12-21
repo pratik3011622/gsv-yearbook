@@ -14,9 +14,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  batchYear: Number,
+  batchYear: String,
   department: String,
-  currentCompany: String,
+  company: String,
   jobTitle: String,
   location: String,
   country: {
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     default: 'India',
   },
   bio: String,
-  profileImageUrl: String,
+  avatarUrl: String,
   linkedinUrl: String,
   rollNumber: String, // For verification
   isMentor: {

@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         { expiresAt: null }
       ]
     })
-      .populate('postedBy', 'fullName currentCompany')
+      .populate('postedBy', 'fullName company batchYear')
       .sort({ createdAt: -1 });
     res.json(jobs);
   } catch (error) {
@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const job = await Job.findById(req.params.id)
-      .populate('postedBy', 'fullName currentCompany');
+      .populate('postedBy', 'fullName company batchYear');
     if (!job) {
       return res.status(404).json({ message: 'Job not found' });
     }
@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create job
-router.post('/', auth, isAlumni, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const job = new Job({
       ...req.body,
@@ -45,7 +45,7 @@ router.post('/', auth, isAlumni, async (req, res) => {
     });
 
     await job.save();
-    await job.populate('postedBy', 'fullName currentCompany');
+    await job.populate('postedBy', 'fullName company');
 
     res.status(201).json(job);
   } catch (error) {
@@ -67,7 +67,7 @@ router.put('/:id', auth, async (req, res) => {
 
     Object.assign(job, req.body);
     await job.save();
-    await job.populate('postedBy', 'fullName currentCompany');
+    await job.populate('postedBy', 'fullName company batchYear');
 
     res.json(job);
   } catch (error) {
@@ -100,7 +100,7 @@ router.put('/admin/:id', auth, isAdmin, async (req, res) => {
       req.params.id,
       req.body,
       { new: true }
-    ).populate('postedBy', 'fullName currentCompany');
+    ).populate('postedBy', 'fullName company batchYear');
 
     if (!job) {
       return res.status(404).json({ message: 'Job not found' });

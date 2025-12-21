@@ -20,7 +20,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/yearbook'
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profiles', require('./routes/profiles'));
-app.use('/api/memories', require('./routes/memories'));
 app.use('/api/events', require('./routes/events'));
 app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/stories', require('./routes/stories'));

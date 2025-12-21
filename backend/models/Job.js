@@ -34,6 +34,10 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  salaryRange: {
+    type: String,
+    required: false,
+  },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

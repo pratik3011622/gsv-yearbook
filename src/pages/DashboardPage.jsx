@@ -12,7 +12,11 @@ export const DashboardPage = ({ onNavigate }) => {
     eventsAttending: 0,
     connectionsCount: 0,
     storiesRead: 0,
+    jobsPosted: 0,
+    storiesSubmitted: 0,
   });
+  const [userJobs, setUserJobs] = useState([]);
+  const [userStories, setUserStories] = useState([]);
   const [onboardingChecklist, setOnboardingChecklist] = useState([
     { id: 1, task: 'Complete your profile', completed: false, action: 'profile' },
     { id: 2, task: 'Browse alumni directory', completed: false, action: 'directory' },
@@ -33,9 +37,22 @@ export const DashboardPage = ({ onNavigate }) => {
       // Get user's mentorship sessions as a proxy for activity
       const sessions = await api.getMySessions();
 
+      // Get all jobs and filter user's jobs
+      const allJobs = await api.getJobs();
+      const userJobsData = allJobs.filter(job => job.postedBy?._id === user?.id);
+
+      // Get all stories and filter user's stories (this would need a backend endpoint for proper implementation)
+      // For now, we'll show placeholder data
+      const userStoriesData = []; // TODO: Add backend endpoint for user's stories
+
+      setUserJobs(userJobsData);
+      setUserStories(userStoriesData);
+
       setStats((prev) => ({
         ...prev,
         eventsAttending: sessions?.length || 0,
+        jobsPosted: userJobsData.length,
+        storiesSubmitted: userStoriesData.length,
       }));
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -80,14 +97,6 @@ export const DashboardPage = ({ onNavigate }) => {
       color: 'from-emerald-500 to-emerald-600',
       bgColor: 'bg-emerald-500/10',
       action: 'jobs',
-    },
-    {
-      icon: BookOpen,
-      title: 'Yearbook',
-      description: 'Relive college memories',
-      color: 'from-amber-500 to-amber-600',
-      bgColor: 'bg-amber-500/10',
-      action: 'memories',
     },
   ];
 
@@ -174,7 +183,7 @@ export const DashboardPage = ({ onNavigate }) => {
                 Quick Actions
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {quickActions.map((action, index) => {
                   const Icon = action.icon;
                   return (
@@ -270,13 +279,25 @@ export const DashboardPage = ({ onNavigate }) => {
 
                 <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <Newspaper className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                    <Briefcase className="w-5 h-5 text-green-600 dark:text-green-400" />
                     <span className="text-sm text-slate-700 dark:text-slate-300">
-                      Stories Read
+                      Jobs Posted
                     </span>
                   </div>
                   <span className="font-bold text-slate-900 dark:text-white">
-                    {stats.storiesRead}
+                    {stats.jobsPosted}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <Newspaper className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-sm text-slate-700 dark:text-slate-300">
+                      Stories Submitted
+                    </span>
+                  </div>
+                  <span className="font-bold text-slate-900 dark:text-white">
+                    {stats.storiesSubmitted}
                   </span>
                 </div>
               </div>
