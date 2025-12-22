@@ -19,6 +19,9 @@ export const ProfilePage = ({ onNavigate }) => {
     newPassword: '',
     confirmPassword: ''
   });
+  const [profilePhotoFile, setProfilePhotoFile] = useState(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -96,8 +99,46 @@ export const ProfilePage = ({ onNavigate }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await api.updateProfile(formData);
-      await updateProfile(formData);
+      if (profilePhotoFile) {
+        // Use FormData for file upload
+        const formDataToSend = new FormData();
+
+        // Add all form data
+        Object.keys(formData).forEach(key => {
+          if (Array.isArray(formData[key])) {
+            formDataToSend.append(key, JSON.stringify(formData[key]));
+          } else {
+            formDataToSend.append(key, formData[key] || '');
+          }
+        });
+
+        // Add the file
+        formDataToSend.append('profilePhoto', profilePhotoFile);
+
+        const response = await fetch(`${api.baseURL}/profiles/me`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: formDataToSend
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update profile');
+        }
+
+        const updatedUser = await response.json();
+        await updateProfile(updatedUser);
+
+        // Clear photo states
+        setProfilePhotoFile(null);
+        setProfilePhotoPreview(null);
+      } else {
+        // Regular JSON update
+        await api.updateProfile(formData);
+        await updateProfile(formData);
+      }
+
       setIsEditing(false);
       alert('Profile updated successfully!');
     } catch (error) {
@@ -147,6 +188,22 @@ export const ProfilePage = ({ onNavigate }) => {
     onNavigate('home');
   };
 
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePhotoFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePhotoPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePhotoUpload = () => {
+    document.getElementById('profilePhotoInput').click();
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-950">
@@ -180,14 +237,32 @@ export const ProfilePage = ({ onNavigate }) => {
               <div className="relative h-32 bg-gradient-to-r from-slate-800 to-slate-900">
                 <div className="absolute -bottom-12 left-6">
                   <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center text-2xl font-bold text-slate-900 border-4 border-slate-900 shadow-lg">
-                      {formData.fullName?.charAt(0)?.toUpperCase() || '?'}
-                    </div>
+                    {profilePhotoPreview || profile?.avatarUrl ? (
+                      <img
+                        src={profilePhotoPreview || `${api.baseURL}${profile.avatarUrl}`}
+                        alt="Profile"
+                        className="w-24 h-24 rounded-full border-4 border-slate-900 shadow-lg object-cover"
+                      />
+                    ) : (
+                      <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center text-2xl font-bold text-slate-900 border-4 border-slate-900 shadow-lg">
+                        {formData.fullName?.charAt(0)?.toUpperCase() || '?'}
+                      </div>
+                    )}
                     {isEditing && (
-                      <button className="absolute bottom-0 right-0 w-8 h-8 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors shadow-lg">
+                      <button
+                        onClick={handlePhotoUpload}
+                        className="absolute bottom-0 right-0 w-8 h-8 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors shadow-lg"
+                      >
                         <Camera className="w-4 h-4" />
                       </button>
                     )}
+                    <input
+                      id="profilePhotoInput"
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoChange}
+                      className="hidden"
+                    />
                   </div>
                 </div>
               </div>

@@ -22,6 +22,8 @@ export const StoriesPage = ({ onNavigate }) => {
           tags: [],
           coverImageUrl: ''
       });
+      const [coverImageFile, setCoverImageFile] = useState(null);
+      const [uploadingImage, setUploadingImage] = useState(false);
       const { profile, user } = useAuth();
 
       const isAlumni = profile?.role === 'alumni';

@@ -1,8 +1,35 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const User = require('../models/User');
 const AdminLog = require('../models/AdminLog');
 const { auth, isAdmin } = require('../middleware/auth');
 const emailService = require('../services/emailService');
+
+// Configure multer for profile photo uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../uploads'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'profile-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
 
 const router = express.Router();
 
@@ -37,20 +64,35 @@ router.get('/me/profile', auth, async (req, res) => {
 });
 
 // Update own profile
-router.put('/me', auth, async (req, res) => {
+router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
   try {
     const allowedFields = [
       'fullName', 'batchYear', 'department', 'company',
       'jobTitle', 'location', 'country', 'bio', 'avatarUrl',
-      'linkedinUrl', 'rollNumber', 'isMentor', 'skills'
+      'linkedinUrl', 'rollNumber', 'isMentor', 'skills',
+      'tagline', 'universityName', 'degree', 'specialization',
+      'graduationStart', 'graduationEnd', 'currentCompany',
+      'industry', 'yearsOfExperience', 'pastCompanies',
+      'githubUrl', 'websiteUrl', 'achievements', 'certifications',
+      'isProfilePublic'
     ];
 
     const updates = {};
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
-        updates[field] = req.body[field];
+        // Handle array fields
+        if (['skills', 'pastCompanies', 'achievements', 'certifications'].includes(field)) {
+          updates[field] = Array.isArray(req.body[field]) ? req.body[field] : JSON.parse(req.body[field] || '[]');
+        } else {
+          updates[field] = req.body[field];
+        }
       }
     });
+
+    // Handle profile photo upload
+    if (req.file) {
+      updates.avatarUrl = `/uploads/${req.file.filename}`;
+    }
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
