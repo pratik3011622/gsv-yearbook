@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Eye, Calendar, Clock, Tag, Share2, User } from 'lucide-react';
+import { ArrowLeft, Eye, Calendar, Clock, Tag, Share2, User, Edit3, Trash2 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -8,6 +8,8 @@ export const StoryDetailPage = ({ onNavigate }) => {
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const isAuthor = story && user && user.id && story.authorId && story.authorId._id === user.id;
 
   useEffect(() => {
     const storyId = localStorage.getItem('selectedStoryId');
@@ -41,6 +43,27 @@ export const StoryDetailPage = ({ onNavigate }) => {
     } else {
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
+    }
+  };
+
+  const handleEditStory = () => {
+    // Store story data for editing and navigate to stories page with edit mode
+    localStorage.setItem('editStoryData', JSON.stringify(story));
+    onNavigate('stories');
+  };
+
+  const handleDeleteStory = async () => {
+    if (!window.confirm('Are you sure you want to delete this story? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await api.deleteStory(story._id);
+      alert('Story deleted successfully!');
+      onNavigate('stories');
+    } catch (error) {
+      console.error('Error deleting story:', error);
+      alert('Failed to delete story. Please try again.');
     }
   };
 
@@ -82,14 +105,35 @@ export const StoryDetailPage = ({ onNavigate }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Back Button */}
-        <button
-          onClick={() => onNavigate('stories')}
-          className="flex items-center space-x-2 text-slate-400 hover:text-amber-400 transition-colors mb-8"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Stories</span>
-        </button>
+        {/* Header with Back Button and Actions */}
+        <div className="flex items-center justify-between mb-8">
+          <button
+            onClick={() => onNavigate('stories')}
+            className="flex items-center space-x-2 text-slate-400 hover:text-amber-400 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back to Stories</span>
+          </button>
+
+          {isAuthor && (
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handleEditStory}
+                className="flex items-center space-x-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl transition-all duration-300 border border-slate-600 hover:border-slate-500"
+              >
+                <Edit3 className="w-4 h-4" />
+                <span>Edit</span>
+              </button>
+              <button
+                onClick={handleDeleteStory}
+                className="flex items-center space-x-2 px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 rounded-xl transition-all duration-300 border border-red-500/30 hover:border-red-500/50"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Delete</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         <article className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-800 overflow-hidden">
           {/* Cover Image */}

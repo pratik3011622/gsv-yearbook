@@ -275,42 +275,48 @@ export const ProfilePage = ({ onNavigate }) => {
           <div className="lg:col-span-2 space-y-6">
 
             {/* ABOUT SECTION */}
-            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
-              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2 text-amber-400" />
-                About
-              </h3>
+            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-slate-700/50 p-8 hover:shadow-amber-500/20 hover:border-amber-400/40 transition-all duration-500">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                  <User className="w-5 h-5 text-slate-900" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">About</h3>
+              </div>
               {isEditing ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Tagline</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wide">Tagline</label>
                     <input
                       type="text"
                       value={formData.tagline}
                       onChange={(e) => handleInputChange('tagline', e.target.value)}
                       placeholder="A short personal quote or tagline"
-                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full p-4 bg-slate-800/80 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Bio</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wide">Bio</label>
                     <textarea
                       value={formData.bio}
                       onChange={(e) => handleInputChange('bio', e.target.value)}
                       placeholder="Tell us about your journey, experiences, and aspirations..."
-                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
-                      rows={4}
+                      className="w-full p-4 bg-slate-800/80 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none transition-all duration-300"
+                      rows={5}
                     />
                   </div>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {formData.tagline && (
-                    <p className="text-amber-400 font-medium italic">"{formData.tagline}"</p>
+                    <div className="bg-amber-500/10 border-l-4 border-amber-500 rounded-r-xl p-4">
+                      <p className="text-amber-300 font-medium italic text-lg">"{formData.tagline}"</p>
+                    </div>
                   )}
-                  <p className="text-slate-300 leading-relaxed">
-                    {formData.bio || 'No bio added yet. Share your story with the community.'}
-                  </p>
+                  <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/30">
+                    <p className="text-slate-300 leading-relaxed text-base">
+                      {formData.bio || 'No bio added yet. Share your story with the community.'}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -484,35 +490,46 @@ export const ProfilePage = ({ onNavigate }) => {
             </div>
 
             {/* SKILLS SECTION */}
-            <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 hover:shadow-amber-500/10 transition-all duration-300">
-              <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-                <Star className="w-5 h-5 mr-2 text-amber-400" />
-                Skills
-              </h3>
+            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-slate-700/50 p-8 hover:shadow-amber-500/20 hover:border-amber-400/40 transition-all duration-500">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                  <Star className="w-5 h-5 text-slate-900" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">Skills & Expertise</h3>
+              </div>
               {isEditing ? (
-                <div>
-                  <input
-                    type="text"
-                    value={formData.skills.join(', ')}
-                    onChange={(e) => handleArrayChange('skills', e.target.value)}
-                    placeholder="React, Python, Machine Learning, Electronics, etc."
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  />
-                  <p className="text-slate-400 text-sm mt-2">Separate skills with commas</p>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wide">Skills</label>
+                    <input
+                      type="text"
+                      value={formData.skills.join(', ')}
+                      onChange={(e) => handleArrayChange('skills', e.target.value)}
+                      placeholder="React, Python, Machine Learning, Electronics, etc."
+                      className="w-full p-4 bg-slate-800/80 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                    />
+                    <p className="text-slate-400 text-sm mt-3">Separate skills with commas</p>
+                  </div>
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-2">
+                <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/30">
                   {formData.skills.length > 0 ? (
-                    formData.skills.map((skill, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-2 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-500/30 rounded-full text-sm font-medium hover:bg-amber-500/30 transition-colors"
-                      >
-                        {skill}
-                      </span>
-                    ))
+                    <div className="flex flex-wrap gap-3">
+                      {formData.skills.map((skill, index) => (
+                        <span
+                          key={index}
+                          className="px-4 py-2.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-500/30 rounded-full text-sm font-semibold hover:bg-amber-500/30 hover:border-amber-500/50 transition-all duration-300 hover:scale-105"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   ) : (
-                    <p className="text-slate-400">No skills added yet. Add your technical and professional skills.</p>
+                    <div className="text-center py-8">
+                      <Star className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                      <p className="text-slate-400 text-lg">No skills added yet.</p>
+                      <p className="text-slate-500 text-sm mt-2">Add your technical and professional skills to showcase your expertise.</p>
+                    </div>
                   )}
                 </div>
               )}

@@ -23,8 +23,9 @@ export const DirectoryPage = () => {
   const fetchProfiles = async () => {
     try {
       const data = await api.getProfiles();
-      // Sort by batch year (latest first)
-      const sortedData = (data || []).sort((a, b) => (b.batchYear || 0) - (a.batchYear || 0));
+      // Filter to show only alumni profiles, then sort by batch year (latest first)
+      const alumniOnly = (data || []).filter(profile => profile.role === 'alumni');
+      const sortedData = alumniOnly.sort((a, b) => (b.batchYear || 0) - (a.batchYear || 0));
       setProfiles(sortedData);
       setFilteredProfiles(sortedData);
     } catch (error) {
@@ -246,101 +247,139 @@ export const DirectoryPage = () => {
 
         {/* Loading State */}
         {loading ? (
-          <div className="text-center py-16">
-            <div className="inline-block w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-400">Loading distinguished alumni...</p>
+          <div className="text-center py-20">
+            <div className="relative">
+              <div className="inline-block w-20 h-20 border-4 border-amber-500/30 border-t-amber-500 rounded-full animate-spin mb-6"></div>
+              <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-t-amber-400/50 rounded-full animate-spin animation-delay-300"></div>
+            </div>
+            <p className="text-slate-400 text-lg font-medium">Connecting with distinguished alumni...</p>
+            <div className="mt-4 flex justify-center space-x-1">
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse animation-delay-200"></div>
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse animation-delay-400"></div>
+            </div>
           </div>
         ) : filteredProfiles.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-20 h-20 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-700">
-              <GraduationCap className="w-10 h-10 text-slate-400" />
+          <div className="text-center py-20">
+            <div className="relative mx-auto mb-8">
+              <div className="w-24 h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl flex items-center justify-center border border-slate-700/50 shadow-2xl">
+                <GraduationCap className="w-12 h-12 text-slate-400" />
+              </div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-amber-500/20 rounded-full flex items-center justify-center border border-amber-500/30">
+                <Users className="w-4 h-4 text-amber-400" />
+              </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-3">
-              {profiles.length === 0 ? 'No alumni yet' : 'No alumni match your search'}
+            <h3 className="text-3xl font-bold text-white mb-4">
+              {profiles.length === 0 ? 'Building Our Community' : 'No Matches Found'}
             </h3>
-            <p className="text-slate-400 mb-6 max-w-md mx-auto">
+            <p className="text-slate-400 text-lg mb-8 max-w-lg mx-auto leading-relaxed">
               {profiles.length === 0
-                ? 'Our alumni network is growing. Check back soon to connect with fellow graduates.'
-                : 'Try adjusting your search criteria or filters to find more alumni.'
+                ? 'Our distinguished alumni network is growing. Be among the first to join and connect with fellow graduates from Gati Shakti Vishwavidyalaya.'
+                : 'Try adjusting your search criteria or filters to discover more alumni in our network.'
               }
             </p>
-            {profiles.length > 0 && (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              {profiles.length > 0 && (
+                <button
+                  onClick={clearFilters}
+                  className="px-8 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 rounded-xl font-bold hover:from-amber-600 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-1"
+                >
+                  Reset Filters
+                </button>
+              )}
               <button
-                onClick={clearFilters}
-                className="px-6 py-3 bg-amber-500 text-slate-900 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
+                onClick={() => window.location.reload()}
+                className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl font-semibold transition-all duration-300 border border-slate-600 hover:border-slate-500 shadow-lg hover:shadow-slate-900/50"
               >
-                Reset Filters
+                Refresh Directory
               </button>
-            )}
+            </div>
           </div>
         ) : (
           /* Alumni Grid */
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredProfiles.map((profile) => (
               <div
                 key={profile._id || profile.id}
-                className="group bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-800 hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10 hover:-translate-y-1"
+                className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-amber-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/20 hover:-translate-y-2 overflow-hidden"
               >
-                <div className="p-6">
+                {/* Top accent bar */}
+                <div className="h-1 bg-gradient-to-r from-amber-400 to-yellow-500"></div>
+
+                <div className="p-8">
                   {/* Header with Avatar and Basic Info */}
-                  <div className="flex items-start space-x-4 mb-4">
-                    <div className="flex-shrink-0">
+                  <div className="flex items-start space-x-5 mb-6">
+                    <div className="flex-shrink-0 relative">
                       {profile.avatarUrl ? (
                         <img
                           src={profile.avatarUrl}
                           alt={profile.fullName}
-                          className="w-16 h-16 rounded-xl object-cover border-2 border-slate-700 shadow-lg"
+                          className="w-20 h-20 rounded-2xl object-cover border-3 border-slate-600 shadow-xl group-hover:border-amber-400/50 transition-all duration-300"
                         />
                       ) : (
-                        <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-xl font-bold text-slate-900 shadow-lg">
+                        <div className="w-20 h-20 bg-gradient-to-br from-amber-400 via-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center text-2xl font-bold text-slate-900 shadow-xl group-hover:shadow-amber-500/30 transition-all duration-300">
                           {profile.fullName?.charAt(0)?.toUpperCase() || '?'}
                         </div>
                       )}
+                      {/* Online indicator */}
+                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-3 border-slate-900 rounded-full"></div>
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-400 transition-colors line-clamp-1">
+                      <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-amber-300 transition-colors duration-300 line-clamp-1">
                         {profile.fullName}
                       </h3>
-                      <div className="flex items-center space-x-2 text-sm text-slate-400">
-                        <GraduationCap className="w-4 h-4" />
-                        <span>{profile.department} • Batch {profile.batchYear}</span>
+                      <div className="flex items-center space-x-2 text-sm text-slate-300 mb-1">
+                        <GraduationCap className="w-4 h-4 text-amber-400" />
+                        <span className="font-medium">{profile.department}</span>
+                      </div>
+                      <div className="text-sm text-slate-400">
+                        Batch of {profile.batchYear}
                       </div>
                     </div>
                   </div>
 
                   {/* Professional Info */}
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-4 mb-8">
                     {profile.company && (
-                      <div className="flex items-center text-slate-300">
-                        <Briefcase className="w-4 h-4 mr-2 text-blue-400 flex-shrink-0" />
-                        <span className="text-sm font-medium line-clamp-1">{profile.company}</span>
+                      <div className="flex items-center text-slate-200 bg-slate-800/50 rounded-xl p-3 border border-slate-700/50">
+                        <Briefcase className="w-5 h-5 mr-3 text-blue-400 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs text-slate-400 uppercase tracking-wide font-semibold">Company</div>
+                          <div className="text-sm font-medium line-clamp-1">{profile.company}</div>
+                        </div>
                       </div>
                     )}
 
                     {profile.location && (
-                      <div className="flex items-center text-slate-400">
-                        <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-                        <span className="text-sm">{profile.location}</span>
+                      <div className="flex items-center text-slate-200 bg-slate-800/50 rounded-xl p-3 border border-slate-700/50">
+                        <MapPin className="w-5 h-5 mr-3 text-green-400 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs text-slate-400 uppercase tracking-wide font-semibold">Location</div>
+                          <div className="text-sm font-medium">{profile.location}</div>
+                        </div>
                       </div>
                     )}
 
                     {/* Skills/Interests Preview */}
                     {profile.skills && profile.skills.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-3">
-                        {profile.skills.slice(0, 3).map((skill, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-slate-800 text-slate-300 text-xs rounded-md border border-slate-700"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                        {profile.skills.length > 3 && (
-                          <span className="px-2 py-1 bg-slate-800 text-slate-500 text-xs rounded-md border border-slate-700">
-                            +{profile.skills.length - 3} more
-                          </span>
-                        )}
+                      <div className="bg-slate-800/30 rounded-xl p-3 border border-slate-700/30">
+                        <div className="text-xs text-slate-400 uppercase tracking-wide font-semibold mb-2">Skills & Expertise</div>
+                        <div className="flex flex-wrap gap-2">
+                          {profile.skills.slice(0, 4).map((skill, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 text-xs font-semibold rounded-full border border-amber-500/30 hover:bg-amber-500/30 transition-colors duration-200"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                          {profile.skills.length > 4 && (
+                            <span className="px-3 py-1.5 bg-slate-700 text-slate-400 text-xs font-semibold rounded-full border border-slate-600">
+                              +{profile.skills.length - 4} more
+                            </span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -352,14 +391,14 @@ export const DirectoryPage = () => {
                         href={profile.linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5"
+                        className="flex-1 inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-blue-500/40 transform hover:-translate-y-1 hover:scale-105"
                       >
                         <Linkedin className="w-4 h-4 mr-2" />
                         Connect
                       </a>
                     )}
 
-                    <button className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-semibold rounded-lg transition-all duration-300 border border-slate-700 hover:border-slate-600">
+                    <button className="flex-1 inline-flex items-center justify-center px-5 py-3 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-bold rounded-xl transition-all duration-300 border border-slate-600 hover:border-slate-500 shadow-lg hover:shadow-slate-900/50 transform hover:-translate-y-1 hover:scale-105">
                       View Profile
                     </button>
                   </div>

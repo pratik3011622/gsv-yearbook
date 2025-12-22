@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Eye, Calendar, Tag, ChevronRight, Plus, X, Upload, Save, Clock, Quote, User } from 'lucide-react';
+import { BookOpen, Eye, Calendar, Tag, ChevronRight, Plus, X, Upload, Save, Clock, Quote, User, Edit3, Trash2 } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { api } from '../lib/api';
@@ -10,7 +10,10 @@ export const StoriesPage = ({ onNavigate }) => {
       const [featuredStory, setFeaturedStory] = useState(null);
       const [loading, setLoading] = useState(true);
       const [showCreateModal, setShowCreateModal] = useState(false);
+      const [showEditModal, setShowEditModal] = useState(false);
+      const [editingStory, setEditingStory] = useState(null);
       const [creating, setCreating] = useState(false);
+      const [editing, setEditing] = useState(false);
       const [storyForm, setStoryForm] = useState({
           title: '',
           excerpt: '',
@@ -19,7 +22,7 @@ export const StoriesPage = ({ onNavigate }) => {
           tags: [],
           coverImageUrl: ''
       });
-      const { profile } = useAuth();
+      const { profile, user } = useAuth();
 
       const isAlumni = profile?.role === 'alumni';
 
@@ -31,6 +34,14 @@ export const StoriesPage = ({ onNavigate }) => {
 
    useEffect(() => {
      fetchStories();
+
+     // Check if there's story data to edit from localStorage
+     const editStoryData = localStorage.getItem('editStoryData');
+     if (editStoryData) {
+       const storyToEdit = JSON.parse(editStoryData);
+       handleEditStory(storyToEdit);
+       localStorage.removeItem('editStoryData');
+     }
    }, []);
 
    const fetchStories = async () => {
@@ -87,6 +98,85 @@ export const StoriesPage = ({ onNavigate }) => {
     } finally {
       setCreating(false);
     }
+  };
+
+  const handleEditStory = (story) => {
+    setEditingStory(story);
+    setStoryForm({
+      title: story.title || '',
+      excerpt: story.excerpt || '',
+      content: story.content || '',
+      highlightQuote: story.highlightQuote || '',
+      tags: story.tags || [],
+      coverImageUrl: story.coverImageUrl || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdateStory = async (e) => {
+    e.preventDefault();
+    if (!storyForm.title.trim() || !storyForm.content.trim()) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setEditing(true);
+    try {
+      const readTime = calculateReadTime(storyForm.content);
+      const updatedStory = await api.updateStory(editingStory._id, {
+        ...storyForm,
+        readTime,
+        tags: storyForm.tags.filter(tag => tag.trim() !== '')
+      });
+
+      setStories(prev => prev.map(story =>
+        story._id === editingStory._id ? updatedStory : story
+      ));
+
+      // Update featured story if it was the one edited
+      if (featuredStory && featuredStory._id === editingStory._id) {
+        setFeaturedStory(updatedStory);
+      }
+
+      setShowEditModal(false);
+      setEditingStory(null);
+      setStoryForm({
+        title: '',
+        excerpt: '',
+        content: '',
+        highlightQuote: '',
+        tags: [],
+        coverImageUrl: ''
+      });
+    } catch (error) {
+      console.error('Error updating story:', error);
+      alert('Failed to update story. Please try again.');
+    } finally {
+      setEditing(false);
+    }
+  };
+
+  const handleDeleteStory = async (storyId) => {
+    if (!window.confirm('Are you sure you want to delete this story? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await api.deleteStory(storyId);
+      setStories(prev => prev.filter(story => story._id !== storyId));
+
+      // Remove from featured if it was featured
+      if (featuredStory && featuredStory._id === storyId) {
+        setFeaturedStory(null);
+      }
+    } catch (error) {
+      console.error('Error deleting story:', error);
+      alert('Failed to delete story. Please try again.');
+    }
+  };
+
+  const isAuthor = (story) => {
+    return user && user.id && story.authorId && story.authorId._id === user.id;
   };
 
   const handleTagInput = (e) => {
@@ -298,63 +388,98 @@ export const StoriesPage = ({ onNavigate }) => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
               {stories.filter(story => story._id !== featuredStory?._id).map((story) => (
                 <article
                   key={story._id || story.id}
-                  className="group bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-800 hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10 hover:-translate-y-1"
+                  className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-amber-400/40 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/20 hover:-translate-y-2 overflow-hidden"
                 >
+                  {/* Top accent bar */}
+                  <div className="h-1 bg-gradient-to-r from-amber-400 to-yellow-500"></div>
+
                   {story.coverImageUrl && (
-                    <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                    <div className="relative h-56 overflow-hidden">
                       <img
                         src={story.coverImageUrl}
                         alt={story.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
                     </div>
                   )}
 
-                  <div className="p-6">
-                    <div className="flex items-center space-x-4 text-sm text-slate-400 mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Clock className="w-4 h-4" />
-                        <span>{story.readTime || 5} min read</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Eye className="w-4 h-4" />
-                        <span>{story.viewsCount || 0} views</span>
+                  <div className="p-8">
+                    {/* Meta Info */}
+                    <div className="flex items-center justify-between text-sm text-slate-400 mb-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 bg-slate-800/50 rounded-xl px-3 py-1.5 border border-slate-700/50">
+                          <Clock className="w-4 h-4 text-amber-400" />
+                          <span className="font-medium">{story.readTime || 5} min read</span>
+                        </div>
+                        <div className="flex items-center space-x-2 bg-slate-800/50 rounded-xl px-3 py-1.5 border border-slate-700/50">
+                          <Eye className="w-4 h-4 text-blue-400" />
+                          <span className="font-medium">{story.viewsCount || 0} views</span>
+                        </div>
                       </div>
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-amber-400 transition-colors">
+                    <h3 className="text-2xl font-bold text-white mb-4 line-clamp-2 group-hover:text-amber-300 transition-colors duration-300 leading-tight">
                       {story.title}
                     </h3>
 
-                    <p className="text-slate-400 mb-6 line-clamp-3">
+                    <p className="text-slate-300 mb-8 line-clamp-3 leading-relaxed text-base">
                       {story.excerpt}
                     </p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-700">
-                      <div className="text-sm">
-                        <p className="font-medium text-white">
-                          {story.authorId?.fullName}
-                        </p>
-                        {story.authorId?.batchYear && (
-                          <p className="text-slate-400">
-                            Batch {story.authorId.batchYear}
+                    {/* Author Info and Actions */}
+                    <div className="flex items-center justify-between pt-6 border-t border-slate-700/50">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-lg font-bold text-slate-900 shadow-lg">
+                          {story.authorId?.fullName?.charAt(0)?.toUpperCase() || 'A'}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-white text-lg">
+                            {story.authorId?.fullName}
                           </p>
-                        )}
+                          {story.authorId?.batchYear && (
+                            <p className="text-slate-400 text-sm">
+                              Batch {story.authorId.batchYear}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
-                      <button
-                        onClick={() => {
-                          localStorage.setItem('selectedStoryId', story._id || story.id);
-                          onNavigate('story-detail');
-                        }}
-                        className="flex items-center space-x-1 text-amber-400 font-medium hover:translate-x-1 transition-transform"
-                      >
-                        <span className="text-sm">Read →</span>
-                      </button>
+                      <div className="flex items-center space-x-3">
+                        {isAuthor(story) && (
+                          <>
+                            <button
+                              onClick={() => handleEditStory(story)}
+                              className="p-3 text-slate-400 hover:text-amber-400 transition-colors rounded-xl hover:bg-slate-800/50"
+                              title="Edit Story"
+                            >
+                              <Edit3 className="w-5 h-5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteStory(story._id)}
+                              className="p-3 text-slate-400 hover:text-red-400 transition-colors rounded-xl hover:bg-slate-800/50"
+                              title="Delete Story"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </>
+                        )}
+
+                        <button
+                          onClick={() => {
+                            localStorage.setItem('selectedStoryId', story._id || story.id);
+                            onNavigate('story-detail');
+                          }}
+                          className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/40 transform hover:-translate-y-1 hover:scale-105"
+                        >
+                          <span className="text-sm mr-2">Read Story</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -550,6 +675,184 @@ export const StoriesPage = ({ onNavigate }) => {
                     <>
                       <Save className="w-4 h-4 mr-2" />
                       Publish Story
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Story Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
+            <div className="p-8 border-b border-slate-700">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center">
+                    <Edit3 className="w-5 h-5 text-slate-900" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">
+                    Edit Your Story
+                  </h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingStory(null);
+                    setStoryForm({
+                      title: '',
+                      excerpt: '',
+                      content: '',
+                      highlightQuote: '',
+                      tags: [],
+                      coverImageUrl: ''
+                    });
+                  }}
+                  className="p-2 hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-white"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            <form onSubmit={handleUpdateStory} className="p-8 space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Story Title *
+                </label>
+                <input
+                  type="text"
+                  value={storyForm.title}
+                  onChange={(e) => setStoryForm(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                  placeholder="Enter an engaging title for your story"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Excerpt *
+                </label>
+                <textarea
+                  value={storyForm.excerpt}
+                  onChange={(e) => setStoryForm(prev => ({ ...prev, excerpt: e.target.value }))}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all resize-none"
+                  placeholder="Write a brief summary of your story (2-3 sentences)"
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Highlight Quote (Optional)
+                </label>
+                <textarea
+                  value={storyForm.highlightQuote}
+                  onChange={(e) => setStoryForm(prev => ({ ...prev, highlightQuote: e.target.value }))}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all resize-none"
+                  placeholder="A memorable quote from your story"
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Story Content *
+                </label>
+                <div className="border border-slate-700 rounded-xl overflow-hidden">
+                  <ReactQuill
+                    value={storyForm.content}
+                    onChange={(content) => setStoryForm(prev => ({ ...prev, content }))}
+                    modules={quillModules}
+                    theme="snow"
+                    placeholder="Share your inspiring journey, challenges overcome, and lessons learned..."
+                    className="bg-slate-800"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Tags
+                </label>
+                <input
+                  type="text"
+                  onKeyDown={handleTagInput}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                  placeholder="Press Enter to add tags (e.g., career, entrepreneurship, overcoming-challenges)"
+                />
+                {storyForm.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {storyForm.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center px-3 py-1 bg-amber-500/20 text-amber-400 text-sm font-medium rounded-full border border-amber-500/30"
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => removeTag(tag)}
+                          className="ml-2 hover:bg-amber-500/30 rounded-full p-0.5"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Cover Image URL (Optional)
+                </label>
+                <input
+                  type="url"
+                  value={storyForm.coverImageUrl}
+                  onChange={(e) => setStoryForm(prev => ({ ...prev, coverImageUrl: e.target.value }))}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                  placeholder="https://example.com/your-image.jpg"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-4 pt-6 border-t border-slate-700">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingStory(null);
+                    setStoryForm({
+                      title: '',
+                      excerpt: '',
+                      content: '',
+                      highlightQuote: '',
+                      tags: [],
+                      coverImageUrl: ''
+                    });
+                  }}
+                  className="px-6 py-3 border border-slate-700 text-slate-300 rounded-xl hover:bg-slate-800 hover:text-white transition-all duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={editing}
+                  className="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center"
+                >
+                  {editing ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
+                      <span>Updating...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Update Story
                     </>
                   )}
                 </button>

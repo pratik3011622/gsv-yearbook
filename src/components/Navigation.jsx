@@ -93,10 +93,10 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                       onClick={() => setOpenDropdown(openDropdown === item.id ? null : item.id)}
                       className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 flex items-center space-x-1 ${
                           item.subItems.some(subItem => currentPage === subItem.id)
-                            ? 'bg-primary-900 text-white shadow-soft'
+                            ? 'bg-blue-600 text-white shadow-lg ring-2 ring-blue-300'
                             : currentPage === 'home'
-                            ? 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900'
-                            : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
+                            ? 'text-neutral-700 hover:bg-blue-50 hover:text-blue-900'
+                            : 'text-neutral-700 dark:text-neutral-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-100'
                         }`}
                     >
                       <span>{item.label}</span>
@@ -115,10 +115,10 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                             }}
                             className={`block w-full text-left px-4 py-3 text-sm font-medium transition-all duration-200 ${
                                currentPage === subItem.id
-                                 ? 'bg-primary-900 text-white'
+                                 ? 'bg-blue-600 text-white'
                                  : currentPage === 'home'
-                                 ? 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900'
-                                 : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
+                                 ? 'text-neutral-700 hover:bg-blue-50 hover:text-blue-900'
+                                 : 'text-neutral-700 dark:text-neutral-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-100'
                              }`}
                           >
                             {subItem.label}
@@ -132,10 +132,10 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                     onClick={() => onNavigate(item.id)}
                     className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
                        currentPage === item.id
-                         ? 'bg-primary-900 text-white shadow-soft'
+                         ? 'bg-blue-600 text-white shadow-lg ring-2 ring-blue-300'
                          : currentPage === 'home'
-                         ? 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900'
-                         : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-900 dark:hover:text-primary-100'
+                         ? 'text-neutral-700 hover:bg-blue-50 hover:text-blue-900'
+                         : 'text-neutral-700 dark:text-neutral-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-100'
                      }`}
                   >
                     {item.label}
@@ -254,12 +254,12 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                               setOpenDropdown(null);
                             }}
                             className={`block w-full text-left px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                              currentPage === subItem.id
-                                ? 'bg-primary-900 text-white'
-                                : currentPage === 'home'
-                                ? 'text-neutral-600 hover:bg-primary-50'
-                                : 'text-neutral-600 dark:text-neutral-400 hover:bg-primary-50 dark:hover:bg-primary-900/20'
-                            }`}
+                                      currentPage === subItem.id
+                                        ? 'bg-blue-600 text-white'
+                                        : currentPage === 'home'
+                                        ? 'text-neutral-600 hover:bg-blue-50'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                                    }`}
                           >
                             {subItem.label}
                           </button>
@@ -275,10 +275,10 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                     }}
                     className={`block w-full text-left px-4 py-3 rounded-xl font-medium transition-all ${
                       currentPage === item.id
-                        ? 'bg-primary-900 text-white'
+                        ? 'bg-blue-600 text-white ring-2 ring-blue-300'
                         : currentPage === 'home'
-                        ? 'text-neutral-700 hover:bg-primary-50'
-                        : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20'
+                        ? 'text-neutral-700 hover:bg-blue-50'
+                        : 'text-neutral-700 dark:text-neutral-300 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                     }`}
                   >
                     {item.label}

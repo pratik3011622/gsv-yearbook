@@ -409,41 +409,49 @@ export const JobsPage = () => {
           </div>
         ) : (
           /* Job Cards Grid */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {filteredJobs.map((job) => (
               <div
                 key={job._id || job.id}
-                className={`group bg-slate-900/50 backdrop-blur-sm rounded-2xl border transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10 hover:-translate-y-1 ${
+                className={`group bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm rounded-3xl border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden ${
                   job.isFeatured
-                    ? 'border-amber-500/50 shadow-lg shadow-amber-500/20 bg-gradient-to-br from-amber-500/5 to-yellow-500/5'
-                    : 'border-slate-800 hover:border-amber-500/30'
+                    ? 'border-amber-400/50 shadow-xl shadow-amber-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/10'
+                    : 'border-slate-700/50 hover:border-amber-400/40 hover:shadow-amber-500/20'
                 }`}
               >
+                {/* Top accent bar */}
+                <div className={`h-1 ${job.isFeatured ? 'bg-gradient-to-r from-amber-400 to-yellow-500' : 'bg-gradient-to-r from-slate-600 to-slate-700'}`}></div>
+
                 {/* Featured Badge */}
                 {job.isFeatured && (
-                  <div className="absolute -top-3 left-6 z-10">
-                    <div className="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                      ⭐ FEATURED
+                  <div className="absolute -top-3 left-8 z-10">
+                    <div className="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center">
+                      <Star className="w-3 h-3 mr-1" />
+                      FEATURED
                     </div>
                   </div>
                 )}
 
-                <div className="p-6">
+                <div className="p-8">
                   {/* Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start space-x-4 flex-1">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start space-x-5 flex-1">
                       {/* Company Logo */}
                       <div className="flex-shrink-0">
-                        <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-xl font-bold text-slate-900 shadow-lg">
+                        <div className="w-16 h-16 bg-gradient-to-br from-amber-400 via-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center text-2xl font-bold text-slate-900 shadow-xl group-hover:shadow-amber-500/30 transition-all duration-300">
                           {job.company?.charAt(0)?.toUpperCase() || 'C'}
                         </div>
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-400 transition-colors line-clamp-2">
+                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-amber-300 transition-colors duration-300 line-clamp-2">
                           {job.title}
                         </h3>
-                        <p className="text-slate-300 font-medium text-lg">{job.company}</p>
+                        <p className="text-slate-300 font-semibold text-lg">{job.company}</p>
+                        <div className="flex items-center space-x-2 text-sm text-slate-400 mt-1">
+                          <MapPin className="w-4 h-4 text-green-400" />
+                          <span>{job.location || 'Remote'}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -451,7 +459,7 @@ export const JobsPage = () => {
                     {isLoggedIn && (
                       <button
                         onClick={() => toggleBookmark(job._id)}
-                        className="flex-shrink-0 p-2 text-slate-400 hover:text-amber-400 transition-colors"
+                        className="flex-shrink-0 p-3 text-slate-400 hover:text-amber-400 transition-colors rounded-xl hover:bg-slate-800/50"
                       >
                         {bookmarkedJobs.has(job._id) ? (
                           <BookmarkCheck className="w-5 h-5" />
@@ -463,61 +471,60 @@ export const JobsPage = () => {
                   </div>
 
                   {/* Job Details */}
-                  <div className="space-y-3 mb-6">
-                    <div className="flex flex-wrap items-center gap-3 text-sm">
-                      <div className="flex items-center text-slate-400">
-                        <MapPin className="w-4 h-4 mr-1" />
-                        <span>{job.location || 'Remote'}</span>
-                      </div>
-                      <div className="flex items-center text-slate-400">
-                        <Briefcase className="w-4 h-4 mr-1" />
-                        <span className="capitalize">{job.jobType?.replace('-', ' ') || 'Full-time'}</span>
+                  <div className="space-y-4 mb-8">
+                    {/* Key Info Row */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <div className="flex items-center text-slate-300 bg-slate-800/50 rounded-xl px-3 py-2 border border-slate-700/50">
+                        <Briefcase className="w-4 h-4 mr-2 text-blue-400" />
+                        <span className="font-medium capitalize">{job.jobType?.replace('-', ' ') || 'Full-time'}</span>
                       </div>
                       {job.salaryRange && (
-                        <div className="flex items-center text-green-400">
-                          <DollarSign className="w-4 h-4 mr-1" />
-                          <span className="font-medium">{job.salaryRange}</span>
+                        <div className="flex items-center text-green-300 bg-slate-800/50 rounded-xl px-3 py-2 border border-slate-700/50">
+                          <DollarSign className="w-4 h-4 mr-2" />
+                          <span className="font-semibold">{job.salaryRange}</span>
                         </div>
                       )}
+                      <div className="flex items-center text-slate-300 bg-slate-800/50 rounded-xl px-3 py-2 border border-slate-700/50">
+                        <Clock className="w-4 h-4 mr-2 text-purple-400" />
+                        <span className="font-medium">{getRelativeTime(job.createdAt)}</span>
+                      </div>
                     </div>
 
                     {/* Badges */}
                     <div className="flex flex-wrap gap-2">
-                      {getJobTypeBadge(job.jobType).label && (
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getJobTypeBadge(job.jobType).bg} ${getJobTypeBadge(job.jobType).text}`}>
-                          {getJobTypeBadge(job.jobType).label}
-                        </span>
-                      )}
                       {job.domain && (
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDomainBadge(job.domain).bg} ${getDomainBadge(job.domain).text}`}>
+                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getDomainBadge(job.domain).bg} ${getDomainBadge(job.domain).text} border border-opacity-30`}>
                           {job.domain}
                         </span>
                       )}
                       {job.experienceLevel && (
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getExperienceBadge(job.experienceLevel).bg} ${getExperienceBadge(job.experienceLevel).text}`}>
+                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getExperienceBadge(job.experienceLevel).bg} ${getExperienceBadge(job.experienceLevel).text} border border-opacity-30`}>
                           {getExperienceBadge(job.experienceLevel).label}
+                        </span>
+                      )}
+                      {getJobTypeBadge(job.jobType).label && (
+                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getJobTypeBadge(job.jobType).bg} ${getJobTypeBadge(job.jobType).text} border border-opacity-30`}>
+                          {getJobTypeBadge(job.jobType).label}
                         </span>
                       )}
                     </div>
 
                     {/* Description Preview */}
                     {job.description && (
-                      <p className="text-slate-400 text-sm line-clamp-2">
-                        {job.description}
-                      </p>
+                      <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                        <p className="text-slate-300 text-sm leading-relaxed line-clamp-3">
+                          {job.description}
+                        </p>
+                      </div>
                     )}
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-700">
-                    <div className="flex items-center space-x-4 text-xs text-slate-500">
+                  <div className="flex items-center justify-between pt-6 border-t border-slate-700/50">
+                    <div className="text-sm text-slate-400">
                       {job.postedBy && (
-                        <span>By {job.postedBy.fullName}</span>
+                        <span className="font-medium text-slate-300">Posted by {job.postedBy.fullName}</span>
                       )}
-                      <div className="flex items-center">
-                        <Clock className="w-3 h-3 mr-1" />
-                        <span>{getRelativeTime(job.createdAt)}</span>
-                      </div>
                     </div>
 
                     {/* Apply Button */}
@@ -527,13 +534,13 @@ export const JobsPage = () => {
                           href={job.applyUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-0.5"
+                          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/40 transform hover:-translate-y-1 hover:scale-105"
                         >
                           Apply Now
                           <ExternalLink className="w-4 h-4 ml-2" />
                         </a>
                       ) : (
-                        <span className="inline-flex items-center px-6 py-2 bg-slate-700 text-slate-400 font-semibold rounded-lg cursor-not-allowed">
+                        <span className="inline-flex items-center px-6 py-3 bg-slate-700/80 text-slate-400 font-semibold rounded-xl cursor-not-allowed border border-slate-600">
                           Link Unavailable
                         </span>
                       )}

@@ -126,6 +126,7 @@ export const Hero = ({ onNavigate }) => {
                   <button
                     onClick={() => {
                       setIsYearbookDropdownOpen(!isYearbookDropdownOpen);
+                      setIsAboutDropdownOpen(false); // Close other dropdown
                     }}
                     className="text-white hover:text-white font-semibold transition-all duration-300 text-xs sm:text-sm px-1.5 sm:px-2 lg:px-3 py-1 sm:py-1.5 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform flex items-center space-x-1"
                   >
@@ -192,6 +193,7 @@ export const Hero = ({ onNavigate }) => {
                   <button
                     onClick={() => {
                       setIsAboutDropdownOpen(!isAboutDropdownOpen);
+                      setIsYearbookDropdownOpen(false); // Close other dropdown
                     }}
                     className="text-white hover:text-white font-semibold transition-all duration-300 text-xs sm:text-sm px-1.5 sm:px-2 lg:px-3 py-1 sm:py-1.5 rounded-lg hover:bg-white/20 hover:scale-105 drop-shadow-lg transform flex items-center space-x-1"
                   >
