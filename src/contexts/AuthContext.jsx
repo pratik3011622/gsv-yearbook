@@ -73,7 +73,6 @@ export const AuthProvider = ({ children }) => {
         email: result.user.email,
         fullName: result.user.fullName,
         role: result.user.role,
-        approvalStatus: result.user.approvalStatus,
       });
     }
     return result;

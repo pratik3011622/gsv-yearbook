@@ -78,25 +78,6 @@ class ApiClient {
     return result.data;
   }
 
-  async getAllProfiles() {
-    const result = await this.request('/profiles/admin/all');
-    return result.data;
-  }
-
-  async approveUser(userId) {
-    const result = await this.request(`/admin/users/${userId}/approve`, {
-      method: 'PUT',
-    });
-    return result.data;
-  }
-
-  async rejectUser(userId, reason) {
-    const result = await this.request(`/admin/users/${userId}/reject`, {
-      method: 'PUT',
-      body: JSON.stringify({ reason }),
-    });
-    return result.data;
-  }
 
   // Memories endpoints
   async getMemories() {
@@ -264,52 +245,6 @@ class ApiClient {
     return result.data;
   }
 
-  // Admin endpoints
-  async getAdminStats() {
-    const result = await this.request('/admin/dashboard/stats');
-    return result.data;
-  }
-
-  async getAdminLogs() {
-    const result = await this.request('/admin/logs');
-    return result.data;
-  }
-
-  async bulkApproveUsers(userIds) {
-    const result = await this.request('/admin/users/bulk-approve', {
-      method: 'POST',
-      body: JSON.stringify({ userIds }),
-    });
-    return result.data;
-  }
-
-  async bulkRejectUsers(userIds, reason) {
-    const result = await this.request('/admin/users/bulk-reject', {
-      method: 'POST',
-      body: JSON.stringify({ userIds, reason }),
-    });
-    return result.data;
-  }
-
-  async getPendingPhotos() {
-    const result = await this.request('/memories/admin/pending');
-    return result.data;
-  }
-
-  async approvePhoto(uploadId) {
-    const result = await this.request(`/admin/photos/${uploadId}/approve`, {
-      method: 'PUT',
-    });
-    return result.data;
-  }
-
-  async rejectPhoto(uploadId, notes) {
-    const result = await this.request(`/admin/photos/${uploadId}/reject`, {
-      method: 'PUT',
-      body: JSON.stringify({ notes }),
-    });
-    return result.data;
-  }
 
   // Stats endpoints
   async getPlatformStats() {

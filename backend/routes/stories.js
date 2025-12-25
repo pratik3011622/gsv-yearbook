@@ -1,14 +1,14 @@
 const express = require('express');
 const Story = require('../models/Story');
-const { auth, isAdmin, isAlumni } = require('../middleware/auth');
+const { auth, isAlumni } = require('../middleware/auth');
 const { validateStory } = require('../middleware/validation');
 
 const router = express.Router();
 
-// Get all approved stories (public)
+// Get all stories (public)
 router.get('/', async (req, res) => {
   try {
-    const stories = await Story.find({ approvalStatus: 'approved' })
+    const stories = await Story.find({})
       .populate('authorId', 'fullName batchYear')
       .sort({ publishedAt: -1 });
     res.json(stories);
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 // Get featured story (only the most recent one)
 router.get('/featured', async (req, res) => {
   try {
-    const story = await Story.findOne({ isFeatured: true, approvalStatus: 'approved' })
+    const story = await Story.findOne({ isFeatured: true })
       .populate('authorId', 'fullName batchYear')
       .sort({ publishedAt: -1 });
     res.json(story ? [story] : []);
@@ -107,85 +107,5 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// Admin: Manage all stories
-router.put('/admin/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const story = await Story.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    ).populate('authorId', 'fullName');
-
-    if (!story) {
-      return res.status(404).json({ message: 'Story not found' });
-    }
-
-    res.json(story);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-router.delete('/admin/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const story = await Story.findByIdAndDelete(req.params.id);
-    if (!story) {
-      return res.status(404).json({ message: 'Story not found' });
-    }
-    res.json({ message: 'Story deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Admin: Approve story
-router.put('/:id/approve', auth, isAdmin, async (req, res) => {
-  try {
-    const story = await Story.findByIdAndUpdate(
-      req.params.id,
-      { approvalStatus: 'approved' },
-      { new: true }
-    ).populate('authorId', 'fullName batchYear');
-
-    if (!story) {
-      return res.status(404).json({ message: 'Story not found' });
-    }
-
-    res.json(story);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Admin: Reject story
-router.put('/:id/reject', auth, isAdmin, async (req, res) => {
-  try {
-    const story = await Story.findByIdAndUpdate(
-      req.params.id,
-      { approvalStatus: 'rejected' },
-      { new: true }
-    ).populate('authorId', 'fullName batchYear');
-
-    if (!story) {
-      return res.status(404).json({ message: 'Story not found' });
-    }
-
-    res.json(story);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get all stories for admin (including pending)
-router.get('/admin/all', auth, isAdmin, async (req, res) => {
-  try {
-    const stories = await Story.find({})
-      .populate('authorId', 'fullName batchYear')
-      .sort({ createdAt: -1 });
-    res.json(stories);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 module.exports = router;

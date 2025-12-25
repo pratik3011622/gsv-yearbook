@@ -1,6 +1,6 @@
 const express = require('express');
 const Job = require('../models/Job');
-const { auth, isAdmin, isAlumni } = require('../middleware/auth');
+const { auth, isAlumni } = require('../middleware/auth');
 const { validateJob } = require('../middleware/validation');
 
 const router = express.Router();
@@ -93,35 +93,5 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// Admin: Manage all jobs
-router.put('/admin/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const job = await Job.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    ).populate('postedBy', 'fullName company batchYear');
-
-    if (!job) {
-      return res.status(404).json({ message: 'Job not found' });
-    }
-
-    res.json(job);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-router.delete('/admin/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const job = await Job.findByIdAndDelete(req.params.id);
-    if (!job) {
-      return res.status(404).json({ message: 'Job not found' });
-    }
-    res.json({ message: 'Job deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 module.exports = router;

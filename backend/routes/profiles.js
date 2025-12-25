@@ -2,9 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const User = require('../models/User');
-const AdminLog = require('../models/AdminLog');
-const { auth, isAdmin } = require('../middleware/auth');
-const emailService = require('../services/emailService');
+const { auth } = require('../middleware/auth');
 
 // Configure multer for profile photo uploads
 const storage = multer.diskStorage({
@@ -33,10 +31,10 @@ const upload = multer({
 
 const router = express.Router();
 
-// Get all approved profiles (public)
+// Get all profiles (public)
 router.get('/', async (req, res) => {
   try {
-    const profiles = await User.find({ approvalStatus: 'approved' })
+    const profiles = await User.find({})
       .select('-password')
       .sort({ createdAt: -1 });
     res.json(profiles);
@@ -106,118 +104,5 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
   }
 });
 
-// Admin: Get all profiles (including pending)
-router.get('/admin/all', auth, isAdmin, async (req, res) => {
-  try {
-    const profiles = await User.find({})
-      .select('-password')
-      .sort({ createdAt: -1 });
-    res.json(profiles);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Admin: Approve profile
-router.put('/:id/approve', auth, isAdmin, async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        approvalStatus: 'approved',
-        approvedBy: req.user._id,
-        approvedAt: new Date(),
-        rejectionReason: null,
-      },
-      { new: true }
-    ).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Log admin action
-    await AdminLog.create({
-      adminId: req.user._id,
-      action: 'approve_profile',
-      targetType: 'profile',
-      targetId: user._id,
-    });
-
-    // Send welcome email
-    try {
-      await emailService.sendWelcomeEmail(user);
-    } catch (emailError) {
-      console.error('Error sending welcome email:', emailError);
-      // Don't fail the approval if email fails
-    }
-
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Admin: Reject profile
-router.put('/:id/reject', auth, isAdmin, async (req, res) => {
-  try {
-    const { reason } = req.body;
-
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        approvalStatus: 'rejected',
-        rejectionReason: reason,
-        approvedBy: req.user._id,
-        approvedAt: new Date(),
-      },
-      { new: true }
-    ).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Log admin action
-    await AdminLog.create({
-      adminId: req.user._id,
-      action: 'reject_profile',
-      targetType: 'profile',
-      targetId: user._id,
-      details: { reason },
-    });
-
-    // Send rejection email
-    try {
-      await emailService.sendRejectionEmail(user, reason);
-    } catch (emailError) {
-      console.error('Error sending rejection email:', emailError);
-      // Don't fail the rejection if email fails
-    }
-
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Admin: Update any profile
-router.put('/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    ).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 module.exports = router;

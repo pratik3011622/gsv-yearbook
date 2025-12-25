@@ -11,7 +11,6 @@ import { JobsPage } from './pages/JobsPage';
 import { StoriesPage } from './pages/StoriesPage';
 import { StoryDetailPage } from './pages/StoryDetailPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { AdminDashboard } from './pages/AdminDashboard';
 import { ProfilePage } from './pages/ProfilePage';
 import { VideoGalleryPage } from './pages/VideoGalleryPage';
 import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
@@ -421,8 +420,6 @@ function App() {
         return <DashboardPage onNavigate={handleNavigate} />;
       case 'profile':
         return <ProfilePage onNavigate={handleNavigate} />;
-      case 'admin':
-        return <AdminDashboard onNavigate={handleNavigate} />;
       default:
         return <HomePage onNavigate={handleNavigate} />;
     }

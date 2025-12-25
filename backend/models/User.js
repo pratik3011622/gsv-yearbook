@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  batchYear: String,
+  batchYear: Number,
   department: String,
   company: String,
   jobTitle: String,
@@ -37,22 +37,10 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['guest', 'student', 'alumni', 'admin'],
-    default: 'guest',
+    enum: ['guest', 'student', 'alumni'],
+    default: 'alumni',
     required: true,
   },
-  approvalStatus: {
-    type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'approved',
-    required: true,
-  },
-  rejectionReason: String,
-  approvedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  approvedAt: Date,
 }, {
   timestamps: true,
 });

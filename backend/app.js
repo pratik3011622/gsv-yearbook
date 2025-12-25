@@ -100,7 +100,6 @@ app.use('/api/events', require('./routes/events'));
 app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/stories', require('./routes/stories'));
 app.use('/api/mentorship', require('./routes/mentorship'));
-app.use('/api/admin', require('./routes/admin'));
 app.use('/api/stats', require('./routes/stats'));
 
 const PORT = process.env.PORT || 5000;

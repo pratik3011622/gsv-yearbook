@@ -1,7 +1,7 @@
 const express = require('express');
 const Event = require('../models/Event');
 const EventRSVP = require('../models/EventRSVP');
-const { auth, isAdmin } = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const { validateEvent } = require('../middleware/validation');
 
 const router = express.Router();
@@ -155,39 +155,5 @@ router.get('/:id/my-rsvp', auth, async (req, res) => {
   }
 });
 
-// Admin: Manage all events
-router.put('/admin/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const event = await Event.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    ).populate('createdBy', 'fullName');
-
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-
-    res.json(event);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-router.delete('/admin/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const event = await Event.findByIdAndDelete(req.params.id);
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-
-    // Delete associated RSVPs
-    await EventRSVP.deleteMany({ eventId: req.params.id });
-
-    res.json({ message: 'Event deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 module.exports = router;

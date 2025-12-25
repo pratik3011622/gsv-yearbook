@@ -4,12 +4,19 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 
+const { validateRegistration } = require('../middleware/validation');
+
 const router = express.Router();
 
 // Register
 router.post('/register', async (req, res) => {
   try {
+    console.log('Registration request body:', req.body);
     const { email, password, fullName, ...otherFields } = req.body;
+
+    if (!email || !password || !fullName) {
+      return res.status(400).json({ message: 'Email, password, and full name are required' });
+    }
 
     // Check if user exists
     const existingUser = await User.findOne({ email });
@@ -17,8 +24,9 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Hash password (simplified for testing)
-    const hashedPassword = password; // TODO: Use proper hashing
+    // Hash password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Create user
     const user = new User({
@@ -31,7 +39,7 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     // Generate token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, 'your_jwt_secret_key_here_change_in_production', {
       expiresIn: '7d',
     });
 
@@ -42,11 +50,11 @@ router.post('/register', async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         role: user.role,
-        approvalStatus: user.approvalStatus,
       },
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -55,17 +63,21 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const isMatch = password === user.password; // TODO: Use proper comparison
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_secret_change_this', {
       expiresIn: '7d',
     });
 
@@ -76,11 +88,11 @@ router.post('/login', async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         role: user.role,
-        approvalStatus: user.approvalStatus,
       },
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -92,7 +104,6 @@ router.get('/me', auth, async (req, res) => {
       email: req.user.email,
       fullName: req.user.fullName,
       role: req.user.role,
-      approvalStatus: req.user.approvalStatus,
       // Add other fields as needed
     },
   });
