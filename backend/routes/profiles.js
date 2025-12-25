@@ -89,7 +89,9 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
 
     // Handle profile photo upload
     if (req.file) {
+      console.log('File uploaded:', req.file.filename);
       updates.avatarUrl = `/uploads/${req.file.filename}`;
+      console.log('Avatar URL set:', updates.avatarUrl);
     }
 
     const user = await User.findByIdAndUpdate(

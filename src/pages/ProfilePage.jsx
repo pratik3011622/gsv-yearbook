@@ -6,9 +6,9 @@ import {
   TrendingUp, Users, Star, Shield, Eye, EyeOff
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { api } from '../lib/api';
+import { api, staticBaseURL } from '../lib/api';
 
-export const ProfilePage = ({ onNavigate }) => {
+export const ProfilePage = ({ onNavigate, userId }) => {
   const { profile, user, updateProfile, signOut } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,12 @@ export const ProfilePage = ({ onNavigate }) => {
   const [profilePhotoFile, setProfilePhotoFile] = useState(null);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+  const [viewProfile, setViewProfile] = useState(null);
+  const [viewLoading, setViewLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const displayProfile = userId ? viewProfile : (profile || {});
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -51,7 +57,36 @@ export const ProfilePage = ({ onNavigate }) => {
   });
 
   useEffect(() => {
-    if (profile) {
+    if (userId) {
+      // Reset formData for viewing other user
+      setFormData({
+        fullName: '',
+        bio: '',
+        tagline: '',
+        batchYear: '',
+        department: '',
+        universityName: 'Gati Shakti Vishwavidyalaya',
+        degree: 'Bachelor of Technology',
+        specialization: '',
+        graduationStart: '',
+        graduationEnd: '',
+        currentCompany: '',
+        jobTitle: '',
+        industry: '',
+        yearsOfExperience: '',
+        pastCompanies: [],
+        location: '',
+        country: 'India',
+        linkedinUrl: '',
+        githubUrl: '',
+        websiteUrl: '',
+        skills: [],
+        achievements: [],
+        certifications: [],
+        isProfilePublic: true
+      });
+    } else if (profile) {
+      // Set formData for own profile
       setFormData({
         fullName: profile.fullName || '',
         bio: profile.bio || '',
@@ -79,7 +114,7 @@ export const ProfilePage = ({ onNavigate }) => {
         isProfilePublic: profile.isProfilePublic !== false
       });
     }
-  }, [profile]);
+  }, [userId, profile]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -89,7 +124,8 @@ export const ProfilePage = ({ onNavigate }) => {
   };
 
   const handleArrayChange = (field, value) => {
-    const array = value.split(',').map(item => item.trim()).filter(item => item);
+    const separator = field === 'achievements' ? '\n' : ',';
+    const array = value.split(separator).map(item => item.trim()).filter(item => item);
     setFormData(prev => ({
       ...prev,
       [field]: array
@@ -128,6 +164,7 @@ export const ProfilePage = ({ onNavigate }) => {
         }
 
         const updatedUser = await response.json();
+        console.log('Updated user from server:', updatedUser);
         await updateProfile(updatedUser);
 
         // Clear photo states
@@ -237,9 +274,10 @@ export const ProfilePage = ({ onNavigate }) => {
               <div className="relative h-32 bg-gradient-to-r from-slate-800 to-slate-900">
                 <div className="absolute -bottom-12 left-6">
                   <div className="relative">
-                    {profilePhotoPreview || profile?.avatarUrl ? (
+                    {profilePhotoPreview || displayProfile?.avatarUrl ? (
                       <img
-                        src={profilePhotoPreview || `${api.baseURL}${profile.avatarUrl}`}
+                        key={profilePhotoPreview || displayProfile?.avatarUrl}
+                        src={profilePhotoPreview || `${staticBaseURL}${displayProfile.avatarUrl}`}
                         alt="Profile"
                         className="w-24 h-24 rounded-full border-4 border-slate-900 shadow-lg object-cover"
                       />

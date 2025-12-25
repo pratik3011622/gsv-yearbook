@@ -25,10 +25,11 @@ function App() {
     return hash || 'home';
   });
 
-  const handleNavigate = (page) => {
-    setCurrentPage(page);
+  const handleNavigate = (page, params) => {
+    const hash = params ? `${page}/${params}` : page;
+    setCurrentPage(hash);
     // Update URL hash for browser back/forward support
-    window.location.hash = page;
+    window.location.hash = hash;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -56,7 +57,8 @@ function App() {
   }, []);
 
   const renderPage = () => {
-    switch (currentPage) {
+    const page = currentPage.split('/')[0];
+    switch (page) {
       case 'home':
         return <HomePage onNavigate={handleNavigate} currentPage={currentPage} />;
       case 'update-password':
@@ -79,7 +81,7 @@ function App() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <DirectoryPage />
+              <DirectoryPage onNavigate={handleNavigate} />
             </div>
           </div>
         );
@@ -419,7 +421,12 @@ function App() {
       case 'dashboard':
         return <DashboardPage onNavigate={handleNavigate} />;
       case 'profile':
-        return <ProfilePage onNavigate={handleNavigate} />;
+        if (currentPage.includes('/')) {
+          const [page, userId] = currentPage.split('/');
+          return <ProfilePage onNavigate={handleNavigate} userId={userId} />;
+        } else {
+          return <ProfilePage onNavigate={handleNavigate} userId={currentPage.split('/')[1]} />;
+        }
       default:
         return <HomePage onNavigate={handleNavigate} />;
     }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, MapPin, Linkedin, Briefcase, GraduationCap, Filter, X, Users, Building2, Award, ChevronDown, ChevronUp } from 'lucide-react';
 import { api } from '../lib/api';
 
-export const DirectoryPage = () => {
+export const DirectoryPage = ({ onNavigate }) => {
   const [profiles, setProfiles] = useState([]);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,7 +37,7 @@ export const DirectoryPage = () => {
 
   const applyFilters = () => {
     let filtered = profiles;
-
+             
     // Apply search filter
     if (searchTerm.trim()) {
       filtered = filtered.filter(
@@ -398,7 +398,13 @@ export const DirectoryPage = () => {
                       </a>
                     )}
 
-                    <button className="flex-1 inline-flex items-center justify-center px-5 py-3 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-bold rounded-xl transition-all duration-300 border border-slate-600 hover:border-slate-500 shadow-lg hover:shadow-slate-900/50 transform hover:-translate-y-1 hover:scale-105">
+                    <button onClick={() => {
+
+                      console.log('Navigating to profile of:', profile._id);
+
+                      onNavigate('profile', profile._id);
+
+                    }} className="flex-1 inline-flex items-center justify-center px-5 py-3 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-bold rounded-xl transition-all duration-300 border border-slate-600 hover:border-slate-500 shadow-lg hover:shadow-slate-900/50 transform hover:-translate-y-1 hover:scale-105">
                       View Profile
                     </button>
                   </div>
