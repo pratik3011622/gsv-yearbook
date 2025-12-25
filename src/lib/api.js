@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://gsv-yearbook.vercel.app/api';
+const API_BASE_URL = 'https://sampleyearbook-backends.vercel.app/api';
 
 class ApiClient {
   constructor() {
@@ -262,4 +262,4 @@ class ApiClient {
 
 export const api = new ApiClient();
 
-export const staticBaseURL = 'https://gsv-yearbook.vercel.app';
+export const staticBaseURL = 'https://sampleyearbook-backends.vercel.app';
