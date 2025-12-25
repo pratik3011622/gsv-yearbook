@@ -1,5 +1,4 @@
-const base = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-const API_BASE_URL = base.endsWith('/api') ? base : `${base}/api`;
+const API_BASE_URL = 'https://gsv-yearbook.vercel.app/api';
 
 class ApiClient {
   constructor() {
@@ -263,4 +262,4 @@ class ApiClient {
 
 export const api = new ApiClient();
 
-export const staticBaseURL = base.replace(/\/api$/, '');
+export const staticBaseURL = 'https://gsv-yearbook.vercel.app';
