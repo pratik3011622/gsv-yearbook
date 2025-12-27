@@ -13,18 +13,18 @@ const teamMembers = [
       
     }
   },
-  {
-    name: 'Vinamra Tiwari',
-    role: 'Team Member',
-    bio: 'Valuable contributor to the GSVConnect project, bringing innovative ideas and technical skills.',
-    photo: '/vinamra.png',
-    social: {
-      linkedin: 'https://www.linkedin.com/in/vinamra-tiwari-ba3653345?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
-      instagram: '',
-      github: 'https://github.com/Vinamra-tech'
+  // {
+  //   name: 'Vinamra Tiwari',
+  //   role: 'Team Member',
+  //   bio: 'Valuable contributor to the GSVConnect project, bringing innovative ideas and technical skills.',
+  //   photo: '/vinamra.png',
+  //   social: {
+  //     linkedin: 'https://www.linkedin.com/in/vinamra-tiwari-ba3653345?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+  //     instagram: '',
+  //     github: 'https://github.com/Vinamra-tech'
       
-    }
-  },
+  //   }
+  // },
   {
     name: 'Pratik Ranjan',
     role: 'Team Member',
