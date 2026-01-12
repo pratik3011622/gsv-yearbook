@@ -1,283 +1,385 @@
-import { useState, useEffect } from 'react';
-import { ContactSection } from '../components/ContactSection';
-import { Hero } from '../components/Hero';
-import { StatsCounter } from '../components/StatsCounter';
-import { FeatureHighlights } from '../components/FeatureHighlights';
-import { ThisDayWidget } from '../components/ThisDayWidget';
-import { Testimonials } from '../components/Testimonials';
-import { AnimatedText } from '../components/AnimatedText';
-import { ScrollReveal } from '../components/ScrollReveal';
-import { ParallaxSection } from '../components/ParallaxSection';
-import { FloatingParticles } from '../components/FloatingParticles';
-import { Mail, ArrowUp, Moon, Sun } from 'lucide-react';
-import { api } from '../lib/api';
+import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useAuth } from '../contexts/AuthContext';
+import { Facebook, Linkedin, Instagram, Twitter, Mail, Phone, MapPin, ExternalLink, Briefcase, Award, Search, Users, Calendar, Globe, Zap, Building2 } from 'lucide-react';
 
-export const HomePage = ({ onNavigate, currentPage }) => {
-   const [stats, setStats] = useState({});
-   const [email, setEmail] = useState('');
-   const [showScrollTop, setShowScrollTop] = useState(false);
-   const { isDark, toggleTheme } = useTheme();
-   const { user, profile } = useAuth();
-
-   const isAlumni = profile?.role === 'alumni';
-
-  useEffect(() => {
-    fetchStats();
-
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const fetchStats = async () => {
-    try {
-      const data = await api.getPlatformStats();
-      setStats(data || {});
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
-    alert('Thank you for subscribing! Stay tuned for updates.');
-    setEmail('');
-  };
+export const HomePage = ({ onNavigate }) => {
+  const { isDark } = useTheme();
 
   return (
-    <div className="relative">
-      <Hero onNavigate={onNavigate} currentPage={currentPage} />
+    <div className="overflow-x-hidden font-sans bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-50">
+      {/* Video Hero Section */}
+      <section className="relative h-[90vh] w-full flex items-center justify-center text-center overflow-hidden bg-slate-900 text-white">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover z-0 opacity-60"
+        >
+          <source src="/final.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,rgba(30,64,175,0.3),rgba(15,23,42,0.5))]"></div>
 
-
-      {/* Professional Section */}
-      <div className="relative py-8 sm:py-12 md:py-16 overflow-hidden bg-white">
-        <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-          <ScrollReveal direction="up" delay={0.2}>
-            <div className="text-center">
-              <AnimatedText
-                text="Connect & Celebrate"
-                className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4"
-                delay={0.3}
-              />
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-                Join our vibrant community where memories are made and futures are shaped
-              </p>
-            </div>
-          </ScrollReveal>
-        </div>
-      </div>
-
-
-      <div className="relative">
-        <FloatingParticles count={6} className="z-0" />
-        <ParallaxSection speed={0.3} direction="up">
-          <ScrollReveal direction="up" delay={0.1}>
-            <StatsCounter stats={stats} />
-          </ScrollReveal>
-        </ParallaxSection>
-        <ParallaxSection speed={0.2} direction="down">
-          <ScrollReveal direction="up" delay={0.2}>
-            <FeatureHighlights onNavigate={onNavigate} />
-          </ScrollReveal>
-        </ParallaxSection>
-        <ParallaxSection speed={0.4} direction="up">
-          <ScrollReveal direction="up" delay={0.3}>
-            <ThisDayWidget />
-          </ScrollReveal>
-        </ParallaxSection>
-        <ParallaxSection speed={0.1} direction="down">
-          <ScrollReveal direction="up" delay={0.4}>
-            <ContactSection />
-          </ScrollReveal>
-        </ParallaxSection>
-        <ParallaxSection speed={0.3} direction="up">
-          <ScrollReveal direction="up" delay={0.5}>
-            <Testimonials />
-          </ScrollReveal>
-        </ParallaxSection>
-      </div>
-
-
-      <footer className="relative overflow-hidden bg-gray-900">
-        {/* Professional gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
-
-        <div className="relative z-10 py-8 sm:py-12 md:py-16 lg:py-20">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-10 md:mb-12">
-              <div className="lg:col-span-1">
-                <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
-                    alt="Gati Shakti Vishwavidyalaya Logo"
-                    className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                  />
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-                    GSVConnect
-                  </h3>
-                </div>
-                <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-                  Where Memories Meet Futures. Connecting Gati Shakti Vishwavidyalaya alumni worldwide.
-                </p>
-                <div className="flex space-x-2 sm:space-x-3">
-                  <a
-                    href="https://www.facebook.com/gsv.ac.in/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all hover:scale-110"
-                    aria-label="Follow us on Facebook"
-                  >
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/school/gatishaktivishwavidyalaya/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all hover:scale-110"
-                    aria-label="Connect with us on LinkedIn"
-                  >
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                  </a>
-                  <a
-                    href="https://www.instagram.com/gsv.vadodara/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all hover:scale-110"
-                    aria-label="Follow us on Instagram"
-                  >
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                  </a>
-                  <a
-                    href="https://x.com/gsv_vadodara?t=EfCgxwtFAx95GvtBgIJjbw&s=08"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-black transition-all hover:scale-110"
-                    aria-label="Follow us on X"
-                  >
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-4 sm:mb-6 text-base sm:text-lg text-white">Quick Links</h4>
-                <ul className="space-y-2 sm:space-y-3 text-gray-300">
-                  <li>
-                    <button onClick={() => onNavigate('directory')} className="hover:text-white transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-200">
-                      Alumni Directory
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => onNavigate('events')} className="hover:text-white transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-200">
-                      Events & Reunions
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => onNavigate('jobs')} className="hover:text-white transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-200">
-                      Job Board
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-4 sm:mb-6 text-base sm:text-lg text-white">Community</h4>
-                <ul className="space-y-2 sm:space-y-3 text-gray-300">
-                  <li>
-                    <button onClick={() => onNavigate('stories')} className="hover:text-white transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-200">
-                      Alumni Stories
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => onNavigate('memories')} className="hover:text-white transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-200">
-                      Yearbook Gallery
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-4 sm:mb-6 text-base sm:text-lg text-white">Get Started</h4>
-                <p className="text-gray-300 text-xs sm:text-sm mb-4 sm:mb-6 leading-relaxed">
-                  Join our vibrant community today and start building meaningful connections.
-                </p>
-                <button
-                  onClick={() => onNavigate('register')}
-                  className="w-full px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg font-semibold text-xs sm:text-sm hover:bg-blue-700 transition-all hover:scale-105"
-                >
-                  Join GSVConnect
-                </button>
-              </div>
-            </div>
-
+        <div className="relative z-30 max-w-[1000px] px-8 mt-16">
+          <h1 className="font-serif text-[4.5rem] font-bold mb-6 leading-[1.1] text-white tracking-tighter animate-[fadeIn_1s_ease-out_forwards]">
+            Connect, Celebrate,<br />and Grow Together
+          </h1>
+          <p className="text-xl text-white/95 mb-12 font-normal max-w-[700px] mx-auto animate-[slideUp_1s_ease-out_0.3s_forwards] opacity-0 translate-y-5">
+            Join a vibrant community where memories are made, careers accelerate, and support never stops.
+          </p>
+          <div className="flex gap-6 justify-center animate-[slideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.4s_forwards] opacity-0 translate-y-8">
+            <a href="#directory" className="bg-white text-primary-600 px-10 py-4 rounded-full font-semibold tracking-wide transition-all duration-300 shadow-md border-2 border-white uppercase text-sm hover:bg-transparent hover:text-white hover:-translate-y-0.5 hover:shadow-lg inline-block text-center">
+              Explore Directory
+            </a>
+            <a href="#register" className="bg-transparent text-white px-10 py-4 rounded-full font-semibold border-2 border-white/30 transition-all duration-300 uppercase text-sm hover:bg-white hover:text-primary-600 hover:border-white hover:-translate-y-0.5 inline-block text-center">
+              Join Community
+            </a>
           </div>
         </div>
+      </section>
 
-        <div className="border-t border-gray-700 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-3">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
-                alt="Gati Shakti Vishwavidyalaya Logo"
-                className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
-              />
-              <p className="text-gray-400 text-xs sm:text-sm">
-                &copy; 2025 Gati Shakti Vishwavidyalaya. All rights reserved.
-              </p>
+      {/* Stats Section - Animated Impact */}
+      <section className="py-12 bg-white dark:bg-slate-950">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { num: '5000+', label: 'Alumni Connected' },
+              { num: '50+', label: 'Cities' },
+              { num: '120+', label: 'Mentors' },
+              { num: '500+', label: 'Opportunities Shared' }
+            ].map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                <span className="text-4xl font-bold text-primary-600 dark:text-primary-400 font-serif leading-none mb-2">{stat.num}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-center">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Everything You Need Section */}
+      <section className="py-16 bg-slate-50 relative overflow-hidden dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-[700px] mx-auto mb-10">
+            <h2 className="font-serif text-4xl sm:text-5xl text-slate-900 mb-4 dark:text-white">Everything You Need</h2>
+            <p className="font-sans text-slate-500 leading-relaxed text-lg mb-0 dark:text-slate-400">
+              A comprehensive suite of tools and resources designed to supercharge your alumni experience.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-20 max-w-5xl mx-auto">
+            {[
+              {
+                title: 'Alumni Directory',
+                desc: 'Reconnect with old friends and expand your professional network.',
+                nav: 'directory'
+              },
+              {
+                title: 'Mentorship',
+                desc: 'Gain guidance from experienced alumni or mentor the next generation.',
+                nav: 'mentorship'
+              },
+              {
+                title: 'Events',
+                desc: 'Join reunions, workshops, and gatherings.',
+                nav: 'events'
+              }
+            ].map((card, idx) => (
+              <a key={idx} href={`#${card.nav}`} className="group relative bg-slate-900 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block border border-slate-700/50 hover:bg-slate-800/80">
+                <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                  <svg className="w-6 h-6 text-slate-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </div>
+                <h3 className="font-sans text-xl font-bold text-white mb-3 mt-2">{card.title}</h3>
+                <p className="text-slate-300 leading-relaxed text-sm mb-0">{card.desc}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Walk Down Memory Lane Section */}
+      <section className="py-24 bg-white dark:bg-slate-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="font-serif text-4xl sm:text-5xl text-slate-900 mb-6 dark:text-white">A Walk Down Memory Lane</h2>
+            <p className="font-sans text-slate-500 leading-relaxed text-lg dark:text-slate-400 mb-8">
+              Relive the moments that defined us. From late-night study sessions to cultural fests, every picture tells a story of our shared journey.
+            </p>
+            <a href="#photo-gallery" className="inline-flex items-center gap-2 text-primary-600 font-bold text-lg transition-all duration-300 hover:gap-3 hover:text-primary-700">
+              View Full Gallery <ExternalLink size={20} />
+            </a>
+          </div>
+
+          <div className="relative max-w-3xl mx-auto h-[400px] rounded-[2rem] overflow-hidden shadow-2xl group border-4 border-white/10 bg-black">
+            {/* Scroll Container */}
+            <div
+              id="memory-lane-scroll"
+              className="flex overflow-x-auto h-full snap-x snap-mandatory scrollbar-hide scroll-smooth"
+            >
+              {[
+                { title: 'Campus Highlights', img: '/slide5.jpg', date: 'Dec 12, 2024', desc: 'Prastuti - Pratap Palace ' },
+                { title: 'Cultural Night', img: '/cultural_night.jpg', date: 'Nov 15, 2023', desc: 'A night of music, dance, and unforgettable performances.' },
+                { title: 'Campus Highlights', img: '/Screenshot 2025-10-21 211940.png', date: 'Oct 21, 2025', desc: 'The vibrant energy of student life at GSV.' },
+                { title: 'Student Activities', img: '/Screenshot 2025-10-21 212003.png', date: 'Oct 21, 2025', desc: 'Engaging workshops and collaborative learning sessions.' },
+                { title: 'Academic Excellence', img: '/Screenshot 2025-10-22 100457.png', date: 'Oct 22, 2025', desc: 'Pushing the boundaries of knowledge and innovation.' },
+                { title: 'Community Moments', img: '/WhatsApp Image 2025-06-21 at 20.14.42_a21a8fec.jpg', date: 'Jun 21, 2025', desc: 'Building lifelong friendships and professional networks.' },
+              ].map((item, idx) => (
+                <div key={idx} className="min-w-full h-full relative snap-center flex items-center justify-center bg-black">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img src={item.img} alt="" className="w-full h-full object-cover blur-xl opacity-50 scale-110" />
+                  </div>
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="relative w-full h-full object-contain z-10 shadow-xl"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+
+                  {/* Content Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold tracking-wider uppercase border border-white/10">
+                        {item.date}
+                      </span>
+                      <div className="h-px bg-white/20 flex-1"></div>
+                    </div>
+                    <h3 className="font-serif text-3xl font-bold mb-2 leading-tight drop-shadow-lg">{item.title}</h3>
+                    <p className="text-sm text-white/80 max-w-xl font-light leading-relaxed line-clamp-2 mix-blend-lighten">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm text-gray-400">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Contact Us</a>
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={() => {
+                const container = document.getElementById('memory-lane-scroll');
+                if (container) container.scrollLeft -= container.offsetWidth;
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all duration-300 opacity-0 group-hover:opacity-100 z-20"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button
+              onClick={() => {
+                const container = document.getElementById('memory-lane-scroll');
+                if (container) container.scrollLeft += container.offsetWidth;
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all duration-300 opacity-0 group-hover:opacity-100 z-20"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+
+          <div className="mt-8 text-center md:hidden">
+            <a href="#photo-gallery" className="inline-flex items-center gap-2 text-primary-600 font-semibold text-lg transition-all duration-300 border-b-2 border-transparent hover:gap-3 hover:border-primary-600">
+              View Full Gallery <ExternalLink size={16} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Features / Connect Section */}
+      <section className="py-32 bg-white dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-[700px] mx-auto mb-16">
+            <h2 className="font-serif text-4xl sm:text-5xl text-slate-900 mb-6 dark:text-white">Connect & Hub</h2>
+            <p className="font-sans text-slate-500 leading-relaxed text-lg mb-8 dark:text-slate-400">
+              Your gateway to the global GSV community. Stay connected, give back, and grow together.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1200px] mx-auto">
+            {[
+              { title: 'Global Events', text: 'Join reunions, workshops, and networking meets.', icon: MapPin, img: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80', nav: 'events' },
+              { title: 'Career Hub', text: 'Explore exclusive job opportunities and mentorship.', icon: Briefcase, img: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80', nav: 'jobs' },
+              { title: 'Success Stories', text: 'Celebrate the achievements of our alumni.', icon: Award, img: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80', nav: 'stories' }
+            ].map((feat, idx) => (
+              <a key={idx} href={`#${feat.nav}`} className="group relative h-[240px] rounded-2xl overflow-hidden cursor-pointer shadow-lg transition-transform duration-300 border border-white/10 block">
+                <img src={feat.img} alt={feat.title} className="absolute inset-0 w-full h-full object-cover z-0" />
+                <div className="absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.3)_100%)] backdrop-blur-[0px]"></div>
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-4 text-white border border-white/20">
+                    <feat.icon size={24} />
+                  </div>
+                  <h3 className="font-sans text-xl font-bold mb-2 text-white drop-shadow-md">{feat.title}</h3>
+                  <p className="text-white/90 leading-relaxed text-sm max-w-[90%] opacity-90">{feat.text}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Us Section */}
+      <section className="py-32 bg-white dark:bg-slate-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-[700px] mx-auto mb-16">
+            <h2 className="font-serif text-4xl sm:text-5xl text-slate-900 mb-6 dark:text-white">Get in Touch</h2>
+            <p className="font-sans text-slate-500 leading-relaxed text-lg mb-8 dark:text-slate-400">
+              Have questions or want to reconnect? We'd love to hear from you.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Contact Info Card */}
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                  <MapPin size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Visit Us</h4>
+                  <p className="text-slate-500 dark:text-slate-400">Gati Shakti Vishwavidyalaya<br />Lalbaug, Vadodara, Gujarat 390004</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                  <Phone size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Call Us</h4>
+                  <p className="text-slate-500 dark:text-slate-400">+91 265 265 3131</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                  <Mail size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Email Us</h4>
+                  <p className="text-slate-500 dark:text-slate-400">alumni@gsv.ac.in</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+                  <Globe size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Website</h4>
+                  <a href="https://gsv.ac.in" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
+                    www.gsv.ac.in
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Map Card */}
+            <div className="h-[400px] rounded-2xl overflow-hidden shadow-lg">
+              <iframe
+                src="https://maps.google.com/maps?q=Gati+Shakti+Vishwavidyalaya,+Vadodara,+Gujarat,+India&z=15&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="GSV Location"
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="pt-10 pb-24 bg-slate-50 dark:bg-slate-900 text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="font-serif text-5xl font-bold mb-6 text-slate-900 dark:text-white">Ready to Reconnect?</h2>
+          <p className="text-xl text-slate-500 dark:text-slate-400 mb-12">
+            Join thousands of alumni who are already part of the GSV Connect network.
+          </p>
+          <a href="#register" className="bg-primary-600 text-white px-10 py-5 rounded-full font-bold tracking-wide transition-all duration-300 shadow-xl border-none uppercase text-sm hover:bg-primary-700 hover:-translate-y-1 hover:shadow-2xl inline-block text-center">
+            Register Now
+          </a>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-950 text-slate-300 py-6 relative">
+        <div className="absolute inset-0 bg-transparent pointer-events-none"></div>
+        <div className="max-w-[1200px] mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-8 pb-8 border-b border-white/10">
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src="/gsv-logo.png"
+                  alt="GSV Logo"
+                  className="w-10 h-10 object-contain brightness-0 invert"
+                />
+                <div className="flex flex-col">
+                  <span className="font-serif text-2xl font-bold text-white leading-none">GSV Connect</span>
+                  <span className="text-sm text-slate-400 font-sans">गति शक्ति विश्वविद्यालय</span>
+                  <span className="text-[11px] font-brand font-semibold tracking-[0.15em] uppercase text-slate-500 mt-1">Gati Shakti Vishwavidyalaya</span>
+                </div>
+              </div>
+              <p className="leading-relaxed text-slate-400 mb-6">
+                The official platform of Gati Shakti Vishwavidyalaya. Building bridges between past, present, and future.
+              </p>
+              <div className="flex gap-4">
+                {[
+                  { Icon: Facebook, link: "https://www.facebook.com/gsv.ac.in/" },
+                  { Icon: Linkedin, link: "https://www.linkedin.com/school/gatishaktivishwavidyalaya/" },
+                  { Icon: Instagram, link: "https://www.instagram.com/gsv.vadodara/" },
+                  { Icon: Twitter, link: "https://x.com/gsv_vadodara" }
+                ].map(({ Icon, link }, idx) => (
+                  <a key={idx} href={link} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white transition-all duration-300 hover:bg-primary-600 hover:-translate-y-0.5">
+                    <Icon size={18} />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <h3 className="font-sans text-lg font-bold text-white mb-6">Quick Links</h3>
+              <ul>
+                {[
+                  { label: 'Alumni Events', nav: 'events' },
+                  { label: 'Alumni Directory', nav: 'directory' },
+                  { label: 'Career Opportunities', nav: 'jobs' },
+                  { label: 'Success Stories', nav: 'stories' }
+                ].map((item, idx) => (
+                  <li key={idx}><a href={`#${item.nav}`} className="text-left text-slate-400 text-[0.95rem] mb-3 block bg-none border-none p-0 cursor-pointer transition-colors duration-200 hover:text-white">{item.label}</a></li>
+                ))}
+              </ul>
+            </div>
+
+
+
+            <div className="flex flex-col">
+              <h3 className="font-sans text-lg font-bold text-white mb-6">Contact Us</h3>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3 text-slate-400 text-sm">
+                  <MapPin size={18} className="mt-1 flex-shrink-0 text-blue-500" />
+                  <span>Gati Shakti Vishwavidyalaya, Lalbaug, Vadodara, Gujarat 390004</span>
+                </li>
+                <li className="flex items-center gap-3 text-slate-400 text-sm">
+                  <Phone size={18} className="flex-shrink-0 text-blue-500" />
+                  <span>+91 265 265 3131</span>
+                </li>
+                <li className="flex items-center gap-3 text-slate-400 text-sm">
+                  <Mail size={18} className="flex-shrink-0 text-blue-500" />
+                  <span>alumni@gsv.ac.in</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between">
+            <p className="text-sm text-slate-500">
+              © {new Date().getFullYear()} Gati Shakti Vishwavidyalaya. All rights reserved.
+            </p>
+            <div className="flex gap-6 mt-4 sm:mt-0">
+              <span className="text-sm text-slate-500 hover:text-slate-300 cursor-pointer">Privacy Policy</span>
+              <span className="text-sm text-slate-500 hover:text-slate-300 cursor-pointer">Terms of Service</span>
             </div>
           </div>
         </div>
       </footer>
-
-      {/* Copyright Footer */}
-      <div className="bg-gray-900 py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-3">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
-                alt="Gati Shakti Vishwavidyalaya Logo"
-                className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-              />
-              <p className="text-sm sm:text-base text-gray-400">
-                © 2025 Gati Shakti Vishwavidyalaya. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 sm:bottom-8 right-4 sm:right-8 p-3 sm:p-4 bg-gradient-to-r from-blue-600 to-amber-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 z-40"
-          aria-label="Scroll to top"
-        >
-          <ArrowUp className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-      )}
-    </div>
+    </div >
   );
 };

@@ -3,7 +3,7 @@ import { Users, MessageCircle, Calendar, Star, UserPlus, CheckCircle, Clock, Awa
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
-export const MentorshipPage = () => {
+export const MentorshipPage = ({ onNavigate }) => {
   const [mentors, setMentors] = useState([]);
   const [mySessions, setMySessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,45 +76,13 @@ export const MentorshipPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
-      {/* Professional Background */}
-      <div className="absolute inset-0 opacity-10">
-        {/* Subtle geometric patterns */}
-        <div className="absolute top-20 left-10 w-32 h-32 border border-blue-200 dark:border-blue-800 rounded-lg rotate-12"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 border border-indigo-200 dark:border-indigo-800 rounded-full"></div>
-        <div className="absolute bottom-32 left-1/4 w-40 h-40 border border-slate-300 dark:border-slate-700 rounded-lg -rotate-6"></div>
-        <div className="absolute top-1/3 right-10 w-28 h-28 border border-blue-300 dark:border-blue-700 rounded-full"></div>
-        <div className="absolute bottom-20 right-1/3 w-36 h-36 border border-indigo-200 dark:border-indigo-800 rounded-lg rotate-45"></div>
-        <div className="absolute top-60 left-1/3 w-20 h-20 border border-slate-400 dark:border-slate-600 rounded-full"></div>
-        <div className="absolute bottom-40 right-10 w-16 h-16 border border-blue-300 dark:border-blue-700 rounded-lg"></div>
-        <div className="absolute top-80 right-1/4 w-24 h-24 border border-indigo-300 dark:border-indigo-700 rounded-full"></div>
-
-        {/* Professional grid pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <svg className="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-              </pattern>
-            </defs>
-            <rect width="100" height="100" fill="url(#grid)" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-12 text-center relative">
-          {/* Decorative elements around title */}
-          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent"></div>
-
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold bg-gradient-to-r from-slate-700 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 relative">
+    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-12 text-center">
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">
             Mentorship Program
-            <div className="absolute -top-2 -right-8 w-6 h-6 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-full animate-bounce-subtle opacity-80"></div>
-            <div className="absolute -bottom-2 -left-8 w-4 h-4 bg-gradient-to-br from-slate-400 to-blue-400 rounded-full animate-bounce-subtle opacity-80" style={{ animationDelay: '1s' }}></div>
           </h1>
-
-          <p className="text-xl text-slate-600 dark:text-slate-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
             Connect with experienced alumni mentors to guide your career journey and personal growth
           </p>
 
@@ -122,21 +90,19 @@ export const MentorshipPage = () => {
             <div className="flex justify-center space-x-4">
               <button
                 onClick={() => setActiveTab('find')}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  activeTab === 'find'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all ${activeTab === 'find'
+                  ? 'bg-primary-600 text-white shadow-md'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                  }`}
               >
                 Find Mentors
               </button>
               <button
                 onClick={() => setActiveTab('sessions')}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  activeTab === 'sessions'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all ${activeTab === 'sessions'
+                  ? 'bg-primary-600 text-white shadow-md'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                  }`}
               >
                 My Sessions
               </button>
@@ -146,7 +112,7 @@ export const MentorshipPage = () => {
 
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="inline-block w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
           <>
@@ -154,18 +120,19 @@ export const MentorshipPage = () => {
               <div className="space-y-8">
                 {/* Available Mentors */}
                 <div>
-                  <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-6">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
+                    <Users className="w-5 h-5 mr-2 text-primary-600" />
                     Available Mentors
                   </h2>
 
                   {mentors.length === 0 ? (
-                    <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
+                    <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
                       <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
-                        No mentors available
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                        No mentors available yet
                       </h3>
                       <p className="text-slate-600 dark:text-slate-400">
-                        Check back later for available mentors
+                        Check back later or invite alumni to join as mentors
                       </p>
                     </div>
                   ) : (
@@ -173,41 +140,38 @@ export const MentorshipPage = () => {
                       {mentors.map((mentor) => (
                         <div
                           key={mentor._id}
-                          className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-slate-200 dark:border-slate-800"
+                          className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-all duration-300 group"
                         >
-                          <div className="h-32 bg-gradient-to-br from-blue-500 to-amber-500"></div>
+                          <div className="h-24 bg-gradient-to-r from-primary-500 to-primary-600"></div>
 
                           <div className="relative px-6 pb-6">
-                            <div className="absolute -top-16 left-6">
-                              <div className="w-32 h-32 bg-slate-200 dark:bg-slate-700 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center text-4xl font-bold text-blue-600 dark:text-blue-400">
-                                {mentor.fullName?.charAt(0) || '?'}
+                            <div className="absolute -top-12 left-6">
+                              <div className="w-24 h-24 bg-white dark:bg-slate-800 rounded-xl p-1 shadow-sm">
+                                <div className="w-full h-full bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center text-3xl font-bold text-primary-600 dark:text-primary-400">
+                                  {mentor.fullName?.charAt(0) || '?'}
+                                </div>
                               </div>
                             </div>
 
-                            <div className="pt-20">
-                              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
+                            <div className="pt-14">
+                              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary-600 transition-colors">
                                 {mentor.fullName}
                               </h3>
 
                               {mentor.currentCompany && (
                                 <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 mb-2">
-                                  <Award className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
+                                  <Award className="w-4 h-4 mr-2 text-primary-600" />
                                   <span>{mentor.currentCompany}</span>
+                                  {mentor.jobTitle && <span className="mx-1">• {mentor.jobTitle}</span>}
                                 </div>
                               )}
 
-                              {mentor.jobTitle && (
-                                <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">
-                                  {mentor.jobTitle}
-                                </p>
-                              )}
-
                               {mentor.expertise && mentor.expertise.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mb-4">
+                                <div className="flex flex-wrap gap-2 mb-6 mt-3">
                                   {mentor.expertise.slice(0, 3).map((skill, index) => (
                                     <span
                                       key={index}
-                                      className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs font-medium rounded-full"
+                                      className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-medium rounded-md"
                                     >
                                       {skill}
                                     </span>
@@ -221,7 +185,7 @@ export const MentorshipPage = () => {
                                     setRequestForm(prev => ({ ...prev, mentorId: mentor._id }));
                                     setActiveTab('request');
                                   }}
-                                  className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                                  className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-all shadow-sm hover:shadow"
                                 >
                                   <UserPlus className="w-4 h-4" />
                                   <span>Request Mentorship</span>
@@ -239,7 +203,7 @@ export const MentorshipPage = () => {
 
             {activeTab === 'request' && isAlumni && (
               <div className="max-w-2xl mx-auto">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-8">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8">
                   <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-6">
                     Request Mentorship
                   </h2>
@@ -253,7 +217,7 @@ export const MentorshipPage = () => {
                         type="text"
                         value={requestForm.topic}
                         onChange={(e) => setRequestForm(prev => ({ ...prev, topic: e.target.value }))}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="e.g., Career guidance, Entrepreneurship, Technical skills"
                         required
                       />
@@ -266,7 +230,7 @@ export const MentorshipPage = () => {
                       <textarea
                         value={requestForm.message}
                         onChange={(e) => setRequestForm(prev => ({ ...prev, message: e.target.value }))}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="Tell the mentor about your background, goals, and what you'd like to achieve from this mentorship..."
                         rows={4}
                         required
@@ -281,7 +245,7 @@ export const MentorshipPage = () => {
                         type="text"
                         value={requestForm.preferredTime}
                         onChange={(e) => setRequestForm(prev => ({ ...prev, preferredTime: e.target.value }))}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="e.g., Weekends, Evenings, Any time"
                       />
                     </div>
@@ -290,19 +254,19 @@ export const MentorshipPage = () => {
                       <button
                         type="button"
                         onClick={() => setActiveTab('find')}
-                        className="px-6 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        className="px-6 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-medium"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                        className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium shadow-sm hover:shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                       >
                         {submitting ? (
                           <>
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                            Sending Request...
+                            Sending...
                           </>
                         ) : (
                           <>
@@ -318,15 +282,16 @@ export const MentorshipPage = () => {
             )}
 
             {activeTab === 'sessions' && isAlumni && (
-              <div>
-                <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-6">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
+                  <Calendar className="w-5 h-5 mr-2 text-primary-600" />
                   My Mentorship Sessions
                 </h2>
 
                 {mySessions.length === 0 ? (
-                  <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
+                  <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <Calendar className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                       No sessions yet
                     </h3>
                     <p className="text-slate-600 dark:text-slate-400">
@@ -338,54 +303,54 @@ export const MentorshipPage = () => {
                     {mySessions.map((session) => (
                       <div
                         key={session._id}
-                        className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-800"
+                        className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 hover:shadow-md transition-all duration-300 border border-slate-200 dark:border-slate-700"
                       >
-                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                           <div className="flex-1">
-                            <div className="flex items-center space-x-4 mb-3">
-                              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-amber-500 rounded-full flex items-center justify-center text-white font-bold">
+                            <div className="flex items-center space-x-4 mb-4">
+                              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center text-primary-600 font-bold text-lg">
                                 {session.mentorId?.fullName?.charAt(0) || '?'}
                               </div>
                               <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                                   Session with {session.mentorId?.fullName}
                                 </h3>
-                                <p className="text-sm text-slate-600 dark:text-slate-400">
+                                <p className="text-sm font-medium text-primary-600 dark:text-primary-400">
                                   {session.topic}
                                 </p>
                               </div>
                             </div>
 
-                            <p className="text-slate-600 dark:text-slate-400 mb-3">
-                              {session.message}
+                            <p className="text-slate-600 dark:text-slate-400 mb-4 bg-slate-50 dark:bg-slate-900 p-4 rounded-lg text-sm">
+                              "{session.message}"
                             </p>
 
-                            <div className="flex items-center space-x-4 text-sm text-slate-500 dark:text-slate-500">
+                            <div className="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-400">
                               <div className="flex items-center">
-                                <Clock className="w-4 h-4 mr-1" />
+                                <Clock className="w-4 h-4 mr-1.5" />
                                 <span>Requested {new Date(session.createdAt).toLocaleDateString()}</span>
                               </div>
                               {session.scheduledAt && (
-                                <div className="flex items-center">
-                                  <Calendar className="w-4 h-4 mr-1" />
+                                <div className="flex items-center text-primary-600 dark:text-primary-400">
+                                  <Calendar className="w-4 h-4 mr-1.5" />
                                   <span>Scheduled for {new Date(session.scheduledAt).toLocaleDateString()}</span>
                                 </div>
                               )}
                             </div>
                           </div>
 
-                          <div className="flex flex-col items-end space-y-2">
+                          <div className="flex flex-col items-start lg:items-end space-y-3 min-w-[140px]">
                             {(() => {
                               const statusBadge = getStatusBadge(session.status);
                               return (
-                                <span className={`px-3 py-1 ${statusBadge.bg} ${statusBadge.text} text-sm font-semibold rounded-full`}>
+                                <span className={`px-3 py-1 ${statusBadge.bg} ${statusBadge.text} text-xs font-semibold rounded-full uppercase tracking-wider`}>
                                   {statusBadge.label}
                                 </span>
                               );
                             })()}
 
                             {session.status === 'accepted' && (
-                              <button className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center">
+                              <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center text-sm shadow-sm">
                                 <MessageCircle className="w-4 h-4 mr-2" />
                                 Join Session
                               </button>
@@ -400,17 +365,19 @@ export const MentorshipPage = () => {
             )}
 
             {!isAlumni && (
-              <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl shadow-lg">
-                <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+              <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 max-w-3xl mx-auto">
+                <div className="w-20 h-20 bg-primary-50 dark:bg-primary-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="w-10 h-10 text-primary-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
                   Mentorship for Alumni Only
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">
+                <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-lg mx-auto">
                   Become an alumni member to access our mentorship program and connect with experienced mentors
                 </p>
                 <button
-                  onClick={() => window.location.href = '/register'}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  onClick={() => onNavigate('register')}
+                  className="px-8 py-3 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
                   Join as Alumni
                 </button>

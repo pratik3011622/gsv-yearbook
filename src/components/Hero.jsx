@@ -6,14 +6,14 @@ import { ProfileSection } from './ProfileSection';
 
 
 export const Hero = ({ onNavigate }) => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
-    const [isYearbookDropdownOpen, setIsYearbookDropdownOpen] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { isDark, toggleTheme } = useTheme();
-    const { user, profile } = useAuth();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [isYearbookDropdownOpen, setIsYearbookDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
+  const { user, profile } = useAuth();
 
-    const isAlumni = profile?.role === 'alumni';
+  const isAlumni = profile?.role === 'alumni';
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -45,7 +45,8 @@ export const Hero = ({ onNavigate }) => {
       {/* Hero Section with Clean Slideshow - Full height */}
       <div className="relative h-screen overflow-hidden">
         {/* Gradient overlay for better text visibility and visual appeal */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 z-10"></div>
+        {/* Gradient overlay with Cloudy Effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10 backdrop-blur-[2px]"></div>
 
         {/* Video Background */}
         <div className="absolute inset-0 z-0">
@@ -62,7 +63,7 @@ export const Hero = ({ onNavigate }) => {
               filter: 'contrast(1.1) brightness(1.05)'
             }}
           >
-            <source src="/induction-video.mp4" type="video/mp4" />
+            <source src="/final.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -105,7 +106,7 @@ export const Hero = ({ onNavigate }) => {
                     </button>
                     <button
                       onClick={() => onNavigate('register')}
-                      className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-300 font-semibold text-xs sm:text-sm border border-white/30 hover:scale-105 drop-shadow-lg transform"
+                      className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-white/20 text-white rounded-full hover:bg-white/30 transition-all duration-300 font-semibold text-xs sm:text-sm border border-white/30 hover:scale-105 drop-shadow-lg transform"
                     >
                       Join Now
                     </button>
@@ -252,39 +253,40 @@ export const Hero = ({ onNavigate }) => {
             </div>
           </div>
         </div>
-
-
       </div>
 
-      {/* Content Section Below Slideshow - Responsive */}
-      <div className="bg-white dark:bg-gray-900 py-4 sm:py-6 md:py-8 lg:py-12 xl:py-16 parallax-bg">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 md:mb-6 leading-tight">
-              Gati Shakti Vishwavidyalaya
-              <br />
-              <span className="text-blue-600 dark:text-blue-400">Alumni Network</span>
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed">
-              Connect & Celebrate with fellow alumni, share experiences, and build lifelong relationships that transcend time and distance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center">
-              <button
-                onClick={() => onNavigate('directory')}
-                className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 btn-smooth font-semibold text-sm sm:text-base md:text-lg shadow-lg hover:shadow-xl"
-              >
-                Explore Directory
-              </button>
-              <button
-                onClick={() => onNavigate('register')}
-                className="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 btn-smooth font-semibold text-sm sm:text-base md:text-lg"
-              >
-                Join Community
-              </button>
-            </div>
+      {/* Hero Content Overlay */}
+      <div className="absolute inset-0 z-30 flex items-center justify-center px-4 sm:px-6 lg:px-8 mt-16 sm:mt-0">
+        <div className="text-center max-w-5xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+            Gati Shakti Vishwavidyalaya
+            <br />
+            <span className="text-blue-400 font-brand font-bold">Gati Shakti Vishwavidyalaya</span>
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-100 mb-8 max-w-4xl mx-auto leading-relaxed drop-shadow-lg font-light">
+            Connect & Celebrate with fellow alumni, share experiences, and build lifelong relationships that transcend time and distance.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+            <button
+              onClick={() => onNavigate('directory')}
+              className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 font-bold text-base sm:text-lg shadow-lg hover:shadow-blue-500/50 hover:-translate-y-1"
+            >
+              Explore Directory
+            </button>
+            <button
+              onClick={() => onNavigate('register')}
+              className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-full hover:bg-white/20 transition-all duration-300 font-bold text-base sm:text-lg shadow-lg hover:shadow-white/20 hover:-translate-y-1"
+            >
+              Join Community
+            </button>
           </div>
         </div>
       </div>
+
+
+
+
+
     </div>
   );
 };

@@ -47,8 +47,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Roboto', 'system-ui', 'sans-serif'],
+        display: ['Roboto', 'system-ui', 'sans-serif'],
+        serif: ['Roboto', 'serif'], // Mapping serif to Roboto to adhere to 'google default' request
       },
       borderRadius: {
         'xl': '12px',

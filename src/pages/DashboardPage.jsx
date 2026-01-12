@@ -122,7 +122,7 @@ export const DashboardPage = ({ onNavigate }) => {
   }
 
   return (
-    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
           <div className="flex items-center space-x-4 mb-4">
@@ -138,7 +138,7 @@ export const DashboardPage = ({ onNavigate }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-gradient-to-br from-blue-600 to-amber-600 rounded-2xl p-8 text-white shadow-xl">
+            <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-8 text-white shadow-lg">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-serif font-bold mb-2">Your Progress</h2>
@@ -178,7 +178,7 @@ export const DashboardPage = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-8 border border-slate-200 dark:border-slate-700">
               <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-6">
                 Quick Actions
               </h2>
@@ -190,7 +190,7 @@ export const DashboardPage = ({ onNavigate }) => {
                     <button
                       key={index}
                       onClick={() => onNavigate(action.action)}
-                      className="group p-6 bg-slate-50 dark:bg-slate-800 rounded-xl hover:shadow-lg transition-all duration-300 text-left border border-slate-200 dark:border-slate-700 hover:-translate-y-1"
+                      className="group p-6 bg-slate-50 dark:bg-slate-700/50 rounded-xl hover:shadow-md transition-all duration-300 text-left border border-slate-200 dark:border-slate-700 hover:-translate-y-1"
                     >
                       <div className={`${action.bgColor} w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                         <Icon className={`w-6 h-6 bg-gradient-to-r ${action.color} bg-clip-text text-transparent`} />
@@ -209,9 +209,9 @@ export const DashboardPage = ({ onNavigate }) => {
           </div>
 
           <div className="space-y-8">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-6 border border-slate-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-amber-500 rounded-full flex items-center justify-center text-2xl font-bold text-white">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-blue-600 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-md">
                   {profile?.fullName?.charAt(0) || '?'}
                 </div>
                 <div>
@@ -246,14 +246,14 @@ export const DashboardPage = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-6 border border-slate-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
               <h3 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
+                <TrendingUp className="w-5 h-5 mr-2 text-primary-600 dark:text-primary-400" />
                 Your Activity
               </h3>
 
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-600/50">
                   <div className="flex items-center space-x-3">
                     <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                     <span className="text-sm text-slate-700 dark:text-slate-300">
@@ -265,7 +265,7 @@ export const DashboardPage = ({ onNavigate }) => {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-600/50">
                   <div className="flex items-center space-x-3">
                     <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     <span className="text-sm text-slate-700 dark:text-slate-300">
@@ -277,7 +277,7 @@ export const DashboardPage = ({ onNavigate }) => {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-600/50">
                   <div className="flex items-center space-x-3">
                     <Briefcase className="w-5 h-5 text-green-600 dark:text-green-400" />
                     <span className="text-sm text-slate-700 dark:text-slate-300">
@@ -289,7 +289,7 @@ export const DashboardPage = ({ onNavigate }) => {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-100 dark:border-slate-600/50">
                   <div className="flex items-center space-x-3">
                     <Newspaper className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     <span className="text-sm text-slate-700 dark:text-slate-300">

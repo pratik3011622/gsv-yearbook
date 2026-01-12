@@ -57,25 +57,25 @@ export const RegisterPage = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-12 bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div className="min-h-screen pt-20 pb-12 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-2xl mx-auto px-4">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-amber-500 rounded-full mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl mb-4 shadow-sm border border-slate-200 dark:border-slate-700">
             <img
               src="https://upload.wikimedia.org/wikipedia/en/d/d2/Gati_Shakti_Vishwavidyalaya_Logo.png"
               alt="GSV Logo"
-              className="w-12 h-12 rounded-full object-contain"
+              className="w-12 h-12 object-contain"
             />
           </div>
           <h1 className="text-4xl font-serif font-bold text-slate-900 dark:text-white mb-2">
             Join GSVConnect
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-slate-500 dark:text-slate-400">
             Create your account and reconnect with your college community
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-[3rem] shadow-xl p-12 border border-slate-200 dark:border-slate-700">
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
               {error}
@@ -91,24 +91,21 @@ export const RegisterPage = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, role: 'alumni' })}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.role === 'alumni'
-                      ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-slate-300 dark:border-slate-600'
-                  }`}
+                  className={`p-4 rounded-2xl border-2 transition-all ${formData.role === 'alumni'
+                    ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    }`}
                 >
                   <div className="text-center">
                     <GraduationCap
-                      className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.role === 'alumni' ? 'text-blue-600' : 'text-slate-400'
-                      }`}
+                      className={`w-8 h-8 mx-auto mb-2 ${formData.role === 'alumni' ? 'text-primary-600' : 'text-slate-400'
+                        }`}
                     />
                     <span
-                      className={`font-medium ${
-                        formData.role === 'alumni'
-                          ? 'text-blue-600'
-                          : 'text-slate-700 dark:text-slate-300'
-                      }`}
+                      className={`font-medium ${formData.role === 'alumni'
+                        ? 'text-primary-600'
+                        : 'text-slate-700 dark:text-slate-300'
+                        }`}
                     >
                       Alumni
                     </span>
@@ -118,24 +115,21 @@ export const RegisterPage = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, role: 'student' })}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    formData.role === 'student'
-                      ? 'border-green-600 bg-green-50 dark:bg-green-900/20'
-                      : 'border-slate-300 dark:border-slate-600'
-                  }`}
+                  className={`p-4 rounded-2xl border-2 transition-all ${formData.role === 'student'
+                    ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    }`}
                 >
                   <div className="text-center">
                     <User
-                      className={`w-8 h-8 mx-auto mb-2 ${
-                        formData.role === 'student' ? 'text-green-600' : 'text-slate-400'
-                      }`}
+                      className={`w-8 h-8 mx-auto mb-2 ${formData.role === 'student' ? 'text-primary-600' : 'text-slate-400'
+                        }`}
                     />
                     <span
-                      className={`font-medium ${
-                        formData.role === 'student'
-                          ? 'text-green-600'
-                          : 'text-slate-700 dark:text-slate-300'
-                      }`}
+                      className={`font-medium ${formData.role === 'student'
+                        ? 'text-primary-600'
+                        : 'text-slate-700 dark:text-slate-300'
+                        }`}
                     >
                       Student
                     </span>
@@ -157,7 +151,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                     placeholder="Your name"
                     required
                   />
@@ -175,7 +169,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                     placeholder="you@example.com"
                     required
                   />
@@ -195,14 +189,14 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                    className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                     placeholder="Create password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -220,7 +214,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                     placeholder="Confirm password"
                     required
                   />
@@ -240,7 +234,7 @@ export const RegisterPage = ({ onNavigate }) => {
                       name="batchYear"
                       value={formData.batchYear}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                       placeholder="2020"
                       required
                     />
@@ -255,7 +249,7 @@ export const RegisterPage = ({ onNavigate }) => {
                       name="department"
                       value={formData.department}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                       placeholder="Computer Science"
                       required
                     />
@@ -274,7 +268,7 @@ export const RegisterPage = ({ onNavigate }) => {
                         name="currentCompany"
                         value={formData.currentCompany}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                         placeholder="Your company"
                       />
                     </div>
@@ -291,7 +285,7 @@ export const RegisterPage = ({ onNavigate }) => {
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white"
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
                         placeholder="City, Country"
                       />
                     </div>
@@ -303,7 +297,7 @@ export const RegisterPage = ({ onNavigate }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-blue-600 to-amber-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
             >
               {loading ? 'Creating Account...' : 'Create Account'}
             </button>

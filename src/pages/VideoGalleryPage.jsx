@@ -132,13 +132,12 @@ export const VideoGalleryPage = () => {
         </div>
         {/* Video Slideshow */}
         <div className="mb-16 relative">
-          <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+          <div className="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
             {videoData.map((video, index) => (
               <div
                 key={video.id}
-                className={`absolute inset-0 transition-opacity duration-1000 ${
-                  index === currentSlide ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 <img
                   src={video.thumbnail}
@@ -180,11 +179,10 @@ export const VideoGalleryPage = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentSlide
+                  className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide
                       ? 'w-8 bg-white'
                       : 'w-2 bg-white/50 hover:bg-white/70'
-                  }`}
+                    }`}
                   aria-label={`Go to video ${index + 1}`}
                 ></button>
               ))}
@@ -198,11 +196,10 @@ export const VideoGalleryPage = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                selectedCategory === category
+              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${selectedCategory === category
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
                   : 'bg-white dark:bg-slate-800 text-neutral-700 dark:text-neutral-300 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-neutral-200 dark:border-slate-700'
-              }`}
+                }`}
             >
               {category}
             </button>
@@ -214,7 +211,7 @@ export const VideoGalleryPage = () => {
           {filteredVideos.map((video) => (
             <div
               key={video.id}
-              className="group relative card-3d-tilt cursor-pointer overflow-hidden gpu-accelerated"
+              className="group relative card-3d-tilt cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-slate-800 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 gpu-accelerated"
               onClick={() => openVideoModal(video)}
             >
               {/* Thumbnail */}
@@ -267,7 +264,7 @@ export const VideoGalleryPage = () => {
       {/* Video Modal */}
       {selectedVideo && (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-          <div className="relative w-full max-w-4xl bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
+          <div className="relative w-full max-w-4xl bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl">
             <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-slate-700">
               <h3 className="text-xl font-bold text-neutral-900 dark:text-gray-100">
                 {selectedVideo.title}

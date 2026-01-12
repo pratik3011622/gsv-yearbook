@@ -95,27 +95,26 @@ export const PhotoGalleryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-25 via-teal-25 to-cyan-25 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
             Photo Gallery
           </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
             Explore the visual memories that capture the essence of our Gati Shakti Vishwavidyalaya community
           </p>
         </div>
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                selectedCategory === category
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
-                  : 'bg-white dark:bg-slate-800 text-neutral-700 dark:text-neutral-300 hover:bg-emerald-50 dark:hover:bg-slate-700 border border-neutral-200 dark:border-slate-700'
-              }`}
+              className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 text-sm tracking-wide ${selectedCategory === category
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md transform -translate-y-0.5'
+                : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                }`}
             >
               {category}
             </button>
@@ -123,49 +122,41 @@ export const PhotoGalleryPage = () => {
         </div>
 
         {/* Photo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {filteredPhotos.map((photo) => (
             <div
               key={photo.id}
-              className="group relative card-3d-tilt cursor-pointer overflow-hidden gpu-accelerated"
+              className="group cursor-pointer bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all duration-300"
               onClick={() => openPhotoModal(photo)}
             >
               {/* Image */}
-              <div className="relative aspect-square overflow-hidden">
+              <div className="relative aspect-square overflow-hidden bg-slate-100 dark:bg-slate-900">
                 <img
                   src={photo.image}
                   alt={photo.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-                <div className="absolute top-3 left-3">
-                  <span className="px-2 py-1 bg-white/90 backdrop-blur-md text-neutral-800 rounded-full text-xs font-medium">
+                {/* Simple Category Tag */}
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-black/50 text-white rounded-lg text-xs font-bold uppercase tracking-wider backdrop-blur-[2px]">
                     {photo.category}
                   </span>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-4">
-                <h3 className="text-lg font-bold text-neutral-900 dark:text-gray-100 mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              {/* Minimal Content */}
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-1">
                   {photo.title}
                 </h3>
 
-                <p className="text-neutral-600 dark:text-gray-300 text-sm leading-relaxed mb-3 line-clamp-2">
-                  {photo.description}
-                </p>
-
-                <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex items-center">
-                    <Calendar className="w-3 h-3 mr-1" />
+                    <Calendar className="w-3.5 h-3.5 mr-1.5" />
                     {new Date(photo.date).toLocaleDateString()}
                   </div>
                   <div className="flex items-center">
-                    <MapPin className="w-3 h-3 mr-1" />
+                    <MapPin className="w-3.5 h-3.5 mr-1.5" />
                     {photo.location}
                   </div>
                 </div>
@@ -175,8 +166,8 @@ export const PhotoGalleryPage = () => {
         </div>
 
         {filteredPhotos.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-xl text-neutral-500 dark:text-neutral-400">
+          <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <p className="text-xl text-slate-500 dark:text-slate-400">
               No photos found in this category.
             </p>
           </div>
@@ -185,44 +176,46 @@ export const PhotoGalleryPage = () => {
 
       {/* Photo Modal */}
       {selectedPhoto && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-5xl max-h-full bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-slate-700">
-              <div>
-                <h3 className="text-xl font-bold text-neutral-900 dark:text-gray-100">
-                  {selectedPhoto.title}
-                </h3>
-                <p className="text-sm text-neutral-600 dark:text-gray-400 mt-1">
-                  {selectedPhoto.description}
-                </p>
-              </div>
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="relative max-w-5xl w-full bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 shrink-0">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-4">
+                {selectedPhoto.title}
+              </h3>
               <button
                 onClick={closePhotoModal}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
               >
-                <X className="w-6 h-6 text-neutral-600 dark:text-neutral-400" />
+                <X className="w-6 h-6 text-slate-500 dark:text-slate-400" />
               </button>
             </div>
-            <div className="relative">
+
+            <div className="relative flex-1 bg-slate-100 dark:bg-black overflow-hidden flex items-center justify-center">
               <img
                 src={selectedPhoto.image}
                 alt={selectedPhoto.title}
-                className="w-full max-h-[70vh] object-contain"
+                className="max-w-full max-h-full object-contain p-4"
               />
             </div>
-            <div className="p-4 bg-neutral-50 dark:bg-slate-700">
-              <div className="flex items-center justify-between text-sm text-neutral-600 dark:text-gray-300">
+
+            <div className="p-6 bg-white dark:bg-slate-900 shrink-0 border-t border-slate-200 dark:border-slate-800">
+              <p className="text-slate-600 dark:text-slate-300 mb-4 font-light text-lg">
+                {selectedPhoto.description}
+              </p>
+              <div className="flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400">
                 <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-2" />
+                  <Calendar className="w-4 h-4 mr-2 text-primary-600" />
                   {new Date(selectedPhoto.date).toLocaleDateString()}
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-2" />
+                  <MapPin className="w-4 h-4 mr-2 text-primary-600" />
                   {selectedPhoto.location}
                 </div>
-                <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300 rounded-full">
-                  {selectedPhoto.category}
-                </span>
+                <div className="ml-auto">
+                  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg text-xs font-bold uppercase tracking-wider">
+                    {selectedPhoto.category}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
