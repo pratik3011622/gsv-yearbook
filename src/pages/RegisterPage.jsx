@@ -152,7 +152,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                     placeholder="Your name"
                     required
                   />
@@ -170,7 +170,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                     placeholder="you@example.com"
                     required
                   />
@@ -190,7 +190,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                    className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                     placeholder="Create password"
                     required
                   />
@@ -215,7 +215,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                     placeholder="Confirm password"
                     required
                   />
@@ -235,7 +235,7 @@ export const RegisterPage = ({ onNavigate }) => {
                       name="batchYear"
                       value={formData.batchYear}
                       onChange={handleChange}
-                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                       placeholder="2020"
                       required
                     />
@@ -250,7 +250,7 @@ export const RegisterPage = ({ onNavigate }) => {
                       name="department"
                       value={formData.department}
                       onChange={handleChange}
-                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                       placeholder="Computer Science"
                       required
                     />
@@ -269,7 +269,7 @@ export const RegisterPage = ({ onNavigate }) => {
                         name="currentCompany"
                         value={formData.currentCompany}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="Your company"
                       />
                     </div>
@@ -286,7 +286,7 @@ export const RegisterPage = ({ onNavigate }) => {
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:white placeholder-slate-400 transition-all"
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="City, Country"
                       />
                     </div>
