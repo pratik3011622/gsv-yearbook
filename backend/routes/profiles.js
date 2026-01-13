@@ -6,11 +6,16 @@ const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 
 // Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+  console.error('❌ Cloudinary environment variables not set!');
+} else {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+  console.log('✅ Cloudinary configured successfully');
+}
 
 // Configure multer for Cloudinary storage
 const storage = new CloudinaryStorage({
@@ -74,6 +79,17 @@ router.get('/me/profile', auth, async (req, res) => {
 // Update own profile
 router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
   try {
+    console.log('Profile update request received');
+    console.log('File present:', !!req.file);
+    if (req.file) {
+      console.log('File details:', {
+        fieldname: req.file.fieldname,
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        path: req.file.path
+      });
+    }
     const allowedFields = [
       'fullName', 'batchYear', 'department', 'company',
       'jobTitle', 'location', 'country', 'bio', 'avatarUrl',
