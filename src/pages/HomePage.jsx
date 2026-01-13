@@ -8,7 +8,7 @@ export const HomePage = ({ onNavigate }) => {
   return (
     <div className="overflow-x-hidden font-sans bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-50">
       {/* Video Hero Section */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center text-center overflow-hidden bg-slate-900 text-white">
+      <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden bg-slate-900 text-white">
         <video
           autoPlay
           muted
@@ -19,11 +19,12 @@ export const HomePage = ({ onNavigate }) => {
           <source src="/final.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
+        <div className="absolute inset-0 z-10 bg-black/60"></div>
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,rgba(30,64,175,0.3),rgba(15,23,42,0.5))]"></div>
 
-        <div className="relative z-30 max-w-[1000px] px-8 mt-16">
-          <h1 className="font-serif text-[4.5rem] font-bold mb-6 leading-[1.1] text-white tracking-tighter animate-[fadeIn_1s_ease-out_forwards]">
-            Connect, Celebrate,<br />and Grow Together
+        <div className="relative z-30 max-w-7xl px-4 mt-16">
+          <h1 className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-22 leading-tight text-white tracking-tight animate-[fadeIn_1s_ease-out_forwards]">
+            <span className="md:whitespace-nowrap">Connect, Celebrate, and Grow</span><br />Together
           </h1>
           <p className="text-xl text-white/95 mb-12 font-normal max-w-[700px] mx-auto animate-[slideUp_1s_ease-out_0.3s_forwards] opacity-0 translate-y-5">
             Join a vibrant community where memories are made, careers accelerate, and support never stops.
@@ -59,7 +60,7 @@ export const HomePage = ({ onNavigate }) => {
       </section>
 
       {/* Everything You Need Section */}
-      <section className="py-16 bg-slate-50 relative overflow-hidden dark:bg-slate-900">
+      <section className="py-16 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-[700px] mx-auto mb-10">
             <h2 className="font-serif text-4xl sm:text-5xl text-slate-900 mb-4 dark:text-white">Everything You Need</h2>
@@ -76,9 +77,9 @@ export const HomePage = ({ onNavigate }) => {
                 nav: 'directory'
               },
               {
-                title: 'Mentorship',
-                desc: 'Gain guidance from experienced alumni or mentor the next generation.',
-                nav: 'mentorship'
+                title: 'About GSV',
+                desc: "Discover the vision behind India's first university dedicated to the transportation sectors.",
+                nav: 'about'
               },
               {
                 title: 'Events',
@@ -305,11 +306,11 @@ export const HomePage = ({ onNavigate }) => {
         <div className="max-w-[1200px] mx-auto px-8">
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-8 pb-8 border-b border-white/10">
             <div>
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-start gap-4 mb-4">
                 <img
                   src="/gsv-logo.png"
                   alt="GSV Logo"
-                  className="w-10 h-10 object-contain brightness-0 invert"
+                  className="w-10 h-10 object-contain"
                 />
                 <div className="flex flex-col">
                   <span className="font-serif text-2xl font-bold text-white leading-none">GSV Connect</span>

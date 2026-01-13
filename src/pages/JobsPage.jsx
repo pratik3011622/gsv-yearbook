@@ -164,39 +164,15 @@ export const JobsPage = () => {
   };
 
   const getExperienceBadge = (level) => {
-    const levels = {
-      'entry': { bg: 'bg-green-500/20', text: 'text-green-400', label: 'Entry Level' },
-      'mid': { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Mid Level' },
-      'senior': { bg: 'bg-purple-500/20', text: 'text-purple-400', label: 'Senior Level' },
-      'executive': { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Executive' }
-    };
-    return levels[level] || levels.entry;
+    return { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-600 dark:text-slate-300', label: level.charAt(0).toUpperCase() + level.slice(1) };
   };
 
   const getJobTypeBadge = (jobType) => {
-    const types = {
-      'full-time': { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300', label: 'Full-Time' },
-      'part-time': { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300', label: 'Part-Time' },
-      'contract': { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-300', label: 'Contract' },
-      'internship': { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300', label: 'Internship' },
-      'freelance': { bg: 'bg-pink-100 dark:bg-pink-900/30', text: 'text-pink-700 dark:text-pink-300', label: 'Freelance' },
-      'remote': { bg: 'bg-indigo-100 dark:bg-indigo-900/30', text: 'text-indigo-700 dark:text-indigo-300', label: 'Remote' }
-    };
-    return types[jobType] || { bg: 'bg-gray-100 dark:bg-gray-900/30', text: 'text-gray-700 dark:text-gray-300', label: jobType };
+    return { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300', label: jobType.replace('-', ' ') };
   };
 
   const getDomainBadge = (domain) => {
-    const domains = {
-      'technology': { bg: 'bg-cyan-100 dark:bg-cyan-900/30', text: 'text-cyan-700 dark:text-cyan-300' },
-      'engineering': { bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-300' },
-      'business': { bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300' },
-      'finance': { bg: 'bg-lime-100 dark:bg-lime-900/30', text: 'text-lime-700 dark:text-lime-300' },
-      'marketing': { bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-700 dark:text-rose-300' },
-      'design': { bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-700 dark:text-violet-300' },
-      'healthcare': { bg: 'bg-teal-100 dark:bg-teal-900/30', text: 'text-teal-700 dark:text-teal-300' },
-      'education': { bg: 'bg-sky-100 dark:bg-sky-900/30', text: 'text-sky-700 dark:text-sky-300' }
-    };
-    return domains[domain.toLowerCase()] || { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300' };
+    return { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300' };
   };
 
   return (
@@ -400,46 +376,42 @@ export const JobsPage = () => {
           </div>
         ) : (
           /* Job Cards Grid */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredJobs.map((job) => (
               <div
                 key={job._id || job.id}
-                className={`group bg-white dark:bg-slate-800 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden flex flex-col ${job.isFeatured
-                  ? 'border-amber-200 dark:border-amber-500/30'
+                className={`group bg-white dark:bg-slate-800 rounded-xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden flex flex-col ${job.isFeatured
+                  ? 'border-slate-300 dark:border-slate-600'
                   : 'border-slate-200 dark:border-slate-700'
                   }`}
               >
-                {/* Top accent bar */}
-                <div className={`h-1.5 ${job.isFeatured ? 'bg-gradient-to-r from-amber-400 to-yellow-500' : 'bg-slate-100 dark:bg-slate-700/50'}`}></div>
-
                 {/* Featured Badge */}
                 {job.isFeatured && (
-                  <div className="absolute top-4 right-4 z-10">
-                    <div className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 px-3 py-1 rounded-full text-xs font-bold flex items-center border border-amber-200 dark:border-amber-700/50">
-                      <Star className="w-3 h-3 mr-1 fill-amber-500 dark:fill-amber-400 text-amber-500 dark:text-amber-400" />
-                      FEATURED
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="bg-slate-900 text-white px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide">
+                      Featured
                     </div>
                   </div>
                 )}
 
-                <div className="p-8 flex-1 flex flex-col">
+                <div className="p-5 flex-1 flex flex-col">
                   {/* Header */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-start space-x-5 flex-1">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start space-x-4 flex-1">
                       {/* Company Logo */}
                       <div className="flex-shrink-0">
-                        <div className="w-16 h-16 bg-slate-50 dark:bg-slate-700 rounded-xl flex items-center justify-center text-2xl font-bold text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-600">
+                        <div className="w-12 h-12 bg-slate-50 dark:bg-slate-700 rounded-lg flex items-center justify-center text-lg font-bold text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-600">
                           {job.company?.charAt(0)?.toUpperCase() || 'C'}
                         </div>
                       </div>
 
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
+                      <div className="flex-1 min-w-0 pt-0.5">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-0.5 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-1">
                           {job.title}
                         </h3>
-                        <p className="text-slate-600 dark:text-slate-300 font-semibold text-base">{job.company}</p>
-                        <div className="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mt-1">
-                          <MapPin className="w-4 h-4 text-slate-400" />
+                        <p className="text-slate-600 dark:text-slate-400 font-medium text-sm">{job.company}</p>
+                        <div className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          <MapPin className="w-3 h-3 text-slate-400" />
                           <span>{job.location || 'Remote'}</span>
                         </div>
                       </div>
@@ -461,50 +433,43 @@ export const JobsPage = () => {
                   </div>
 
                   {/* Job Details */}
-                  <div className="space-y-4 mb-8">
+                  <div className="space-y-3 mb-6">
                     {/* Key Info Row */}
-                    <div className="flex flex-wrap items-center gap-4 text-sm">
-                      <div className="flex items-center text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50 rounded-lg px-3 py-2 border border-slate-100 dark:border-slate-700">
-                        <Briefcase className="w-4 h-4 mr-2 text-blue-500" />
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <div className="flex items-center text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700/50 rounded px-2.5 py-1.5 border border-slate-200 dark:border-slate-700">
+                        <Briefcase className="w-3 h-3 mr-1.5" />
                         <span className="font-medium capitalize">{job.jobType?.replace('-', ' ') || 'Full-time'}</span>
                       </div>
                       {job.salaryRange && (
-                        <div className="flex items-center text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2 border border-green-100 dark:border-green-900/30">
-                          <DollarSign className="w-4 h-4 mr-2" />
-                          <span className="font-semibold">{job.salaryRange}</span>
+                        <div className="flex items-center text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700/50 rounded px-2.5 py-1.5 border border-slate-200 dark:border-slate-700">
+                          <DollarSign className="w-3 h-3 mr-1.5" />
+                          <span className="font-medium">{job.salaryRange}</span>
                         </div>
                       )}
-                      <div className="flex items-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-700/50 rounded-lg px-3 py-2 border border-slate-100 dark:border-slate-700">
-                        <Clock className="w-4 h-4 mr-2" />
+                      <div className="flex items-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-700/30 rounded px-2.5 py-1.5">
+                        <Clock className="w-3 h-3 mr-1.5" />
                         <span className="font-medium">{getRelativeTime(job.createdAt)}</span>
                       </div>
                     </div>
 
                     {/* Badges */}
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {job.domain && (
-                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getDomainBadge(job.domain).bg} ${getDomainBadge(job.domain).text} border border-opacity-30`}>
+                        <span className={`px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700`}>
                           {job.domain}
                         </span>
                       )}
                       {job.experienceLevel && (
-                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getExperienceBadge(job.experienceLevel).bg} ${getExperienceBadge(job.experienceLevel).text} border border-opacity-30`}>
+                        <span className={`px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700`}>
                           {getExperienceBadge(job.experienceLevel).label}
-                        </span>
-                      )}
-                      {getJobTypeBadge(job.jobType).label && (
-                        <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getJobTypeBadge(job.jobType).bg} ${getJobTypeBadge(job.jobType).text} border border-opacity-30`}>
-                          {getJobTypeBadge(job.jobType).label}
                         </span>
                       )}
                     </div>
 
                     {/* Description Preview */}
                     {job.description && (
-                      <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
-                        <p className="text-slate-300 text-sm leading-relaxed line-clamp-3">
-                          {job.description}
-                        </p>
+                      <div className="mt-2 text-slate-500 dark:text-slate-400 text-sm leading-relaxed line-clamp-2">
+                        {job.description}
                       </div>
                     )}
                   </div>
