@@ -99,8 +99,8 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
 
     // Handle profile photo upload
     if (req.file) {
-      console.log('File uploaded:', req.file.filename);
-      updates.avatarUrl = `/uploads/${req.file.filename}`;
+      console.log('File uploaded to Cloudinary:', req.file.path);
+      updates.avatarUrl = req.file.path; // Cloudinary URL
       console.log('Avatar URL set:', updates.avatarUrl);
     }
 
