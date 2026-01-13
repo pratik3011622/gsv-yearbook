@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Search, MapPin, Linkedin, Briefcase, GraduationCap, Filter, X, Users, Building2, Award, ChevronDown, ChevronUp } from 'lucide-react';
 import { api } from '../lib/api';
+import { useAuth } from '../contexts/AuthContext';
 
 export const DirectoryPage = ({ onNavigate }) => {
+  const { user } = useAuth();
   const [profiles, setProfiles] = useState([]);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -80,6 +82,24 @@ export const DirectoryPage = ({ onNavigate }) => {
     setDepartmentFilter('');
     setLocationFilter('');
   };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+            Please login to view the alumni directory
+          </h2>
+          <button
+            onClick={() => onNavigate('login')}
+            className="px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-all shadow-md hover:shadow-lg"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 relative overflow-hidden font-sans transition-colors duration-300">

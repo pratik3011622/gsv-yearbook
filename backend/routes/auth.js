@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     // Generate token
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret_key_here_change_in_production', {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_secret_change_this', {
       expiresIn: '7d',
     });
 

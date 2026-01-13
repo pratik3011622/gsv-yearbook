@@ -65,8 +65,8 @@ router.get('/test-cloudinary', (req, res) => {
   });
 });
 
-// Get all profiles (public)
-router.get('/', async (req, res) => {
+// Get all profiles (authenticated users only)
+router.get('/', auth, async (req, res) => {
   try {
     const profiles = await User.find({})
       .select('-password')
