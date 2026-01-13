@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Navigation } from './components/Navigation';
 import { HomePage } from './pages/HomePage';
@@ -10,7 +10,6 @@ import { EventsPage } from './pages/EventsPage';
 import { JobsPage } from './pages/JobsPage';
 import { StoriesPage } from './pages/StoriesPage';
 import { StoryDetailPage } from './pages/StoryDetailPage';
-import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { VideoGalleryPage } from './pages/VideoGalleryPage';
 import { PhotoGalleryPage } from './pages/PhotoGalleryPage';
@@ -22,6 +21,7 @@ import { VisionMissionPage } from './pages/VisionMissionPage';
 import { LeadershipPage } from './pages/LeadershipPage';
 
 function App() {
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(() => {
     // Get initial page from URL hash or default to home
     const hash = window.location.hash.replace('#', '');
@@ -193,25 +193,12 @@ function App() {
             </div>
           </div>
         );
-      case 'dashboard':
-        return (
-          <div className="min-h-screen">
-            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
-            <div className="pt-20">
-              <DashboardPage onNavigate={handleNavigate} />
-            </div>
-          </div>
-        );
       case 'profile':
         return (
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              {currentPage.includes('/') ? (
-                <ProfilePage onNavigate={handleNavigate} userId={currentPage.split('/')[1]} />
-              ) : (
-                <ProfilePage onNavigate={handleNavigate} userId={currentPage.split('/')[1]} />
-              )}
+              <ProfilePage onNavigate={handleNavigate} userId={currentPage.includes('/') ? currentPage.split('/')[1] : user?.id} />
             </div>
           </div>
         );

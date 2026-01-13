@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 class ApiClient {
   constructor() {
@@ -23,7 +23,14 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        // If response is not JSON, try to get text
+        const text = await response.text();
+        throw new Error(text || 'Invalid response from server');
+      }
       return { response, data };
     } catch (error) {
       console.error('API request failed:', error);
@@ -262,4 +269,4 @@ class ApiClient {
 
 export const api = new ApiClient();
 
-export const staticBaseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+export const staticBaseURL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5000';

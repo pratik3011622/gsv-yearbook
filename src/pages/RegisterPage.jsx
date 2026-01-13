@@ -43,8 +43,9 @@ export const RegisterPage = ({ onNavigate }) => {
     setLoading(true);
 
     try {
-      const { confirmPassword, ...userData } = formData;
+      const { confirmPassword, currentCompany, ...userData } = formData;
       userData.batchYear = parseInt(userData.batchYear) || null;
+      userData.company = currentCompany; // Map to backend field name
 
       await signUp(userData);
       alert('Registration successful! Please check your email to verify your account before logging in.');

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BookOpen, Eye, Calendar, Tag, ChevronRight, Plus, X, Upload, Save, Clock, Quote, User, Edit3, Trash2 } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';

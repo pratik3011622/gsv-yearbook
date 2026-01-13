@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Mail, Lock, GraduationCap, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 

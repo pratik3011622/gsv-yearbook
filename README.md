@@ -5,6 +5,7 @@ A modern, interactive university yearbook and alumni portal connecting students 
 ## ✨ Features
 
 ### For All Users
+
 - **Beautiful Home Page** with 3D animations, hero carousel, and animated statistics
 - **Alumni Directory** - Search and filter alumni by batch, department, company, location
 - **Yearbook Memories** - Interactive timeline of college memories organized by year
@@ -14,11 +15,12 @@ A modern, interactive university yearbook and alumni portal connecting students 
 - **Alumni Stories** - Read inspiring success stories from the community
 
 ### For Authenticated Users
-- **Personalized Dashboard** with gamified onboarding checklist
+
 - **Profile Management** - Complete profiles with skills, experience, and social links
 - **Dark Mode** - Beautiful dark theme with smooth transitions
 
 ### For Administrators
+
 - **Admin Dashboard** - Comprehensive control panel
 - **User Approval System** - Review and approve/reject new registrations
 - **Activity Logs** - Track all admin actions with audit trail
@@ -28,18 +30,21 @@ A modern, interactive university yearbook and alumni portal connecting students 
 ## 🚀 Tech Stack
 
 **Frontend:**
+
 - React.js (JavaScript)
 - Tailwind CSS for styling
 - Lucide React for icons
 - Custom animations with CSS keyframes
 
 **Backend & Database:**
+
 - Supabase (PostgreSQL)
 - Auto-generated REST APIs
 - Real-time subscriptions
 - Row Level Security (RLS)
 
 **Authentication:**
+
 - Supabase Auth
 - JWT-based authentication
 - Email/password login
@@ -50,11 +55,13 @@ A modern, interactive university yearbook and alumni portal connecting students 
 1. **Environment Variables** - Already configured in `.env`
 
 2. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Run Development Server**
+
    ```bash
    npm run dev
    ```
@@ -84,12 +91,12 @@ To create your first admin account:
 - **Jobs** - Job opportunities board
 - **Mentorship** - Find and book mentors
 - **Stories** - Alumni success stories
-- **Dashboard** - Personal dashboard
 - **Admin** - Admin control panel (admins only)
 
 ## 🎨 Design Philosophy
 
 **Modern × Nostalgic Fusion**
+
 - Deep royal blue + gold accents
 - Serif fonts (Merriweather) for titles
 - Sans-serif fonts (Inter) for body text
@@ -97,4 +104,3 @@ To create your first admin account:
 - Responsive mobile-first design
 
 ---
-

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, GraduationCap, Moon, Sun, ChevronDown } from 'lucide-react';
+import { Menu, X, GraduationCap, Moon, Sun, ChevronDown, User } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -7,6 +7,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
   const { isDark, toggleTheme } = useTheme();
 
@@ -19,6 +20,9 @@ export const Navigation = ({ onNavigate, currentPage }) => {
       if (openDropdown && !event.target.closest('.dropdown-container')) {
         setOpenDropdown(null);
       }
+      if (userMenuOpen && !event.target.closest('.user-menu-container')) {
+        setUserMenuOpen(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -28,7 +32,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [openDropdown]);
+  }, [openDropdown, userMenuOpen]);
 
   const baseNavItems = [
     { id: 'home', label: 'Home' },
@@ -56,7 +60,6 @@ export const Navigation = ({ onNavigate, currentPage }) => {
 
   const userNavItems = user
     ? [
-      { id: 'dashboard', label: 'Dashboard' },
       ...baseNavItems,
       { id: 'jobs', label: 'Jobs' },
       ...(profile?.role === 'alumni' ? [
@@ -202,6 +205,42 @@ export const Navigation = ({ onNavigate, currentPage }) => {
               </a>
             </div>
 
+            {user && (
+              <div className="relative user-menu-container">
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className={`p-2 rounded-full font-medium text-sm transition-all duration-300 ${currentPage === 'home' && !isScrolled
+                    ? 'text-white hover:bg-white/20'
+                    : 'text-neutral-700 hover:bg-primary-50 hover:text-primary-900 dark:text-neutral-300 dark:hover:bg-slate-800 dark:hover:text-blue-400'
+                    }`}
+                  title="User Menu"
+                >
+                  <User className="w-5 h-5" />
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden p-2">
+                    <button
+                      onClick={() => {
+                        onNavigate('profile');
+                        setUserMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-3 rounded-2xl text-sm font-medium transition-colors text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setUserMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-3 rounded-2xl text-sm font-medium transition-colors text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 dark:hover:text-red-400"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

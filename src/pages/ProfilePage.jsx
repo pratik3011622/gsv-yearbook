@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   User, Edit3, Save, X, Camera, MapPin, Briefcase, GraduationCap,
   Mail, Globe, Linkedin, Github, Award, Calendar, CheckCircle,
