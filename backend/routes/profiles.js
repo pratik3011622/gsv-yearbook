@@ -46,6 +46,25 @@ const upload = multer({
 
 const router = express.Router();
 
+// Test Cloudinary configuration (for debugging)
+router.get('/test-cloudinary', (req, res) => {
+  const hasCloudName = !!process.env.CLOUDINARY_CLOUD_NAME;
+  const hasApiKey = !!process.env.CLOUDINARY_API_KEY;
+  const hasApiSecret = !!process.env.CLOUDINARY_API_SECRET;
+
+  console.log('Cloudinary test endpoint called');
+  console.log('CLOUDINARY_CLOUD_NAME present:', hasCloudName);
+  console.log('CLOUDINARY_API_KEY present:', hasApiKey);
+  console.log('CLOUDINARY_API_SECRET present:', hasApiSecret);
+
+  res.json({
+    cloudinaryConfigured: hasCloudName && hasApiKey && hasApiSecret,
+    cloudName: hasCloudName ? 'Set' : 'Missing',
+    apiKey: hasApiKey ? 'Set' : 'Missing',
+    apiSecret: hasApiSecret ? 'Set' : 'Missing'
+  });
+});
+
 // Get all profiles (public)
 router.get('/', async (req, res) => {
   try {
