@@ -77,7 +77,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
         : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-lg border-b border-white/20 dark:border-slate-800/50 py-3 supports-[backdrop-filter]:bg-white/60'
         }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-12">
         <div className="flex justify-between items-center h-12 sm:h-16">
           <div
             className={`flex-1 flex justify-start items-start space-x-3 cursor-pointer group ${currentPage === 'home' ? 'cursor-default' : ''}`}
