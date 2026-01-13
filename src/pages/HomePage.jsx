@@ -22,8 +22,8 @@ export const HomePage = ({ onNavigate }) => {
         <div className="absolute inset-0 z-10 bg-black/60"></div>
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,rgba(30,64,175,0.3),rgba(15,23,42,0.5))]"></div>
 
-        <div className="relative z-30 max-w-7xl px-4 mt-16">
-          <h1 className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-22 leading-tight text-white tracking-tight animate-[fadeIn_1s_ease-out_forwards]">
+        <div className="relative z-30 max-w-7xl px-4 mt-0">
+          <h1 className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight text-white tracking-tight animate-[fadeIn_1s_ease-out_forwards]">
             <span className="md:whitespace-nowrap">Connect, Celebrate, and Grow</span><br />Together
           </h1>
           <p className="text-xl text-white/95 mb-12 font-normal max-w-[700px] mx-auto animate-[slideUp_1s_ease-out_0.3s_forwards] opacity-0 translate-y-5">

@@ -206,55 +206,55 @@ export const JobsPage = () => {
         </div>
 
         {/* Stats Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <Briefcase className="w-6 h-6 text-blue-700 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{jobs.length}</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">Active Jobs</p>
+                <p className="text-3xl font-serif font-bold text-slate-900 dark:text-white">{jobs.length}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Active Jobs</p>
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-50 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <Building2 className="w-6 h-6 text-green-700 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{new Set(jobs.map(job => job.company)).size}</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">Companies</p>
+                <p className="text-3xl font-serif font-bold text-slate-900 dark:text-white">{new Set(jobs.map(job => job.company)).size}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Companies</p>
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-purple-50 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <Users className="w-6 h-6 text-purple-700 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{isAlumni ? jobs.filter(job => job.postedBy?.role === 'alumni').length : 'N/A'}</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">Alumni Posts</p>
+                <p className="text-3xl font-serif font-bold text-slate-900 dark:text-white">{isAlumni ? jobs.filter(job => job.postedBy?.role === 'alumni').length : 'N/A'}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Alumni Posts</p>
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-amber-50 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                <TrendingUp className="w-6 h-6 text-amber-700 dark:text-amber-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{jobs.filter(job => job.isFeatured).length}</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">Featured</p>
+                <p className="text-3xl font-serif font-bold text-slate-900 dark:text-white">{jobs.filter(job => job.isFeatured).length}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Featured</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 mb-8 shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 mb-8">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search Bar */}
             <div className="flex-1 relative">
@@ -264,14 +264,14 @@ export const JobsPage = () => {
                 placeholder="Search jobs, companies, or skills..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-transparent border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white placeholder-slate-500 focus:border-black dark:focus:border-white transition-all outline-none"
               />
             </div>
 
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center space-x-2 px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
+              className="flex items-center justify-center space-x-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-medium hover:opacity-90 transition-all font-serif"
             >
               <Filter className="w-4 h-4" />
               <span>Filters</span>
@@ -380,7 +380,7 @@ export const JobsPage = () => {
             {filteredJobs.map((job) => (
               <div
                 key={job._id || job.id}
-                className={`group bg-white dark:bg-slate-800 rounded-xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden flex flex-col ${job.isFeatured
+                className={`group bg-white dark:bg-slate-800 rounded-lg border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden flex flex-col ${job.isFeatured
                   ? 'border-slate-300 dark:border-slate-600'
                   : 'border-slate-200 dark:border-slate-700'
                   }`}
@@ -406,13 +406,13 @@ export const JobsPage = () => {
                       </div>
 
                       <div className="flex-1 min-w-0 pt-0.5">
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-0.5 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-1">
+                        <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-1">
                           {job.title}
                         </h3>
-                        <p className="text-slate-600 dark:text-slate-400 font-medium text-sm">{job.company}</p>
-                        <div className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        <p className="text-slate-600 dark:text-slate-400 font-medium text-sm border-b border-transparent inline-block pb-0.5">{job.company}</p>
+                        <div className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mt-2">
                           <MapPin className="w-3 h-3 text-slate-400" />
-                          <span>{job.location || 'Remote'}</span>
+                          <span className="uppercase tracking-wide">{job.location || 'Remote'}</span>
                         </div>
                       </div>
                     </div>
