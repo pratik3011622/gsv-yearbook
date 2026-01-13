@@ -1,17 +1,27 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 
-// Configure multer for profile photo uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../uploads'));
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'profile-' + uniqueSuffix + path.extname(file.originalname));
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Configure multer for Cloudinary storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'gsv-yearbook/profiles',
+    allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
+    transformation: [
+      { width: 500, height: 500, crop: 'fill', gravity: 'face' },
+      { quality: 'auto' }
+    ]
   }
 });
 

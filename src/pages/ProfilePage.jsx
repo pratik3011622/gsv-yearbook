@@ -277,7 +277,7 @@ export const ProfilePage = ({ onNavigate, userId }) => {
                     {profilePhotoPreview || displayProfile?.avatarUrl ? (
                       <img
                         key={profilePhotoPreview || displayProfile?.avatarUrl}
-                        src={profilePhotoPreview || `${staticBaseURL}${displayProfile.avatarUrl}`}
+                        src={profilePhotoPreview || (displayProfile.avatarUrl?.startsWith('http') ? displayProfile.avatarUrl : `${staticBaseURL}${displayProfile.avatarUrl}`)}
                         alt="Profile"
                         className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-800 shadow-lg object-cover"
                       />
