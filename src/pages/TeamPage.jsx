@@ -43,41 +43,42 @@ export const TeamPage = () => {
           {teamMembers.map((member, idx) => (
             <div key={idx} className="group flex flex-col items-center">
               <div className="relative mb-6">
-                <div className="w-48 h-48 rounded-full overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 ring-4 ring-transparent group-hover:ring-primary-100 dark:group-hover:ring-primary-900/30">
+                <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-white dark:border-slate-800">
                   {member.img ? (
-                    <img src={member.img} alt={member.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
+                    <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-4xl text-slate-400">
                       {member.name[0]}
                     </div>
                   )}
                 </div>
-                {/* Social Links - Visible on Hover */}
-                <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]">
-                  {member.social.linkedin && (
-                    <a href={member.social.linkedin} target="_blank" rel="noreferrer" className="text-white hover:text-blue-400 hover:scale-110 transition-all">
-                      <Linkedin className="w-5 h-5" />
-                    </a>
-                  )}
-                  {member.social.github && (
-                    <a href={member.social.github} target="_blank" rel="noreferrer" className="text-white hover:text-white hover:scale-110 transition-all">
-                      <Github className="w-5 h-5" />
-                    </a>
-                  )}
-                  {member.social.instagram && (
-                    <a href={member.social.instagram} target="_blank" rel="noreferrer" className="text-white hover:text-pink-400 hover:scale-110 transition-all">
-                      <Instagram className="w-5 h-5" />
-                    </a>
-                  )}
-                </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 transition-colors">
                 {member.name}
               </h3>
-              <p className="text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-slate-500 dark:text-slate-400 font-medium mb-4">
                 {member.role}
               </p>
+
+              {/* Social Links */}
+              <div className="flex items-center gap-4">
+                {member.social.linkedin && (
+                  <a href={member.social.linkedin} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#0077b5] transition-colors trnasform hover:scale-110">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                )}
+                {member.social.github && (
+                  <a href={member.social.github} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-black dark:hover:text-white transition-colors transform hover:scale-110">
+                    <Github className="w-5 h-5" />
+                  </a>
+                )}
+                {member.social.instagram && (
+                  <a href={member.social.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#E1306C] transition-colors transform hover:scale-110">
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                )}
+              </div>
             </div>
           ))}
         </div>

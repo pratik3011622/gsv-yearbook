@@ -9,7 +9,8 @@ const photoData = [
     image: '/WhatsApp Image 2025-10-21 at 23.04.13_24f84d84.jpg',
     date: '2024-07-15',
     category: 'Events',
-    location: 'Main Auditorium'
+    location: 'Main Auditorium',
+    span: 'md:col-span-2 md:row-span-2'
   },
   {
     id: 2,
@@ -18,7 +19,8 @@ const photoData = [
     image: '/WhatsApp Image 2025-10-21 at 23.15.20_a3ba8370.jpg',
     date: '2024-03-20',
     category: 'Campus',
-    location: 'Central Garden'
+    location: 'Central Garden',
+    span: 'md:col-span-1 md:row-span-1'
   },
   {
     id: 3,
@@ -27,7 +29,8 @@ const photoData = [
     image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
     date: '2024-12-10',
     category: 'Alumni',
-    location: 'Alumni Center'
+    location: 'Alumni Center',
+    span: 'md:col-span-1 md:row-span-2'
   },
   {
     id: 4,
@@ -36,7 +39,8 @@ const photoData = [
     image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
     date: '2024-09-15',
     category: 'Academic',
-    location: 'Research Building'
+    location: 'Research Building',
+    span: 'md:col-span-1 md:row-span-1'
   },
   {
     id: 5,
@@ -45,7 +49,8 @@ const photoData = [
     image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
     date: '2024-02-28',
     category: 'Events',
-    location: 'Sports Complex'
+    location: 'Sports Complex',
+    span: 'md:col-span-1 md:row-span-1'
   },
   {
     id: 6,
@@ -54,7 +59,8 @@ const photoData = [
     image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
     date: '2024-11-05',
     category: 'Campus',
-    location: 'Central Library'
+    location: 'Central Library',
+    span: 'md:col-span-2 md:row-span-1'
   },
   {
     id: 7,
@@ -63,7 +69,8 @@ const photoData = [
     image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
     date: '2024-01-18',
     category: 'Events',
-    location: 'Open Air Theatre'
+    location: 'Open Air Theatre',
+    span: 'md:col-span-2 md:row-span-1'
   },
   {
     id: 8,
@@ -72,7 +79,8 @@ const photoData = [
     image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
     date: '2024-06-30',
     category: 'Campus',
-    location: 'Graduation Hall'
+    location: 'Graduation Hall',
+    span: 'md:col-span-2 md:row-span-1'
   }
 ];
 
@@ -94,6 +102,8 @@ export const PhotoGalleryPage = () => {
     setSelectedPhoto(null);
   };
 
+  const isBento = selectedCategory === 'All';
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
@@ -106,14 +116,14 @@ export const PhotoGalleryPage = () => {
           </p>
         </div>
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
+        <div className="flex flex-wrap justify-center gap-3 mb-16">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 text-sm tracking-wide ${selectedCategory === category
-                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md transform -translate-y-0.5'
-                : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+              className={`px-6 py-2.5 rounded-full font-medium text-sm tracking-wide transition-all duration-300 ${selectedCategory === category
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg scale-105'
+                : 'bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700/60 hover:shadow-md'
                 }`}
             >
               {category}
@@ -122,44 +132,45 @@ export const PhotoGalleryPage = () => {
         </div>
 
         {/* Photo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredPhotos.map((photo) => (
             <div
               key={photo.id}
-              className="group cursor-pointer bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all duration-300"
+              className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-slate-100 dark:border-slate-700/50"
               onClick={() => openPhotoModal(photo)}
             >
-              {/* Image */}
-              <div className="relative aspect-square overflow-hidden bg-slate-100 dark:bg-slate-900">
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={photo.image}
                   alt={photo.title}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Simple Category Tag */}
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-black/50 text-white rounded-lg text-xs font-bold uppercase tracking-wider backdrop-blur-[2px]">
+                <div className="absolute top-3 left-3">
+                  <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm">
                     {photo.category}
                   </span>
                 </div>
               </div>
 
-              {/* Minimal Content */}
               <div className="p-5">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-1">
-                  {photo.title}
-                </h3>
-
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                  <div className="flex items-center">
-                    <Calendar className="w-3.5 h-3.5 mr-1.5" />
-                    {new Date(photo.date).toLocaleDateString()}
-                  </div>
-                  <div className="flex items-center">
-                    <MapPin className="w-3.5 h-3.5 mr-1.5" />
+                <div className="flex items-center space-x-2 mb-3">
+                  <span className="text-xs font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 px-2 py-0.5 rounded">
+                    {new Date(photo.date).getFullYear()}
+                  </span>
+                  <span className="text-slate-300 dark:text-slate-600">•</span>
+                  <div className="flex items-center text-xs text-slate-500 dark:text-slate-400">
+                    <MapPin className="w-3 h-3 mr-1" />
                     {photo.location}
                   </div>
                 </div>
+
+                <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  {photo.title}
+                </h3>
+
+                <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                  {photo.description}
+                </p>
               </div>
             </div>
           ))}
@@ -176,45 +187,67 @@ export const PhotoGalleryPage = () => {
 
       {/* Photo Modal */}
       {selectedPhoto && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="relative max-w-5xl w-full bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 shrink-0">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate pr-4">
-                {selectedPhoto.title}
-              </h3>
-              <button
-                onClick={closePhotoModal}
-                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
-              >
-                <X className="w-6 h-6 text-slate-500 dark:text-slate-400" />
-              </button>
-            </div>
-
-            <div className="relative flex-1 bg-slate-100 dark:bg-black overflow-hidden flex items-center justify-center">
+        <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-xl z-50 flex items-center justify-center p-4 transition-all duration-300">
+          <div className="relative max-w-6xl w-full bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+            {/* Image Section */}
+            <div className="relative flex-1 bg-black flex items-center justify-center group overflow-hidden md:w-2/3">
               <img
                 src={selectedPhoto.image}
                 alt={selectedPhoto.title}
-                className="max-w-full max-h-full object-contain p-4"
+                className="w-full h-full object-contain"
               />
+              <div className="absolute top-4 left-4">
+                <span className="px-4 py-1.5 bg-black/40 backdrop-blur-md text-white rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
+                  {selectedPhoto.category}
+                </span>
+              </div>
             </div>
 
-            <div className="p-6 bg-white dark:bg-slate-900 shrink-0 border-t border-slate-200 dark:border-slate-800">
-              <p className="text-slate-600 dark:text-slate-300 mb-4 font-light text-lg">
-                {selectedPhoto.description}
-              </p>
-              <div className="flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400">
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-2 text-primary-600" />
-                  {new Date(selectedPhoto.date).toLocaleDateString()}
+            {/* Content Section */}
+            <div className="flex flex-col md:w-1/3 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-end p-4 border-b border-slate-100 dark:border-slate-800/50">
+                <button
+                  onClick={closePhotoModal}
+                  className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors group"
+                >
+                  <X className="w-6 h-6 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
+                </button>
+              </div>
+
+              <div className="p-8 overflow-y-auto">
+                <div className="mb-6">
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 dark:text-white mb-4 leading-tight">
+                    {selectedPhoto.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg">
+                      <Calendar className="w-4 h-4 mr-2 text-primary-600" />
+                      {new Date(selectedPhoto.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                    <div className="flex items-center bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg">
+                      <MapPin className="w-4 h-4 mr-2 text-primary-600" />
+                      {selectedPhoto.location}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-2 text-primary-600" />
-                  {selectedPhoto.location}
+
+                <div className="space-y-4">
+                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Description</h4>
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg font-light">
+                    {selectedPhoto.description}
+                  </p>
                 </div>
-                <div className="ml-auto">
-                  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg text-xs font-bold uppercase tracking-wider">
-                    {selectedPhoto.category}
-                  </span>
+              </div>
+
+              <div className="mt-auto p-6 border-t border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between">
+                  <button className="flex items-center space-x-2 text-slate-500 hover:text-red-500 transition-colors">
+                    <Heart className="w-5 h-5" />
+                    <span className="text-sm font-medium">Like</span>
+                  </button>
+                  <button className="text-sm font-semibold text-primary-600 hover:text-primary-700">
+                    Download / Share
+                  </button>
                 </div>
               </div>
             </div>

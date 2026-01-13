@@ -390,17 +390,14 @@ export const StoriesPage = ({ onNavigate }) => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {stories.filter(story => story._id !== featuredStory?._id).map((story) => (
                 <article
                   key={story._id || story.id}
-                  className="group bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
-                  {/* Top accent bar */}
-                  <div className="h-1 bg-gradient-to-r from-primary-500 to-primary-600"></div>
-
                   {story.coverImageUrl && (
-                    <div className="relative h-56 overflow-hidden">
+                    <div className="relative h-40 overflow-hidden">
                       <img
                         src={story.coverImageUrl}
                         alt={story.title}
@@ -410,10 +407,10 @@ export const StoriesPage = ({ onNavigate }) => {
                     </div>
                   )}
 
-                  <div className="p-6">
+                  <div className="p-4">
                     {/* Meta Info */}
-                    <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400 mb-4">
-                      <div className="flex items-center space-x-4">
+                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-3">
+                      <div className="flex items-center space-x-3">
                         <div className="flex items-center space-x-1">
                           <Clock className="w-3 h-3" />
                           <span>{story.readTime || 5} min</span>
@@ -425,11 +422,11 @@ export const StoriesPage = ({ onNavigate }) => {
                       </div>
                     </div>
 
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 leading-tight">
                       {story.title}
                     </h3>
 
-                    <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3 text-sm leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 mb-4 line-clamp-2 text-sm leading-relaxed">
                       {story.excerpt}
                     </p>
 

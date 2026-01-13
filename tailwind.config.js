@@ -50,6 +50,7 @@ export default {
         sans: ['Roboto', 'system-ui', 'sans-serif'],
         display: ['Roboto', 'system-ui', 'sans-serif'],
         serif: ['Roboto', 'serif'], // Mapping serif to Roboto to adhere to 'google default' request
+        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
       },
       borderRadius: {
         'xl': '12px',
