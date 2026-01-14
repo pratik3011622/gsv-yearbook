@@ -7,6 +7,8 @@ class ApiClient {
 
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    console.log('API Request URL:', url);
+    console.log('API Base URL:', this.baseURL);
     const token = localStorage.getItem('token');
 
     const config = {
@@ -21,19 +23,26 @@ class ApiClient {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    console.log('Fetch config:', { method: config.method || 'GET', headers: config.headers });
+
     try {
       const response = await fetch(url, config);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       let data;
       try {
         data = await response.json();
+        console.log('Response data:', data);
       } catch (jsonError) {
         // If response is not JSON, try to get text
         const text = await response.text();
+        console.log('Response text:', text);
         throw new Error(text || 'Invalid response from server');
       }
       return { response, data };
     } catch (error) {
       console.error('API request failed:', error);
+      console.error('Error details:', { message: error.message, stack: error.stack });
       throw error;
     }
   }
