@@ -170,8 +170,8 @@ export const DirectoryPage = ({ onNavigate }) => {
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center justify-between space-x-3 px-8 py-4 border-2 rounded-2xl font-semibold transition-all duration-300 min-w-[160px] ${showFilters
-                  ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300'
-                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-primary-300 dark:hover:border-primary-700 hover:text-primary-600 dark:hover:text-primary-400'
+                ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300'
+                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-primary-300 dark:hover:border-primary-700 hover:text-primary-600 dark:hover:text-primary-400'
                 }`}
             >
               <div className="flex items-center space-x-2">
@@ -280,93 +280,82 @@ export const DirectoryPage = ({ onNavigate }) => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProfiles.map((profile) => (
-              <div key={profile._id || profile.id} className="group flex flex-col bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary-200 dark:hover:border-primary-800 hover:-translate-y-2 transition-all duration-300">
-                {/* Card Header Background */}
-                <div className="h-28 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-200 dark:from-slate-700 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-600 to-transparent"></div>
-                  <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-primary-400/10 rounded-full blur-2xl"></div>
-                </div>
-
-                <div className="px-7 pb-7 pt-0 flex-1 flex flex-col relative">
-                  <div className="w-24 h-24 mx-auto -mt-12 mb-5 relative group-hover:scale-105 transition-transform duration-300">
-                    <div className="absolute inset-0 bg-white dark:bg-slate-800 rounded-2xl shadow-sm rotate-3 opacity-50"></div>
-                    <div className="relative w-full h-full rounded-2xl p-1 bg-white dark:bg-slate-800 shadow-lg">
+              <div
+                key={profile._id || profile.id}
+                className="group flex flex-col bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="p-6 flex flex-col items-center flex-1">
+                  {/* Avatar */}
+                  <div className="w-24 h-24 mb-4 relative">
+                    <div className="w-full h-full rounded-2xl overflow-hidden shadow-md">
                       {profile.avatarUrl ? (
                         <img
                           src={profile.avatarUrl}
                           alt={profile.fullName}
-                          className="w-full h-full object-cover rounded-xl bg-slate-50 dark:bg-slate-900"
+                          className="w-full h-full object-cover bg-slate-100 dark:bg-slate-700"
                         />
                       ) : (
-                        <div className="w-full h-full rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center text-3xl font-bold text-slate-300 dark:text-slate-500">
+                        <div className="w-full h-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-2xl font-serif font-bold text-slate-400">
                           {profile.fullName?.charAt(0)?.toUpperCase()}
                         </div>
                       )}
                     </div>
-                    {/* Status Indicator */}
-                    <span className="absolute bottom-[-4px] right-[-4px] w-5 h-5 rounded-full border-4 border-white dark:border-slate-800 bg-green-500 shadow-sm z-10"></span>
                   </div>
 
-                  <div className="text-center mb-6">
-                    <h3 className="font-serif text-2xl font-bold text-slate-900 dark:text-white mb-1 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                      {profile.fullName}
-                    </h3>
-                    <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700/50 mb-2">
-                      <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
-                        {profile.department}
-                      </p>
-                    </div>
-                    <p className="text-sm font-medium text-primary-600 dark:text-primary-400">
-                      Batch of {profile.batchYear}
-                    </p>
+                  {/* Info */}
+                  <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white text-center mb-1 line-clamp-1">
+                    {profile.fullName}
+                  </h3>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase bg-slate-100 dark:bg-slate-700/50 px-2 py-0.5 rounded">
+                      {profile.batchYear}
+                    </span>
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 border-l border-slate-300 dark:border-slate-600 pl-2">
+                      {profile.department}
+                    </span>
                   </div>
 
-                  <div className="space-y-3 mb-6">
+                  <div className="w-full space-y-2 mb-4">
                     {profile.company ? (
-                      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700/50">
-                        <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm text-slate-400">
-                          <Briefcase size={16} />
-                        </div>
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{profile.company}</span>
+                      <div className="flex items-center justify-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <Briefcase size={14} className="text-slate-400" />
+                        <span className="truncate max-w-[150px]">{profile.company}</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700/50 opacity-50">
-                        <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm text-slate-400">
-                          <Briefcase size={16} />
-                        </div>
-                        <span className="text-sm font-medium text-slate-400 italic">Open to opportunities</span>
+                      <div className="flex items-center justify-center gap-2 text-sm text-slate-400 italic">
+                        <span>Open to work</span>
                       </div>
                     )}
 
                     {profile.location && (
-                      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700/50">
-                        <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm text-slate-400">
-                          <MapPin size={16} />
-                        </div>
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{profile.location}</span>
+                      <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                        <MapPin size={14} className="text-slate-400" />
+                        <span className="truncate max-w-[150px]">{profile.location}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-auto flex gap-3">
+                  {/* Actions */}
+                  <div className="mt-auto flex items-center gap-3 w-full pt-4 border-t border-slate-100 dark:border-slate-700/50">
+                    <button
+                      onClick={() => onNavigate('profile', profile._id)}
+                      className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    >
+                      View Profile
+                    </button>
                     {profile.linkedinUrl && (
                       <a
                         href={profile.linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-700/50 text-slate-400 hover:bg-[#0077b5] hover:text-white transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:border-[#0077b5] hover:shadow-lg hover:shadow-[#0077b5]/30 group/linkedin"
+                        className="p-2 text-slate-400 hover:text-[#0077b5] hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors"
                       >
-                        <Linkedin size={20} className="transform group-hover/linkedin:scale-110 transition-transform" />
+                        <Linkedin size={18} />
                       </a>
                     )}
-                    <button
-                      onClick={() => onNavigate('profile', profile._id)}
-                      className="flex-1 h-12 rounded-xl bg-slate-900 dark:bg-white hover:bg-primary-600 dark:hover:bg-primary-400 text-white dark:text-slate-900 font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                    >
-                      View Profile
-                    </button>
                   </div>
                 </div>
               </div>
@@ -374,6 +363,6 @@ export const DirectoryPage = ({ onNavigate }) => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
