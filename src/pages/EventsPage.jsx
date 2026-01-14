@@ -1,58 +1,76 @@
-import { useState, useEffect } from 'react';
-import { Calendar, MapPin, Users, Clock, CheckCircle } from 'lucide-react';
-import { api } from '../lib/api';
-import { useAuth } from '../contexts/AuthContext';
+import { useState } from 'react';
+import { Calendar, MapPin } from 'lucide-react';
+
+const eventData = [
+  {
+    id: 1,
+    title: 'AUJASYA - Annual Sports Fest',
+    description: 'Experience the thrill of competition and showcase your athletic prowess in our annual sports festival featuring various games and tournaments.',
+    imageUrl: '/slide4.jpg',
+    eventDate: '2026-01-23',
+    location: 'Sports Complex',
+    event_type: 'Sports Fest'
+  },
+  {
+    id: 2,
+    title: 'EPITOME - Annual Techfest',
+    description: 'Dive into the world of innovation and technology with workshops, competitions, and exhibitions showcasing cutting-edge advancements.',
+    imageUrl: '/slide5.jpg',
+    eventDate: '2026-03-13',
+    location: 'Tech Auditorium',
+    event_type: 'Techfest'
+  },
+  {
+    id: 3,
+    title: 'Alumni Reunion 2025',
+    description: 'Reconnect with old friends and reminisce about the good old days at GSV.',
+    imageUrl: '/cultural.jpg',
+    eventDate: '2025-12-15',
+    location: 'Main Auditorium',
+    event_type: 'Reunion'
+  },
+  {
+    id: 4,
+    title: 'Tech Conference 2025',
+    description: 'Latest trends in technology and networking opportunities.',
+    imageUrl: '/slide4.jpg',
+    eventDate: '2025-11-20',
+    location: 'Conference Hall',
+    event_type: 'Conference'
+  },
+  {
+    id: 5,
+    title: 'Cultural Fest 2024',
+    description: 'Celebrate diversity through music, dance, and cultural performances.',
+    imageUrl: '/cultural.jpg',
+    eventDate: '2024-10-10',
+    location: 'Open Air Theatre',
+    event_type: 'Cultural'
+  },
+  {
+    id: 6,
+    title: 'AGNEE - Annual Cultural Fest',
+    description: 'A celebration of art, music, and culture bringing together diverse talents in spectacular performances and competitions.',
+    imageUrl: '/cultural.jpg',
+    eventDate: '2025-11-27',
+    location: 'Open Air Theatre',
+    event_type: 'Cultural Fest'
+  },
+  {
+    id: 7,
+    title: 'Induction Ceremony 2024',
+    description: 'Welcome new students to the GSV family.',
+    imageUrl: '/induction-video.mov',
+    eventDate: '2024-08-01',
+    location: 'Main Hall',
+    event_type: 'Ceremony'
+  }
+];
 
 export const EventsPage = ({ onNavigate }) => {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('upcoming');
-  const { user } = useAuth();
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      const data = await api.getEvents();
-      setEvents(data || []);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRSVP = async (eventId) => {
-    if (!user) {
-      onNavigate('login');
-      return;
-    }
-
-    try {
-      await api.rsvpToEvent(eventId, 'attending');
-      fetchEvents(); // Refresh to show updated count
-    } catch (error) {
-      console.error('Error RSVPing:', error);
-    }
-  };
-
-  const getTimeRemaining = (eventDate) => {
-    const now = new Date();
-    const event = new Date(eventDate);
-    const diff = event - now;
-
-    if (diff < 0) return 'Event passed';
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    if (days > 0) return `${days} days`;
-    return `${hours} hours`;
-  };
-
-  const filteredEvents = events.filter((event) => {
+  const filteredEvents = eventData.filter((event) => {
     const isPast = new Date(event.eventDate) < new Date();
     return filter === 'upcoming' ? !isPast : isPast;
   });
@@ -91,11 +109,7 @@ export const EventsPage = ({ onNavigate }) => {
           </div>
         </div>
 
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        ) : filteredEvents.length === 0 ? (
+        {filteredEvents.length === 0 ? (
           <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
             <Calendar className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
@@ -119,10 +133,6 @@ export const EventsPage = ({ onNavigate }) => {
                       alt={event.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-slate-900 dark:text-white px-3 py-1.5 rounded-full font-bold text-xs shadow-sm flex items-center space-x-1.5 ring-1 ring-slate-900/5">
-                      <Clock className="w-3.5 h-3.5 text-primary-600" />
-                      <span>{getTimeRemaining(event.eventDate)}</span>
-                    </div>
                   </div>
                 )}
 
@@ -157,23 +167,7 @@ export const EventsPage = ({ onNavigate }) => {
                       <MapPin className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
                       <span>{event.location}</span>
                     </div>
-
-                    <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
-                      <Users className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
-                      <span>{event.rsvp_count || 0} attending</span>
-                      {event.max_attendees && <span className="ml-1">/ {event.max_attendees} max</span>}
-                    </div>
                   </div>
-
-                  {filter === 'upcoming' && (
-                    <button
-                      onClick={() => handleRSVP(event._id || event.id)}
-                      className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 group-hover:shadow-lg"
-                    >
-                      <CheckCircle className="w-5 h-5" />
-                      <span>RSVP Now</span>
-                    </button>
-                  )}
                 </div>
               </div>
             ))}

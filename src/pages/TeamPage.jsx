@@ -3,7 +3,7 @@ import { Linkedin, Instagram, Github, Twitter } from 'lucide-react';
 const teamMembers = [
   {
     name: 'Ravi Panchal',
-    role: 'Team Leader & Developer',
+    role: 'Developer',
     img: '/team-ravi.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/ravixpanchal/',
@@ -13,12 +13,32 @@ const teamMembers = [
   },
   {
     name: 'Pratik Ranjan',
-    role: 'Developer & Contributor',
+    role: 'Developer',
     img: '/team-pratik.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/pratik-ranjan3011?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       instagram: 'https://www.instagram.com/pratik_ranjan_34?igsh=Z3R0aml4aWJlOHRs',
       github: 'https://github.com/pratik3011622'
+    }
+  },
+  {
+    name: 'Neeraj',
+    role: 'Developer',
+    img: null,
+    social: {
+      linkedin: 'https://www.linkedin.com/in/neeraj-random',
+      instagram: 'https://www.instagram.com/neeraj_random',
+      github: 'https://github.com/neeraj-random'
+    }
+  },
+  {
+    name: 'Vinamra',
+    role: 'Developer',
+    img: '/vinamra.png',
+    social: {
+      linkedin: 'https://www.linkedin.com/in/vinamra-random',
+      instagram: 'https://www.instagram.com/vinamra_random',
+      github: 'https://github.com/vinamra-random'
     }
   }
 ];
