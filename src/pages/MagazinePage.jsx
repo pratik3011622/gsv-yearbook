@@ -4,6 +4,17 @@ import { Download, Eye, Calendar, FileText, X } from 'lucide-react';
 const magazineData = [
   {
     id: 1,
+    title: 'TechnoBytes',
+    description: 'Exploring the latest in technology, innovation, and digital trends from the GSV community.',
+    coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
+    pdfUrl: '/technobytes.pdf',
+    issue: 'Edition 1',
+    publishDate: '2024-12-01',
+    pages: 20,
+    featured: true
+  },
+  {
+    id: 2,
     title: 'GSV Connect - Winter 2024',
     description: 'Celebrating achievements, sharing stories, and looking forward to new beginnings.',
     coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -14,7 +25,7 @@ const magazineData = [
     featured: true
   },
   {
-    id: 5,
+    id: 3,
     title: 'GSV Connect - Special Edition 2023',
     description: 'Year-end recap, decade highlights, and vision for the future of GSV.',
     coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -102,9 +113,13 @@ export const MagazinePage = () => {
                       <Eye className="w-4 h-4" />
                       Read Now
                     </button>
-                    <button className="p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300">
+                    <a
+                      href={magazine.pdfUrl}
+                      download
+                      className="p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300 inline-block"
+                    >
                       <Download className="w-5 h-5" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -146,10 +161,14 @@ export const MagazinePage = () => {
                 <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm mx-auto">
                   The PDF viewer requires a backend integration. You can download the file to view it.
                 </p>
-                <button className="bg-primary-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-primary-700 transition-all shadow-lg hover:shadow-primary-600/20 inline-flex items-center gap-2">
+                <a
+                  href={selectedMagazine.pdfUrl}
+                  download
+                  className="bg-primary-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-primary-700 transition-all shadow-lg hover:shadow-primary-600/20 inline-flex items-center gap-2"
+                >
                   <Download className="w-5 h-5" />
                   Download PDF
-                </button>
+                </a>
               </div>
             </div>
             <div className="p-8 bg-white dark:bg-slate-800">
