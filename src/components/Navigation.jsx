@@ -34,17 +34,10 @@ export const Navigation = ({ onNavigate, currentPage }) => {
     };
   }, [openDropdown, userMenuOpen]);
 
-  const baseNavItems = [
+  const navItems = [
     { id: 'home', label: 'Home' },
-    {
-      id: 'about',
-      label: 'About',
-      subItems: [
-        { id: 'vision-mission', label: 'Vision & Mission' },
-        { id: 'leadership', label: 'Leadership' },
-        { id: 'team', label: 'Team' },
-      ]
-    },
+    { id: 'directory', label: 'Directory' },
+    { id: 'events', label: 'Event' },
     {
       id: 'yearbook',
       label: 'Yearbook',
@@ -54,19 +47,16 @@ export const Navigation = ({ onNavigate, currentPage }) => {
         { id: 'video-gallery', label: 'Video Gallery' },
       ]
     },
+    {
+      id: 'about',
+      label: 'About',
+      subItems: [
+        { id: 'vision-mission', label: 'Vision & Mission' },
+        { id: 'leadership', label: 'Leadership' },
+        { id: 'team', label: 'Team' },
+      ]
+    },
   ];
-
-  const userNavItems = user
-    ? [
-      ...baseNavItems,
-      { id: 'directory', label: 'Directory' },
-      { id: 'events', label: 'Events' },
-      { id: 'jobs', label: 'Jobs' },
-      { id: 'stories', label: 'Stories' },
-    ]
-    : baseNavItems;
-
-  const navItems = userNavItems;
 
   return (
     <nav
