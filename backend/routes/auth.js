@@ -18,9 +18,12 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email, password, and full name are required' });
     }
 
+    console.log('Checking for existing user with email:', email);
     // Check if user exists
     const existingUser = await User.findOne({ email });
+    console.log('Existing user found:', !!existingUser);
     if (existingUser) {
+      console.log('User already exists, returning error');
       return res.status(400).json({ message: 'User already exists' });
     }
 
@@ -61,25 +64,32 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
+    console.log('Login request for email:', req.body.email);
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
+    console.log('Finding user in database...');
     const user = await User.findOne({ email });
+    console.log('User found:', !!user);
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    console.log('Comparing password...');
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password match:', isMatch);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    console.log('Generating token...');
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_secret_change_this', {
       expiresIn: '7d',
     });
+    console.log('Token generated successfully');
 
     res.json({
       token,
@@ -92,6 +102,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
