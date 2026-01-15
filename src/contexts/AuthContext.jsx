@@ -27,6 +27,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   /* ---------- INITIALIZATION ---------- */
@@ -77,7 +78,9 @@ export const AuthProvider = ({ children }) => {
 
           if (snap.exists()) {
             console.log("AuthContext: Background profile fetch successful");
-            setUser(prev => ({ ...prev, ...snap.data(), id: firebaseUser.uid }));
+            const profileData = snap.data();
+            setProfile(profileData);
+            setUser(prev => ({ ...prev, ...profileData, id: firebaseUser.uid }));
           }
         } catch (err) {
           console.error("AuthContext: Background profile fetch failed ->", err);
@@ -115,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     // Send verification email
     await sendEmailVerification(newUser);
 
-    // Initial profile creation
+    // Sync to Firestore
     try {
       await setDoc(doc(db, "users", newUser.uid), {
         ...profileData,
@@ -127,8 +130,19 @@ export const AuthProvider = ({ children }) => {
         role: profileData.role || "student"
       });
     } catch (err) {
-      console.error("AuthContext: Profile creation failed during signup", err);
-      // We don't throw here to avoid "failed" signup if user is created but firestore is down
+      console.error("AuthContext: Firestore profile creation failed during signup", err);
+    }
+
+    // Sync to MongoDB
+    try {
+      await api.register({
+        ...profileData,
+        email,
+        firebaseUid: newUser.uid,
+        role: profileData.role || "student"
+      });
+    } catch (err) {
+      console.error("AuthContext: MongoDB sync failed during signup", err);
     }
 
     return newUser;
@@ -158,7 +172,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error("Only @gsv.ac.in Google accounts are allowed.");
     }
 
-    // Check if profile exists, if not create it
+    // Sync to Firestore if profile doesn't exist
     const docRef = doc(db, "users", gUser.uid);
     try {
       const snap = await getDoc(docRef);
@@ -175,7 +189,14 @@ export const AuthProvider = ({ children }) => {
         });
       }
     } catch (err) {
-      console.error("AuthContext: Profile sync failed during Google sign-in", err);
+      console.error("AuthContext: Firestore sync failed during Google sign-in", err);
+    }
+
+    // Sync to MongoDB
+    try {
+      await api.syncGoogle();
+    } catch (err) {
+      console.error("AuthContext: MongoDB sync failed during Google sign-in", err);
     }
 
     return gUser;
@@ -203,7 +224,18 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfileData = async (updates) => {
     if (!user) return;
+
+    // Sync to Firestore
     await syncProfile(user.uid, updates);
+
+    // Sync to MongoDB
+    try {
+      await api.updateProfile(updates);
+    } catch (err) {
+      console.error("AuthContext: MongoDB sync failed during profile update", err);
+    }
+
+    setProfile(prev => ({ ...prev, ...updates }));
     setUser(prev => ({ ...prev, ...updates }));
   };
 
@@ -211,6 +243,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        profile,
         loading,
         signUp,
         signIn,

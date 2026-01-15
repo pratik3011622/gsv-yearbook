@@ -66,6 +66,13 @@ class ApiClient {
     return result.data;
   }
 
+  async syncGoogle() {
+    const result = await this.request('/auth/google', {
+      method: 'POST',
+    });
+    return result.data;
+  }
+
   async login(credentials) {
     const result = await this.request('/auth/login', {
       method: 'POST',
