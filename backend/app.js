@@ -38,38 +38,30 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Connect to MongoDB with improved configuration and fallback
+// Connect to MongoDB with improved configuration
 const connectDB = async () => {
   try {
-    // Try Atlas connection first
-    const atlasUri = process.env.MONGODB_URI;
-    if (atlasUri) {
-      console.log('Attempting to connect to MongoDB Atlas...');
-      const conn = await mongoose.connect(atlasUri, {
-        serverSelectionTimeoutMS: 10000, // 10 second timeout
-        socketTimeoutMS: 45000,
-        maxPoolSize: 10,
-      });
-      console.log(`✅ MongoDB Atlas Connected: ${conn.connection.host}`);
-      return;
-    }
-  } catch (atlasError) {
-    console.error('❌ MongoDB Atlas connection failed:', atlasError.message);
-  }
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGODB_LOCAL_URI || 'mongodb://localhost:27017/yearbook';
 
-  // Fallback to local MongoDB
-  try {
-    const localUri = process.env.MONGODB_LOCAL_URI || 'mongodb://localhost:27017/yearbook';
-    console.log('Attempting to connect to local MongoDB...');
-    const conn = await mongoose.connect(localUri, {
-      serverSelectionTimeoutMS: 5000,
+    if (!process.env.MONGODB_URI && process.env.NODE_ENV === 'production') {
+      throw new Error('MONGODB_URI environment variable is required in production');
+    }
+
+    console.log('Attempting to connect to MongoDB...');
+    const conn = await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: process.env.NODE_ENV === 'production' ? 5000 : 10000,
       socketTimeoutMS: 45000,
+      maxPoolSize: 10,
     });
-    console.log(`✅ Local MongoDB Connected: ${conn.connection.host}`);
-  } catch (localError) {
-    console.error('❌ Local MongoDB connection failed:', localError.message);
-    console.log('🔄 Retrying connection in 5 seconds...');
-    setTimeout(connectDB, 5000);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error('❌ MongoDB connection failed:', error.message);
+    if (process.env.NODE_ENV === 'production') {
+      throw error; // Fail fast in production
+    } else {
+      console.log('🔄 Retrying connection in 5 seconds...');
+      setTimeout(connectDB, 5000);
+    }
   }
 };
 
