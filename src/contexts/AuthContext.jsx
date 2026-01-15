@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,196 +7,205 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
   sendEmailVerification,
-  deleteUser,
   setPersistence,
-  browserLocalPersistence
-} from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../firebase.config';
+  browserLocalPersistence,
+} from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../firebase.config";
 
-const AuthContext = createContext({});
+/* ================= CONTEXT ================= */
+
+const AuthContext = createContext(null);
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
 };
+
+/* ================= PROVIDER ================= */
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
+  /* ---------- INITIALIZATION ---------- */
   useEffect(() => {
-    // Explicitly set persistence ensures user stays logged in
+    // Set persistence once on app initialization
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
-        console.log("Auth persistence set to LOCAL");
+        console.log("AuthContext: Persistence set to local");
       })
-      .catch((error) => {
-        console.error("Error setting persistence:", error);
+      .catch((err) => {
+        console.error("AuthContext: Failed to set persistence", err);
       });
+  }, []);
+
+  /* ---------- AUTH STATE OBSERVER ---------- */
+  useEffect(() => {
+    console.log("AuthContext: Initializing state observer...");
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        if (!firebaseUser.emailVerified) {
-          // Logic for unverified email can go here
-        }
+      console.log("AuthContext: State changed ->", firebaseUser ? "User exists" : "No user");
 
-        try {
-          const token = await firebaseUser.getIdToken();
-          localStorage.setItem('token', token);
-
-          // Fetch user profile from Firestore
-          const docRef = doc(db, 'users', firebaseUser.uid);
-          const docSnap = await getDoc(docRef);
-
-          if (docSnap.exists()) {
-            setUser({ ...firebaseUser, ...docSnap.data() });
-          } else {
-            setUser(firebaseUser);
-          }
-
-        } catch (error) {
-          console.error('Error fetching user data (Non-Fatal):', error);
-          // CRITICAL FIX: Do NOT set user to null. Keep them logged in even if DB fails.
-          // This prevents "offline" users from getting kicked out immediately.
-          setUser(firebaseUser);
-        }
-      } else {
-        localStorage.removeItem('token');
+      if (!firebaseUser) {
+        // Clear any old backend tokens just in case, though we shouldn't be using them
+        localStorage.removeItem("token");
         setUser(null);
+        setLoading(false);
+        return;
       }
-      setLoading(false);
+
+      // Check domain restriction immediately
+      if (firebaseUser.email && !firebaseUser.email.endsWith("@gsv.ac.in")) {
+        console.error("AuthContext: Unauthorized domain detected during session restoration");
+        await firebaseSignOut(auth);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Fetch additional profile data from Firestore
+        const docRef = doc(db, "users", firebaseUser.uid);
+        const snap = await getDoc(docRef);
+
+        if (snap.exists()) {
+          console.log("AuthContext: Firestore profile found");
+          setUser({ ...firebaseUser, ...snap.data(), id: firebaseUser.uid });
+        } else {
+          console.warn("AuthContext: No Firestore profile exists for this UID");
+          setUser({ ...firebaseUser, id: firebaseUser.uid });
+        }
+      } catch (err) {
+        console.error("AuthContext: Error fetching profile ->", err);
+        // Important: Firestore failures should NOT clear the auth state
+        setUser({ ...firebaseUser, id: firebaseUser.uid });
+      } finally {
+        setLoading(false);
+      }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const signUp = async (userData) => {
-    console.log("Starting signUp...");
-    const { email, password, ...profileData } = userData;
+  /* ---------- HELPER: SYNC PROFILE ---------- */
+  const syncProfile = async (uid, data) => {
+    try {
+      await setDoc(doc(db, "users", uid), {
+        ...data,
+        uid,
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+    } catch (err) {
+      console.error("AuthContext: syncProfile failed ->", err);
+    }
+  };
 
-    // 1. Domain Check
-    if (!email.endsWith('@gsv.ac.in')) {
-      throw new Error('Registration is restricted to @gsv.ac.in email addresses only.');
+  /* ---------- ACTIONS ---------- */
+
+  const signUp = async ({ email, password, ...profileData }) => {
+    // Strict domain check
+    if (!email.toLowerCase().endsWith("@gsv.ac.in")) {
+      throw new Error("Only university emails (@gsv.ac.in) are allowed.");
     }
 
-    // 2. Create Auth User
-    console.log("Creating user in Firebase Auth...");
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-    console.log("User created:", firebaseUser.uid);
+    const { user: newUser } = await createUserWithEmailAndPassword(auth, email, password);
 
-    // 3. Send Verification Email
-    console.log("Sending verification email...");
-    const actionCodeSettings = {
-      url: window.location.href.split('#')[0] + '#/login', // Redirect to login after verification
-      handleCodeInApp: true,
-    };
-    await sendEmailVerification(firebaseUser, actionCodeSettings);
-    console.log("Verification email sent.");
+    // Send verification email
+    await sendEmailVerification(newUser);
 
-    // 4. Create Firestore Document & Sign Out (Background Process)
-    // We do not await this so the UI can respond immediately (User request: "show pop up immediately")
-    (async () => {
-      console.log("Starting background profile creation...");
-      try {
-        await setDoc(doc(db, 'users', firebaseUser.uid), {
-          ...profileData, // fullName, role, batchYear, etc.
-          email: email,
-          createdAt: serverTimestamp(),
-          role: profileData.role || 'student', // Default role
-          uid: firebaseUser.uid
-        });
-        console.log("Firestore profile created (background).");
-      } catch (dbError) {
-        console.error("Error creating user profile in Firestore:", dbError);
-      }
+    // Initial profile creation
+    try {
+      await setDoc(doc(db, "users", newUser.uid), {
+        ...profileData,
+        email,
+        uid: newUser.uid,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        isProfilePublic: true,
+        role: profileData.role || "student"
+      });
+    } catch (err) {
+      console.error("AuthContext: Profile creation failed during signup", err);
+      // We don't throw here to avoid "failed" signup if user is created but firestore is down
+    }
 
-      // 5. Force Sign Out
-      console.log("Signing out new user (background)...");
-      await firebaseSignOut(auth);
-      console.log("Sign out complete (background).");
-    })();
-
-    return firebaseUser;
+    return newUser;
   };
 
   const signIn = async (email, password) => {
-    // 1. Set Persistence First
-    await setPersistence(auth, browserLocalPersistence);
+    // Firebase handles persistence automatically now
+    const { user: existingUser } = await signInWithEmailAndPassword(auth, email, password);
 
-    // 2. Sign In
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-
-    // We allow unverified users to sign in so the App can show them the "Verify Email" page
-    // instead of just throwing an error and keeping them locked out.
-    if (!firebaseUser.emailVerified) {
+    // Double check domain on sign-in
+    if (existingUser.email && !existingUser.email.endsWith("@gsv.ac.in")) {
       await firebaseSignOut(auth);
-      throw new Error('Please verify your email address before logging in. Check your inbox.');
+      throw new Error("Only @gsv.ac.in accounts are allowed.");
     }
 
-    return firebaseUser;
+    return existingUser;
   };
 
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({
-      hd: 'gsv.ac.in' // Hint to Google to show only gsv accounts
-    });
+    provider.setCustomParameters({ hd: "gsv.ac.in" });
 
-    // 1. Set Persistence
-    await setPersistence(auth, browserLocalPersistence);
+    const { user: gUser } = await signInWithPopup(auth, provider);
 
+    if (!gUser.email?.toLowerCase().endsWith("@gsv.ac.in")) {
+      await firebaseSignOut(auth);
+      throw new Error("Only @gsv.ac.in Google accounts are allowed.");
+    }
+
+    // Check if profile exists, if not create it
+    const docRef = doc(db, "users", gUser.uid);
     try {
-      const userCredential = await signInWithPopup(auth, provider);
-      const firebaseUser = userCredential.user;
-
-      // Strict Domain Check (in case they bypassed the hint)
-      if (!firebaseUser.email?.endsWith('@gsv.ac.in')) {
-        await deleteUser(firebaseUser); // Delete the unauthorized account immediately
-        throw new Error('Access restricted to @gsv.ac.in domains.');
-      }
-
-      // Check/Create Firestore Profile
-      const docRef = doc(db, 'users', firebaseUser.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) {
         await setDoc(docRef, {
-          fullName: firebaseUser.displayName,
-          email: firebaseUser.email,
-          avatarUrl: firebaseUser.photoURL,
-          role: 'student',
+          uid: gUser.uid,
+          email: gUser.email,
+          fullName: gUser.displayName,
+          avatarUrl: gUser.photoURL,
+          role: "student",
           createdAt: serverTimestamp(),
-          uid: firebaseUser.uid
+          updatedAt: serverTimestamp(),
+          isProfilePublic: true
         });
       }
-
-      return firebaseUser;
-    } catch (error) {
-      console.error("Google Sign In Error:", error);
-      throw error;
+    } catch (err) {
+      console.error("AuthContext: Profile sync failed during Google sign-in", err);
     }
+
+    return gUser;
   };
 
   const signOut = async () => {
+    localStorage.removeItem("token");
     await firebaseSignOut(auth);
-    setUser(null);
   };
 
-  const value = {
-    user,
-    profile: user, // Alias for backward compatibility
-    loading,
-    signUp,
-    signIn,
-    googleSignIn,
-    signOut,
+  const updateProfileData = async (updates) => {
+    if (!user) return;
+    await syncProfile(user.uid, updates);
+    setUser(prev => ({ ...prev, ...updates }));
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        signUp,
+        signIn,
+        googleSignIn,
+        signOut,
+        updateProfile: updateProfileData
+      }}
+    >
+      {/* Loading state handles session restoration block */}
+      {children}
+    </AuthContext.Provider>
+  );
 };

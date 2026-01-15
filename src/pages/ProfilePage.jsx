@@ -136,43 +136,11 @@ export const ProfilePage = ({ onNavigate, userId }) => {
     setLoading(true);
     try {
       if (profilePhotoFile) {
-        // Use FormData for file upload
-        const formDataToSend = new FormData();
-
-        // Add all form data
-        Object.keys(formData).forEach(key => {
-          if (Array.isArray(formData[key])) {
-            formDataToSend.append(key, JSON.stringify(formData[key]));
-          } else {
-            formDataToSend.append(key, formData[key] || '');
-          }
-        });
-
-        // Add the file
-        formDataToSend.append('profilePhoto', profilePhotoFile);
-
-        const response = await fetch(`${api.baseURL}/profiles/me`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: formDataToSend
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to update profile');
-        }
-
-        const updatedUser = await response.json();
-        console.log('Updated user from server:', updatedUser);
-        await updateProfile(updatedUser);
-
-        // Clear photo states
-        setProfilePhotoFile(null);
-        setProfilePhotoPreview(null);
+        // TODO: Implement image upload to Firebase Storage if needed
+        alert('Image upload will be integrated with Firestore updates soon.');
+        await updateProfile(formData);
       } else {
-        // Regular JSON update
-        await api.updateProfile(formData);
+        // Update Firestore via AuthContext action
         await updateProfile(formData);
       }
 

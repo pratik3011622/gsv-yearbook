@@ -36,8 +36,6 @@ export const Navigation = ({ onNavigate, currentPage }) => {
 
   const baseNavItems = [
     { id: 'home', label: 'Home' },
-    { id: 'directory', label: 'Directory' },
-    { id: 'events', label: 'Events' },
     {
       id: 'about',
       label: 'About',
@@ -61,6 +59,8 @@ export const Navigation = ({ onNavigate, currentPage }) => {
   const userNavItems = user
     ? [
       ...baseNavItems,
+      { id: 'directory', label: 'Directory' },
+      { id: 'events', label: 'Events' },
       { id: 'jobs', label: 'Jobs' },
       { id: 'stories', label: 'Stories' },
     ]
@@ -156,7 +156,25 @@ export const Navigation = ({ onNavigate, currentPage }) => {
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <div className="hidden lg:flex items-center space-x-3">
-              {/* Social media icons removed as per request */}
+              {!user && (
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => onNavigate('login')}
+                    className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${currentPage === 'home' && !isScrolled
+                      ? 'text-white hover:bg-white/20'
+                      : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
+                      }`}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => onNavigate('register')}
+                    className="px-6 py-2 rounded-full text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                  >
+                    Join
+                  </button>
+                </div>
+              )}
             </div>
 
             {user && (

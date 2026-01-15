@@ -22,8 +22,9 @@ import { LeadershipPage } from './pages/LeadershipPage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { VerificationSentPage } from './pages/VerificationSentPage';
 
-function App() {
-  const { user, loading } = useAuth();
+// Main App Content that uses Auth Context
+function AppContent() {
+  const { user } = useAuth(); // Removed 'loading' from destructuring as it's now assumed to be false initially or handled internally by AuthContext
   const [currentPage, setCurrentPage] = useState(() => {
     // Get initial page from URL hash or default to home
     const hash = window.location.hash.replace('#', '');
@@ -66,6 +67,30 @@ function App() {
 
   const renderPage = () => {
     const page = currentPage.split('/')[0];
+
+    // Public routes that anyone can see
+    const publicPages = ['home', 'login', 'register', 'vision-mission', 'leadership', 'team', 'magazine', 'photo-gallery', 'video-gallery'];
+    const isPublic = publicPages.includes(page);
+
+    // 1. If not logged in and trying to access protected route -> Login
+    if (!user && !isPublic) {
+      return <LoginPage onNavigate={handleNavigate} />;
+    }
+
+    // 2. If logged in but domain is NOT @gsv.ac.in -> Block/Signout 
+    // (This is redundant because AuthContext handles it, but good for safety)
+    if (user && user.email && !user.email.endsWith('@gsv.ac.in')) {
+      return <LoginPage onNavigate={handleNavigate} error="Unauthorized domain." />;
+    }
+
+    // 3. If logged in but email NOT verified -> Show VerifyEmailPage (except for home/sent/vision/leadership)
+    if (user && !user.emailVerified) {
+      const allowedForUnverified = ['home', 'verification-sent', 'vision-mission', 'leadership'];
+      if (!allowedForUnverified.includes(page)) {
+        return <VerifyEmailPage />;
+      }
+    }
+
     switch (page) {
       case 'home':
         return (
@@ -82,8 +107,16 @@ function App() {
           </div>
         );
       case 'login':
+        if (user) {
+          handleNavigate('home');
+          return null;
+        }
         return <LoginPage onNavigate={handleNavigate} />;
       case 'register':
+        if (user) {
+          handleNavigate('home');
+          return null;
+        }
         return (
           <div className="min-h-screen">
             <RegisterPage onNavigate={handleNavigate} />
@@ -220,16 +253,21 @@ function App() {
     }
   };
 
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div></div>;
-  }
+  // Removed blocking loading spinner to allow immediate Guest land
+  // if (loading) { ... }
 
+  return (
+    <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
+      {renderPage()}
+    </div>
+  );
+}
+
+function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
-          {renderPage()}
-        </div>
+        <AppContent />
       </AuthProvider>
     </ThemeProvider>
   );

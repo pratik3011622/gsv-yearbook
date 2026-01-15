@@ -1,3 +1,5 @@
+import { auth } from "../firebase.config";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 class ApiClient {
@@ -9,18 +11,23 @@ class ApiClient {
     const url = `${this.baseURL}${endpoint}`;
     console.log('API Request URL:', url);
     console.log('API Base URL:', this.baseURL);
-    const token = localStorage.getItem('token');
 
     const config = {
+      ...options,
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
       },
-      ...options,
     };
 
-    if (token && !options.skipAuth) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const authUser = auth.currentUser;
+    if (authUser && !options.skipAuth) {
+      try {
+        const firebaseToken = await authUser.getIdToken();
+        config.headers.Authorization = `Bearer ${firebaseToken}`;
+      } catch (err) {
+        console.warn('ApiClient: Could not get Firebase token', err);
+      }
     }
 
     console.log('Fetch config:', { method: config.method || 'GET', headers: config.headers });
@@ -30,14 +37,16 @@ class ApiClient {
       console.log('Response status:', response.status);
       console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       let data;
+      const responseClone = response.clone();
       try {
         data = await response.json();
         console.log('Response data:', data);
       } catch (jsonError) {
-        // If response is not JSON, try to get text
-        const text = await response.text();
+        // If response is not JSON, try to get text from the clone
+        const text = await responseClone.text();
         console.log('Response text:', text);
-        throw new Error(text || 'Invalid response from server');
+        // We throw the text as error message, which is useful for debugging (e.g. 404 HTML pages)
+        throw new Error(`Invalid JSON response: ${text.substring(0, 100)}...`);
       }
       return { response, data };
     } catch (error) {
@@ -53,9 +62,7 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify(userData),
     });
-    if (result.response.ok && result.data.token) {
-      localStorage.setItem('token', result.data.token);
-    }
+    // No manual token storage
     return result.data;
   }
 
@@ -64,9 +71,7 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
-    if (result.response.ok && result.data.token) {
-      localStorage.setItem('token', result.data.token);
-    }
+    // No manual token storage
     return result.data;
   }
 
