@@ -20,7 +20,9 @@ const corsOptions = {
       'http://localhost:3000', // Local Vite dev server
       'http://127.0.0.1:3000', // Alternative localhost
       'http://localhost:5173', // Vite default port
-      'http://127.0.0.1:5173' // Alternative localhost for Vite
+      'http://127.0.0.1:5173', // Alternative localhost for Vite
+      'http://localhost:5174', // Vite fallback port
+      'http://127.0.0.1:5174' // Alternative localhost for Vite fallback
     ];
 
     if (allowedOrigins.indexOf(origin) !== -1) {

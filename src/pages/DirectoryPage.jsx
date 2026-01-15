@@ -25,8 +25,9 @@ export const DirectoryPage = ({ onNavigate }) => {
   const fetchProfiles = async () => {
     try {
       const data = await api.getProfiles();
+      const profilesArray = Array.isArray(data) ? data : [];
       // Filter to show only alumni profiles, then sort by batch year (latest first)
-      const alumniOnly = (data || []).filter(profile => profile.role === 'alumni');
+      const alumniOnly = profilesArray.filter(profile => profile.role === 'alumni');
       const sortedData = alumniOnly.sort((a, b) => (b.batchYear || 0) - (a.batchYear || 0));
       setProfiles(sortedData);
       setFilteredProfiles(sortedData);
