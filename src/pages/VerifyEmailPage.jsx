@@ -4,39 +4,40 @@ import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../firebase.config';
 
 export const VerifyEmailPage = () => {
-    const { user, signOut } = useAuth();
+    const { user, signOut, checkEmailVerification, resendVerificationEmail } = useAuth();
     const [checking, setChecking] = useState(false);
+    const [resending, setResending] = useState(false);
+    const [resendStatus, setResendStatus] = useState('');
 
-    const checkVerification = async () => {
+    const handleCheckManual = async () => {
         setChecking(true);
+        const isVerified = await checkEmailVerification();
+        if (!isVerified) {
+            alert('Email not yet verified. Please check your inbox (and spam folder).');
+        }
+        setChecking(false);
+    };
+
+    const handleResend = async () => {
+        setResending(true);
+        setResendStatus('');
         try {
-            await user.reload();
-            // Force a re-render of the auth context state if needed
-            // Ideally AuthContext listens to idTokenResult, but reload() updates the currentUser object
-            if (auth.currentUser.emailVerified) {
-                window.location.reload(); // Hard reload to ensure all states update
-            } else {
-                alert('Email not yet verified. Please check your inbox (and spam folder).');
-            }
+            await resendVerificationEmail();
+            setResendStatus('Verification email sent! Check your inbox.');
+            setTimeout(() => setResendStatus(''), 5000);
         } catch (error) {
-            console.error("Error reloading user:", error);
+            setResendStatus('Failed to resend. Please try again later.');
         } finally {
-            setChecking(false);
+            setResending(false);
         }
     };
 
     useEffect(() => {
-        // Poll every 5 seconds check
         const interval = setInterval(async () => {
-            try {
-                await user.reload();
-                if (auth.currentUser.emailVerified) {
-                    window.location.reload();
-                }
-            } catch (e) { /* ignore */ }
-        }, 5000);
+            await checkEmailVerification();
+        }, 3000);
         return () => clearInterval(interval);
-    }, [user]);
+    }, []);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4">
@@ -61,13 +62,28 @@ export const VerifyEmailPage = () => {
 
                 <div className="space-y-4">
                     <button
-                        onClick={checkVerification}
+                        onClick={handleCheckManual}
                         disabled={checking}
                         className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center space-x-2"
                     >
                         <RefreshCw className={`w-5 h-5 ${checking ? 'animate-spin' : ''}`} />
-                        <span>{checking ? 'CheckingStatus...' : 'I Have Verified It'}</span>
+                        <span>{checking ? 'Checking Status...' : 'I Have Verified It'}</span>
                     </button>
+
+                    <button
+                        onClick={handleResend}
+                        disabled={resending}
+                        className="w-full py-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-full hover:bg-slate-50 dark:hover:bg-slate-600 transition-all flex items-center justify-center space-x-2"
+                    >
+                        <Mail className={`w-4 h-4 ${resending ? 'animate-pulse' : ''}`} />
+                        <span>{resending ? 'Resending...' : 'Resend Verification Email'}</span>
+                    </button>
+
+                    {resendStatus && (
+                        <p className={`text-sm mt-2 ${resendStatus.includes('failed') ? 'text-red-500' : 'text-green-500'}`}>
+                            {resendStatus}
+                        </p>
+                    )}
 
                     <button
                         onClick={() => signOut()}

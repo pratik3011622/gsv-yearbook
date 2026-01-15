@@ -186,6 +186,21 @@ export const AuthProvider = ({ children }) => {
     await firebaseSignOut(auth);
   };
 
+  const checkEmailVerification = async () => {
+    if (!auth.currentUser) return false;
+    await auth.currentUser.reload();
+    if (auth.currentUser.emailVerified) {
+      setUser(prev => prev ? { ...prev, emailVerified: true } : null);
+      return true;
+    }
+    return false;
+  };
+
+  const resendVerificationEmail = async () => {
+    if (!auth.currentUser) return;
+    await sendEmailVerification(auth.currentUser);
+  };
+
   const updateProfileData = async (updates) => {
     if (!user) return;
     await syncProfile(user.uid, updates);
@@ -201,6 +216,8 @@ export const AuthProvider = ({ children }) => {
         signIn,
         googleSignIn,
         signOut,
+        checkEmailVerification,
+        resendVerificationEmail,
         updateProfile: updateProfileData
       }}
     >
