@@ -40,13 +40,8 @@ export const AuthProvider = ({ children }) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Enforce Email Verification on Page Load / Refresh
         if (!firebaseUser.emailVerified) {
-          // If not verified, we can choose to log them out or let them stay in a "limited" state.
-          // For strict enforcement, we might want to log them out, but usually we let them see a "Please verify" page.
-          // For this specific requirement "email is valid or not .. you can check with email verification link",
-          // we'll allow the session but the UI should block access if not verified.
-          // However, for clean state management, we'll fetch their Firestore data.
+          // Logic for unverified email can go here
         }
 
         try {
@@ -60,13 +55,14 @@ export const AuthProvider = ({ children }) => {
           if (docSnap.exists()) {
             setUser({ ...firebaseUser, ...docSnap.data() });
           } else {
-            // Fallback if firestore doc missing (shouldn't happen if registered properly)
             setUser(firebaseUser);
           }
 
         } catch (error) {
-          console.error('Error fetching user data:', error);
-          setUser(null);
+          console.error('Error fetching user data (Non-Fatal):', error);
+          // CRITICAL FIX: Do NOT set user to null. Keep them logged in even if DB fails.
+          // This prevents "offline" users from getting kicked out immediately.
+          setUser(firebaseUser);
         }
       } else {
         localStorage.removeItem('token');
@@ -129,6 +125,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signIn = async (email, password) => {
+    // 1. Set Persistence First
+    await setPersistence(auth, browserLocalPersistence);
+
+    // 2. Sign In
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
 
@@ -147,6 +147,9 @@ export const AuthProvider = ({ children }) => {
     provider.setCustomParameters({
       hd: 'gsv.ac.in' // Hint to Google to show only gsv accounts
     });
+
+    // 1. Set Persistence
+    await setPersistence(auth, browserLocalPersistence);
 
     try {
       const userCredential = await signInWithPopup(auth, provider);
