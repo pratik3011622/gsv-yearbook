@@ -56,8 +56,8 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      // Check domain restriction immediately
-      if (firebaseUser.email && !firebaseUser.email.endsWith("@gsv.ac.in")) {
+      // Check domain restriction immediately (case-insensitive)
+      if (firebaseUser.email && !firebaseUser.email.toLowerCase().endsWith("@gsv.ac.in")) {
         console.error("AuthContext: Unauthorized domain detected during session restoration");
         await firebaseSignOut(auth);
         setUser(null);
@@ -65,25 +65,25 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      try {
-        // Fetch additional profile data from Firestore
-        const docRef = doc(db, "users", firebaseUser.uid);
-        const snap = await getDoc(docRef);
+      // SET BASIC USER IMMEDIATELY -> This unlocks the UI instantlly
+      setUser({ ...firebaseUser, id: firebaseUser.uid });
+      setLoading(false);
 
-        if (snap.exists()) {
-          console.log("AuthContext: Firestore profile found");
-          setUser({ ...firebaseUser, ...snap.data(), id: firebaseUser.uid });
-        } else {
-          console.warn("AuthContext: No Firestore profile exists for this UID");
-          setUser({ ...firebaseUser, id: firebaseUser.uid });
+      // Fetch additional profile data asynchronously in the background
+      (async () => {
+        try {
+          const docRef = doc(db, "users", firebaseUser.uid);
+          const snap = await getDoc(docRef);
+
+          if (snap.exists()) {
+            console.log("AuthContext: Background profile fetch successful");
+            setUser(prev => ({ ...prev, ...snap.data(), id: firebaseUser.uid }));
+          }
+        } catch (err) {
+          console.error("AuthContext: Background profile fetch failed ->", err);
+          // No need to clear user; they still have basic auth
         }
-      } catch (err) {
-        console.error("AuthContext: Error fetching profile ->", err);
-        // Important: Firestore failures should NOT clear the auth state
-        setUser({ ...firebaseUser, id: firebaseUser.uid });
-      } finally {
-        setLoading(false);
-      }
+      })();
     });
 
     return () => unsubscribe();
@@ -138,8 +138,8 @@ export const AuthProvider = ({ children }) => {
     // Firebase handles persistence automatically now
     const { user: existingUser } = await signInWithEmailAndPassword(auth, email, password);
 
-    // Double check domain on sign-in
-    if (existingUser.email && !existingUser.email.endsWith("@gsv.ac.in")) {
+    // Double check domain on sign-in (case-insensitive)
+    if (existingUser.email && !existingUser.email.toLowerCase().endsWith("@gsv.ac.in")) {
       await firebaseSignOut(auth);
       throw new Error("Only @gsv.ac.in accounts are allowed.");
     }

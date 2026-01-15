@@ -24,7 +24,7 @@ import { VerificationSentPage } from './pages/VerificationSentPage';
 
 // Main App Content that uses Auth Context
 function AppContent() {
-  const { user } = useAuth(); // Removed 'loading' from destructuring as it's now assumed to be false initially or handled internally by AuthContext
+  const { user, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState(() => {
     // Get initial page from URL hash or default to home
     const hash = window.location.hash.replace('#', '');
@@ -71,6 +71,9 @@ function AppContent() {
     // Public routes that anyone can see
     const publicPages = ['home', 'login', 'register', 'vision-mission', 'leadership', 'team', 'magazine', 'photo-gallery', 'video-gallery'];
     const isPublic = publicPages.includes(page);
+
+    // Non-blocking loading: Always proceed to render public or protected logic
+    // We rely on 'user' state which updates progressively
 
     // 1. If not logged in and trying to access protected route -> Login
     if (!user && !isPublic) {

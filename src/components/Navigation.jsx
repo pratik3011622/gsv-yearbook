@@ -34,29 +34,55 @@ export const Navigation = ({ onNavigate, currentPage }) => {
     };
   }, [openDropdown, userMenuOpen]);
 
-  const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'directory', label: 'Directory' },
-    { id: 'events', label: 'Event' },
-    {
-      id: 'yearbook',
-      label: 'Yearbook',
-      subItems: [
-        { id: 'magazine', label: 'Magazine' },
-        { id: 'photo-gallery', label: 'Photo Gallery' },
-        { id: 'video-gallery', label: 'Video Gallery' },
-      ]
-    },
-    {
-      id: 'about',
-      label: 'About',
-      subItems: [
-        { id: 'vision-mission', label: 'Vision & Mission' },
-        { id: 'leadership', label: 'Leadership' },
-        { id: 'team', label: 'Team' },
-      ]
-    },
-  ];
+  const navItems = user
+    ? [
+      { id: 'home', label: 'Home' },
+      { id: 'directory', label: 'Directory' },
+      { id: 'events', label: 'Event' },
+      {
+        id: 'yearbook',
+        label: 'Yearbook',
+        subItems: [
+          { id: 'magazine', label: 'Magazine' },
+          { id: 'photo-gallery', label: 'Photo Gallery' },
+          { id: 'video-gallery', label: 'Video Gallery' },
+        ]
+      },
+      { id: 'jobs', label: 'Jobs' },
+      { id: 'stories', label: 'Stories' },
+      {
+        id: 'about',
+        label: 'About',
+        subItems: [
+          { id: 'vision-mission', label: 'Vision & Mission' },
+          { id: 'leadership', label: 'Leadership' },
+          { id: 'team', label: 'Team' },
+        ]
+      },
+    ]
+    : [
+      { id: 'home', label: 'Home' },
+      { id: 'directory', label: 'Directory' },
+      { id: 'events', label: 'Event' },
+      {
+        id: 'yearbook',
+        label: 'Yearbook',
+        subItems: [
+          { id: 'magazine', label: 'Magazine' },
+          { id: 'photo-gallery', label: 'Photo Gallery' },
+          { id: 'video-gallery', label: 'Video Gallery' },
+        ]
+      },
+      {
+        id: 'about',
+        label: 'About',
+        subItems: [
+          { id: 'vision-mission', label: 'Vision & Mission' },
+          { id: 'leadership', label: 'Leadership' },
+          { id: 'team', label: 'Team' },
+        ]
+      },
+    ];
 
   return (
     <nav
