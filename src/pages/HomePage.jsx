@@ -120,7 +120,6 @@ export const HomePage = ({ onNavigate }) => {
             >
               {[
                 { title: 'Campus Highlights', img: '/slide5.jpg', date: 'Dec 12, 2024', desc: 'Prastuti - Pratap Palace ' },
-                { title: 'Cultural Night', img: '/cultural_night.jpg', date: 'Nov 15, 2023', desc: 'A night of music, dance, and unforgettable performances.' },
                 { title: 'Campus Highlights', img: '/Screenshot 2025-10-21 211940.png', date: 'Oct 21, 2025', desc: 'The vibrant energy of student life at GSV.' },
                 { title: 'Student Activities', img: '/Screenshot 2025-10-21 212003.png', date: 'Oct 21, 2025', desc: 'Engaging workshops and collaborative learning sessions.' },
                 { title: 'Academic Excellence', img: '/Screenshot 2025-10-22 100457.png', date: 'Oct 22, 2025', desc: 'Pushing the boundaries of knowledge and innovation.' },
