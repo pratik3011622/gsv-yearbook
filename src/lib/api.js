@@ -278,4 +278,4 @@ class ApiClient {
 
 export const api = new ApiClient();
 
-export const staticBaseURL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5000';
+export const staticBaseURL = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5001';

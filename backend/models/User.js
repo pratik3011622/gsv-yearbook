@@ -8,7 +8,17 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: false, // Not required for Firebase Auth users (handled by Firebase)
+  },
+  firebaseUid: {
+    type: String,
+    unique: true,
     required: true,
+    index: true,
+  },
+  googleId: {
+    type: String, // Kept for legacy or specific Google ID reference if needed
+    sparse: true,
   },
   fullName: {
     type: String,

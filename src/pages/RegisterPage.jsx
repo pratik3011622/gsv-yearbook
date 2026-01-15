@@ -18,6 +18,7 @@ export const RegisterPage = ({ onNavigate }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -40,6 +41,11 @@ export const RegisterPage = ({ onNavigate }) => {
       return;
     }
 
+    if (!formData.email.endsWith('@gsv.ac.in')) {
+      setError('Please use your university email ending with @gsv.ac.in');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -48,18 +54,43 @@ export const RegisterPage = ({ onNavigate }) => {
       userData.company = currentCompany; // Map to backend field name
 
       await signUp(userData);
-      alert('Registration successful! Please check your email to verify your account before logging in.');
-      onNavigate('login');
+      setSuccess(true);
+      setLoading(false);
     } catch (err) {
+      console.error("Registration error:", err);
       setError(err.message || 'Failed to create account. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-12 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-      <div className="max-w-2xl mx-auto px-4">
+    <div className="min-h-screen pt-20 pb-12 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative">
+      {/* Success Modal Overlay */}
+      {success && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl p-8 max-w-md w-full border border-slate-200 dark:border-slate-700 text-center transform transition-all scale-100 opacity-100 animate-in zoom-in-95 duration-300">
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Mail className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+              Verification Link Sent
+            </h2>
+            <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+              We've sent a verification email to <span className="font-semibold text-slate-900 dark:text-white">{formData.email}</span>.
+              <br />
+              Please check your inbox and click the link to verify your account.
+            </p>
+            <button
+              onClick={() => onNavigate('login')}
+              className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5"
+            >
+              Okay, Go to Login
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className={`max-w-2xl mx-auto px-4 transition-opacity duration-300 ${success ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl mb-4 shadow-sm border border-slate-200 dark:border-slate-700">
             <img

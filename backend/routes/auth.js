@@ -1,58 +1,43 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { auth } = require('../middleware/auth');
-
-const { validateRegistration } = require('../middleware/validation');
+const User = require('../models/User'); // Kept if we want to sync optionally, but we'll try/catch around it
+const { auth, verifyFirebase } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Register
-router.post('/register', async (req, res) => {
+// Register/Sync User - Optional now if we trust token, but good for directory
+router.post('/register', verifyFirebase, async (req, res) => {
   try {
-    console.log('Registration request body:', req.body);
-    const { email, password, fullName, ...otherFields } = req.body;
+    // If MongoDB is down, we shouldn't fail the request if auth is satisfied
+    const { email, fullName, role, ...otherFields } = req.body;
+    const { uid: firebaseUid } = req.firebaseUser;
 
-    if (!email || !password || !fullName) {
-      return res.status(400).json({ message: 'Email, password, and full name are required' });
+    try {
+      // Try to sync to Mongo if available
+      let existingUser = await User.findOne({ firebaseUid });
+      if (!existingUser) {
+        const user = new User({
+          email,
+          fullName,
+          firebaseUid,
+          role: role || 'student',
+          ...otherFields,
+        });
+        await user.save();
+        console.log(`Synced new user ${email} to MongoDB`);
+      }
+    } catch (dbError) {
+      console.warn("MongoDB sync failed during register (non-fatal):", dbError.message);
     }
 
-    console.log('Checking for existing user with email:', email);
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    console.log('Existing user found:', !!existingUser);
-    if (existingUser) {
-      console.log('User already exists, returning error');
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    // Hash password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Create user
-    const user = new User({
-      email,
-      password: hashedPassword,
-      fullName,
-      ...otherFields,
-    });
-
-    await user.save();
-
-    // Generate token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_secret_change_this', {
-      expiresIn: '7d',
-    });
-
+    // Return success based on valid token
     res.status(201).json({
-      token,
       user: {
-        id: user._id,
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role,
+        id: firebaseUid,
+        email: email,
+        fullName: fullName,
+        role: role || 'student',
+        firebaseUid: firebaseUid,
+        isTokenUser: true
       },
     });
   } catch (error) {
@@ -61,61 +46,70 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login
-router.post('/login', async (req, res) => {
+// Google Sign-In / Sync
+router.post('/google', verifyFirebase, async (req, res) => {
   try {
-    console.log('Login request for email:', req.body.email);
-    const { email, password } = req.body;
+    const { uid: firebaseUid, name, picture, email } = req.firebaseUser;
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+    try {
+      // Optional Sync
+      let user = await User.findOne({ firebaseUid });
+      if (!user && email) {
+        user = await User.findOne({ email });
+      }
+
+      if (user) {
+        if (!user.firebaseUid) {
+          user.firebaseUid = firebaseUid;
+          await user.save();
+        }
+      } else {
+        // Create new
+        user = new User({
+          email: email,
+          fullName: name || 'User',
+          firebaseUid,
+          avatarUrl: picture,
+          role: 'student',
+        });
+        await user.save();
+      }
+    } catch (dbError) {
+      console.warn("MongoDB sync failed during google auth (non-fatal):", dbError.message);
     }
-
-    console.log('Finding user in database...');
-    const user = await User.findOne({ email });
-    console.log('User found:', !!user);
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    console.log('Comparing password...');
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log('Password match:', isMatch);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    console.log('Generating token...');
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_secret_change_this', {
-      expiresIn: '7d',
-    });
-    console.log('Token generated successfully');
 
     res.json({
-      token,
       user: {
-        id: user._id,
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role,
+        id: firebaseUid,
+        email: email,
+        fullName: name,
+        role: 'student', // Default, real role would need DB or custom claims
+        avatarUrl: picture,
+        firebaseUid: firebaseUid
       },
     });
   } catch (error) {
-    console.error('Login error:', error);
-    console.error('Error stack:', error.stack);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Google auth error:', error);
+    res.status(500).json({ message: 'Google authentication failed' });
   }
+});
+
+// Login - Deprecated/Unused
+router.post('/login', (req, res) => {
+  res.status(404).json({ message: 'Use Firebase Auth on client side' });
 });
 
 // Get current user
 router.get('/me', auth, async (req, res) => {
+  // req.user is already populated from token in middleware
   res.json({
     user: {
       id: req.user._id,
       email: req.user.email,
       fullName: req.user.fullName,
       role: req.user.role,
-      // Add other fields as needed
+      avatarUrl: req.user.picture,
+      ...req.user
     },
   });
 });

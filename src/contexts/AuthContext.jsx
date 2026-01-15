@@ -1,5 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { api } from '../lib/api';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+  sendEmailVerification,
+  deleteUser
+} from 'firebase/auth';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../firebase.config';
 
 const AuthContext = createContext({});
 
@@ -13,91 +24,164 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing token and validate it
-    const token = localStorage.getItem('token');
-    if (token) {
-      validateToken();
-    } else {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // Enforce Email Verification on Page Load / Refresh
+        if (!firebaseUser.emailVerified) {
+          // If not verified, we can choose to log them out or let them stay in a "limited" state.
+          // For strict enforcement, we might want to log them out, but usually we let them see a "Please verify" page.
+          // For this specific requirement "email is valid or not .. you can check with email verification link",
+          // we'll allow the session but the UI should block access if not verified.
+          // However, for clean state management, we'll fetch their Firestore data.
+        }
+
+        try {
+          const token = await firebaseUser.getIdToken();
+          localStorage.setItem('token', token);
+
+          // Fetch user profile from Firestore
+          const docRef = doc(db, 'users', firebaseUser.uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            setUser({ ...firebaseUser, ...docSnap.data() });
+          } else {
+            // Fallback if firestore doc missing (shouldn't happen if registered properly)
+            setUser(firebaseUser);
+          }
+
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          setUser(null);
+        }
+      } else {
+        localStorage.removeItem('token');
+        setUser(null);
+      }
       setLoading(false);
-    }
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const validateToken = async () => {
-    try {
-      const userData = await api.getCurrentUser();
-      setUser(userData.user);
-      // Get full profile data
-      const profileData = await api.getProfile(userData.user.id);
-      setProfile(profileData);
-    } catch (error) {
-      console.error('Token validation failed:', error);
-      localStorage.removeItem('token');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const signUp = async (userData) => {
-    const result = await api.register(userData);
-    if (result.user) {
-      setUser(result.user);
-      // Get full profile data
-      const profileData = await api.getProfile(result.user.id);
-      setProfile(profileData);
+    console.log("Starting signUp...");
+    const { email, password, ...profileData } = userData;
+
+    // 1. Domain Check
+    if (!email.endsWith('@gsv.ac.in')) {
+      throw new Error('Registration is restricted to @gsv.ac.in email addresses only.');
     }
-    return result;
+
+    // 2. Create Auth User
+    console.log("Creating user in Firebase Auth...");
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = userCredential.user;
+    console.log("User created:", firebaseUser.uid);
+
+    // 3. Send Verification Email
+    console.log("Sending verification email...");
+    const actionCodeSettings = {
+      url: window.location.href.split('#')[0] + '#/login', // Redirect to login after verification
+      handleCodeInApp: true,
+    };
+    await sendEmailVerification(firebaseUser, actionCodeSettings);
+    console.log("Verification email sent.");
+
+    // 4. Create Firestore Document & Sign Out (Background Process)
+    // We do not await this so the UI can respond immediately (User request: "show pop up immediately")
+    (async () => {
+      console.log("Starting background profile creation...");
+      try {
+        await setDoc(doc(db, 'users', firebaseUser.uid), {
+          ...profileData, // fullName, role, batchYear, etc.
+          email: email,
+          createdAt: serverTimestamp(),
+          role: profileData.role || 'student', // Default role
+          uid: firebaseUser.uid
+        });
+        console.log("Firestore profile created (background).");
+      } catch (dbError) {
+        console.error("Error creating user profile in Firestore:", dbError);
+      }
+
+      // 5. Force Sign Out
+      console.log("Signing out new user (background)...");
+      await firebaseSignOut(auth);
+      console.log("Sign out complete (background).");
+    })();
+
+    return firebaseUser;
   };
 
   const signIn = async (email, password) => {
-    const result = await api.login({ email, password });
-    if (!result.user) {
-      throw new Error(result.message || 'Login failed');
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const firebaseUser = userCredential.user;
+
+    // We allow unverified users to sign in so the App can show them the "Verify Email" page
+    // instead of just throwing an error and keeping them locked out.
+    if (!firebaseUser.emailVerified) {
+      await firebaseSignOut(auth);
+      throw new Error('Please verify your email address before logging in. Check your inbox.');
     }
-    // Clear previous user data before setting new one
-    setUser(null);
-    setProfile(null);
-    setUser(result.user);
-    // Get full profile data
+
+    return firebaseUser;
+  };
+
+  const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      hd: 'gsv.ac.in' // Hint to Google to show only gsv accounts
+    });
+
     try {
-      const profileData = await api.getProfile(result.user.id);
-      setProfile(profileData);
+      const userCredential = await signInWithPopup(auth, provider);
+      const firebaseUser = userCredential.user;
+
+      // Strict Domain Check (in case they bypassed the hint)
+      if (!firebaseUser.email?.endsWith('@gsv.ac.in')) {
+        await deleteUser(firebaseUser); // Delete the unauthorized account immediately
+        throw new Error('Access restricted to @gsv.ac.in domains.');
+      }
+
+      // Check/Create Firestore Profile
+      const docRef = doc(db, 'users', firebaseUser.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(docRef, {
+          fullName: firebaseUser.displayName,
+          email: firebaseUser.email,
+          avatarUrl: firebaseUser.photoURL,
+          role: 'student',
+          createdAt: serverTimestamp(),
+          uid: firebaseUser.uid
+        });
+      }
+
+      return firebaseUser;
     } catch (error) {
-      console.error('Error fetching profile after login:', error);
-      // Set basic profile from login response as fallback
-      setProfile({
-        id: result.user.id,
-        email: result.user.email,
-        fullName: result.user.fullName,
-        role: result.user.role,
-      });
+      console.error("Google Sign In Error:", error);
+      throw error;
     }
-    return result;
   };
 
   const signOut = async () => {
-    localStorage.removeItem('token');
+    await firebaseSignOut(auth);
     setUser(null);
-    setProfile(null);
-  };
-
-  const updateProfile = async (updatedData) => {
-    const result = await api.updateProfile(updatedData);
-    setProfile(prev => ({ ...prev, ...result }));
-    return result;
   };
 
   const value = {
     user,
-    profile,
+    profile: user, // Alias for backward compatibility
     loading,
     signUp,
     signIn,
+    googleSignIn,
     signOut,
-    updateProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

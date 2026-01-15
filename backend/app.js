@@ -13,15 +13,16 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
+
     const allowedOrigins = [
-      'https://sampleyearbook-frontend.vercel.app', // Production
+      'https://sampleyearbook-frontend.vercel.app', // Production Placeholder
+      process.env.FRONTEND_URL, // Production configured via Env Var
       'http://localhost:3000', // Local Vite dev server
       'http://127.0.0.1:3000', // Alternative localhost
       'http://localhost:5173', // Vite default port
       'http://127.0.0.1:5173' // Alternative localhost for Vite
     ];
-    
+
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -116,7 +117,7 @@ app.use('/api/stories', require('./routes/stories'));
 app.use('/api/mentorship', require('./routes/mentorship'));
 app.use('/api/stats', require('./routes/stats'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // For Vercel serverless deployment
 module.exports = app;
