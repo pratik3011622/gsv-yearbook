@@ -62,9 +62,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
     ? [
       ...baseNavItems,
       { id: 'jobs', label: 'Jobs' },
-      ...(profile?.role === 'alumni' ? [
-        { id: 'stories', label: 'Stories' },
-      ] : []),
+      { id: 'stories', label: 'Stories' },
     ]
     : baseNavItems;
 
