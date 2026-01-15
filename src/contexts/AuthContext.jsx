@@ -7,7 +7,9 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
   sendEmailVerification,
-  deleteUser
+  deleteUser,
+  setPersistence,
+  browserLocalPersistence
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase.config';
@@ -27,6 +29,15 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Explicitly set persistence ensures user stays logged in
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        console.log("Auth persistence set to LOCAL");
+      })
+      .catch((error) => {
+        console.error("Error setting persistence:", error);
+      });
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Enforce Email Verification on Page Load / Refresh
