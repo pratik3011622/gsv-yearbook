@@ -78,33 +78,6 @@ export const AuthProvider = ({ children }) => {
     return result;
   };
 
-  const googleSignIn = async (idToken) => {
-    const result = await api.googleLogin(idToken);
-    if (!result.user) {
-      throw new Error(result.message || 'Google login failed');
-    }
-    // Clear previous user data before setting new one
-    setUser(null);
-    setProfile(null);
-    setUser(result.user);
-    // Get full profile data
-    try {
-      const profileData = await api.getProfile(result.user.id);
-      setProfile(profileData);
-    } catch (error) {
-      console.error('Error fetching profile after Google login:', error);
-      // Set basic profile from login response as fallback
-      setProfile({
-        id: result.user.id,
-        email: result.user.email,
-        fullName: result.user.fullName,
-        role: result.user.role,
-        avatarUrl: result.user.avatarUrl,
-      });
-    }
-    return result;
-  };
-
   const signOut = async () => {
     localStorage.removeItem('token');
     setUser(null);
@@ -123,7 +96,6 @@ export const AuthProvider = ({ children }) => {
     loading,
     signUp,
     signIn,
-    googleSignIn,
     signOut,
     updateProfile,
   };

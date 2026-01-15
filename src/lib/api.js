@@ -70,17 +70,6 @@ class ApiClient {
     return result.data;
   }
 
-  async googleLogin(idToken) {
-    const result = await this.request('/auth/google', {
-      method: 'POST',
-      body: JSON.stringify({ token: idToken }),
-    });
-    if (result.response.ok && result.data.token) {
-      localStorage.setItem('token', result.data.token);
-    }
-    return result.data;
-  }
-
   async getCurrentUser() {
     const result = await this.request('/auth/me');
     return result.data;
