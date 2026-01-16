@@ -1,49 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Mail, RefreshCw, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { auth, db } from '../firebase.config';
-import { doc, getDoc } from 'firebase/firestore';
-import { api } from '../lib/api';
 
 export const VerifyEmailPage = () => {
     const { user, signOut, checkEmailVerification, resendVerificationEmail } = useAuth();
     const [checking, setChecking] = useState(false);
     const [resending, setResending] = useState(false);
     const [resendStatus, setResendStatus] = useState('');
-    const [syncing, setSyncing] = useState(false);
-
-    const handleSyncToMongo = async (uid) => {
-        if (syncing) return;
-        setSyncing(true);
-        console.log("VerifyEmailPage: Triggering MongoDB sync for", uid);
-        try {
-            // 1. Fetch profile from Firestore (which was saved during signUp)
-            const docRef = doc(db, "users", uid);
-            const snap = await getDoc(docRef);
-
-            if (snap.exists()) {
-                const profileData = snap.data();
-                // 2. Sync to MongoDB
-                await api.register({
-                    ...profileData,
-                    firebaseUid: uid,
-                });
-                console.log("VerifyEmailPage: MongoDB sync successful");
-            } else {
-                console.warn("VerifyEmailPage: No Firestore profile found for sync");
-            }
-        } catch (err) {
-            console.error("VerifyEmailPage: MongoDB sync failed ->", err);
-        } finally {
-            setSyncing(false);
-        }
-    };
 
     const handleCheckManual = async () => {
         setChecking(true);
         const isVerified = await checkEmailVerification();
         if (isVerified && user) {
-            await handleSyncToMongo(user.uid);
+            // Sync handled at registration, just refresh
+            window.location.reload();
         } else if (!isVerified) {
             alert('Email not yet verified. Please check your inbox (and spam folder).');
         }
@@ -68,7 +38,7 @@ export const VerifyEmailPage = () => {
         const interval = setInterval(async () => {
             const isVerified = await checkEmailVerification();
             if (isVerified && user) {
-                await handleSyncToMongo(user.uid);
+                // Sync handled at registration, interval clears
                 clearInterval(interval);
             }
         }, 3000);

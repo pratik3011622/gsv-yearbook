@@ -11,7 +11,8 @@ export const RegisterPage = ({ onNavigate }) => {
     role: 'student',
     batchYear: '',
     department: '',
-    currentCompany: '',
+    company: '',
+    jobTitle: '',
     location: '',
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -49,9 +50,9 @@ export const RegisterPage = ({ onNavigate }) => {
     setLoading(true);
 
     try {
-      const { confirmPassword, currentCompany, ...userData } = formData;
+      const { confirmPassword, ...userData } = formData;
       userData.batchYear = parseInt(userData.batchYear) || null;
-      userData.company = currentCompany; // Map to backend field name
+      // userData.company is already in userData
 
       await signUp(userData);
       setSuccess(true);
@@ -287,8 +288,24 @@ export const RegisterPage = ({ onNavigate }) => {
                     />
                   </div>
                 </div>
-
                 <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Job Title
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type="text"
+                        name="jobTitle"
+                        value={formData.jobTitle}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
+                        placeholder="e.g. Software Engineer"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Current Company
@@ -297,15 +314,17 @@ export const RegisterPage = ({ onNavigate }) => {
                       <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <input
                         type="text"
-                        name="currentCompany"
-                        value={formData.currentCompany}
+                        name="company"
+                        value={formData.company}
                         onChange={handleChange}
                         className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="Your company"
                       />
                     </div>
                   </div>
+                </div>
 
+                <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Location
@@ -360,6 +379,6 @@ export const RegisterPage = ({ onNavigate }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };

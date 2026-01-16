@@ -97,7 +97,7 @@ export const ProfilePage = ({ onNavigate, userId }) => {
         specialization: '',
         graduationStart: '',
         graduationEnd: '',
-        currentCompany: '',
+        company: '',
         jobTitle: '',
         industry: '',
         yearsOfExperience: '',
@@ -125,7 +125,7 @@ export const ProfilePage = ({ onNavigate, userId }) => {
         specialization: profile.specialization || '',
         graduationStart: profile.graduationStart || '',
         graduationEnd: profile.graduationEnd || '',
-        currentCompany: profile.currentCompany || '',
+        company: profile.company || '',
         jobTitle: profile.jobTitle || '',
         industry: profile.industry || '',
         yearsOfExperience: profile.yearsOfExperience || '',
@@ -202,7 +202,7 @@ export const ProfilePage = ({ onNavigate, userId }) => {
   const calculateProfileCompletion = () => {
     const fields = [
       'fullName', 'bio', 'batchYear', 'department',
-      'currentCompany', 'jobTitle', 'location', 'skills'
+      'company', 'jobTitle', 'location', 'skills'
     ];
     const completedFields = fields.filter(field => {
       if (Array.isArray(formData[field])) {
@@ -351,16 +351,16 @@ export const ProfilePage = ({ onNavigate, userId }) => {
                       />
                       <input
                         type="text"
-                        value={formData.currentCompany}
-                        onChange={(e) => handleInputChange('currentCompany', e.target.value)}
+                        value={formData.company}
+                        onChange={(e) => handleInputChange('company', e.target.value)}
                         placeholder="Company"
                         className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
                       />
                     </div>
                   ) : (
                     <p className="text-lg text-slate-600 dark:text-slate-300 font-medium">
-                      {formData.jobTitle && formData.currentCompany
-                        ? `${formData.jobTitle} at ${formData.currentCompany}`
+                      {formData.jobTitle && formData.company
+                        ? `${formData.jobTitle} at ${formData.company}`
                         : 'Professional Title'
                       }
                     </p>

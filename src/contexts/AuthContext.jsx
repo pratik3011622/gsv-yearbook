@@ -10,8 +10,7 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../firebase.config";
+import { auth } from "../firebase.config";
 import { api } from "../lib/api";
 
 /* ================= CONTEXT ================= */
@@ -71,20 +70,18 @@ export const AuthProvider = ({ children }) => {
       setUser({ ...firebaseUser, id: firebaseUser.uid });
       setLoading(false);
 
-      // Fetch additional profile data asynchronously in the background
+      // Fetch additional profile data from MongoDB
       (async () => {
         try {
-          const docRef = doc(db, "users", firebaseUser.uid);
-          const snap = await getDoc(docRef);
-
-          if (snap.exists()) {
-            console.log("AuthContext: Background profile fetch successful");
-            const profileData = snap.data();
+          const response = await api.getCurrentUser();
+          if (response && response.user) {
+            console.log("AuthContext: MongoDB profile fetch successful");
+            const profileData = response.user;
             setProfile(profileData);
             setUser(prev => ({ ...prev, ...profileData, id: firebaseUser.uid }));
           }
         } catch (err) {
-          console.error("AuthContext: Background profile fetch failed ->", err);
+          console.error("AuthContext: MongoDB profile fetch failed ->", err);
           // No need to clear user; they still have basic auth
         }
       })();
@@ -94,17 +91,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   /* ---------- HELPER: SYNC PROFILE ---------- */
-  const syncProfile = async (uid, data) => {
-    try {
-      await setDoc(doc(db, "users", uid), {
-        ...data,
-        uid,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
-    } catch (err) {
-      console.error("AuthContext: syncProfile failed ->", err);
-    }
-  };
+  // Removed syncProfile (Firestore) as we are now using MongoDB exclusively
 
   /* ---------- ACTIONS ---------- */
 
@@ -116,37 +103,28 @@ export const AuthProvider = ({ children }) => {
 
     const { user: newUser } = await createUserWithEmailAndPassword(auth, email, password);
 
-    // Send verification email
-    await sendEmailVerification(newUser);
-
-    // Sync to Firestore
+    // Sync to MongoDB IMMEDIATELY
     try {
-      await setDoc(doc(db, "users", newUser.uid), {
-        ...profileData,
-        email,
-        uid: newUser.uid,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        isProfilePublic: true,
-        role: profileData.role || "student"
-      });
-    } catch (err) {
-      console.error("AuthContext: Firestore profile creation failed during signup", err);
-    }
-
-    // Sync to MongoDB -> REMOVED: This now happens in VerifyEmailPage after verification
-    /* 
-    try {
-      await api.register({
+      const newProfileData = {
         ...profileData,
         email,
         firebaseUid: newUser.uid,
         role: profileData.role || "student"
-      });
+      };
+
+      await api.register(newProfileData);
+      console.log("AuthContext: MongoDB registration successful");
+
+      // OPTIMISTIC UPDATE
+      setProfile(newProfileData);
+      setUser(prev => ({ ...prev, ...newProfileData, id: newUser.uid }));
     } catch (err) {
-      console.error("AuthContext: MongoDB sync failed during signup", err);
+      console.error("AuthContext: MongoDB registration failed", err);
+      // We still proceed to verification, but log the error
     }
-    */
+
+    // Send verification email
+    await sendEmailVerification(newUser);
 
     return newUser;
   };
@@ -175,29 +153,15 @@ export const AuthProvider = ({ children }) => {
       throw new Error("Only @gsv.ac.in Google accounts are allowed.");
     }
 
-    // Sync to Firestore if profile doesn't exist
-    const docRef = doc(db, "users", gUser.uid);
-    try {
-      const snap = await getDoc(docRef);
-      if (!snap.exists()) {
-        await setDoc(docRef, {
-          uid: gUser.uid,
-          email: gUser.email,
-          fullName: gUser.displayName,
-          avatarUrl: gUser.photoURL,
-          role: "student",
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          isProfilePublic: true
-        });
-      }
-    } catch (err) {
-      console.error("AuthContext: Firestore sync failed during Google sign-in", err);
-    }
-
     // Sync to MongoDB
     try {
       await api.syncGoogle();
+      // Fetch fresh profile after sync
+      const response = await api.getCurrentUser();
+      if (response && response.user) {
+        setProfile(response.user);
+        setUser(prev => ({ ...prev, ...response.user, id: gUser.uid }));
+      }
     } catch (err) {
       console.error("AuthContext: MongoDB sync failed during Google sign-in", err);
     }
@@ -236,17 +200,12 @@ export const AuthProvider = ({ children }) => {
     setUser(prev => ({ ...prev, ...updates }));
 
     try {
-      // 2. PARALLEL SYNC: Run Firestore and MongoDB updates concurrently
-      console.log("AuthContext: Starting parallel profile sync...");
-      const syncTasks = [
-        syncProfile(user.uid, updates), // Firestore
-        api.updateProfile(updates)      // MongoDB
-      ];
-
-      await Promise.all(syncTasks);
-      console.log("AuthContext: Parallel profile sync successful");
+      // Direct MongoDB update
+      console.log("AuthContext: Starting profile update...");
+      await api.updateProfile(updates);
+      console.log("AuthContext: Profile update successful");
     } catch (err) {
-      console.error("AuthContext: Profile sync failed ->", err);
+      console.error("AuthContext: Profile update failed ->", err);
       // Optional: Revert on absolute failure if critical data is lost
       // For now, we keep the UI optimistic but log the error
       // alert("Some changes might not have synced. Please refresh.");
