@@ -28,7 +28,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start true to prevent flash
 
   /* ---------- INITIALIZATION ---------- */
   useEffect(() => {
@@ -50,10 +50,11 @@ export const AuthProvider = ({ children }) => {
       console.log("AuthContext: State changed ->", firebaseUser ? "User exists" : "No user");
 
       if (!firebaseUser) {
-        // Clear any old backend tokens just in case, though we shouldn't be using them
+        // Clear any old backend tokens just in case
         localStorage.removeItem("token");
         setUser(null);
-        setLoading(false);
+        setProfile(null);
+        setLoading(false); // Ready to render unauthenticated state
         return;
       }
 
@@ -62,29 +63,31 @@ export const AuthProvider = ({ children }) => {
         console.error("AuthContext: Unauthorized domain detected during session restoration");
         await firebaseSignOut(auth);
         setUser(null);
+        setProfile(null);
         setLoading(false);
         return;
       }
 
-      // SET BASIC USER IMMEDIATELY -> This unlocks the UI instantlly
+      // SET BASIC USER IMMEDIATELY
       setUser({ ...firebaseUser, id: firebaseUser.uid });
-      setLoading(false);
 
-      // Fetch additional profile data from MongoDB
-      (async () => {
-        try {
-          const response = await api.getCurrentUser();
-          if (response && response.user) {
-            console.log("AuthContext: MongoDB profile fetch successful");
-            const profileData = response.user;
-            setProfile(profileData);
-            setUser(prev => ({ ...prev, ...profileData, id: firebaseUser.uid }));
-          }
-        } catch (err) {
-          console.error("AuthContext: MongoDB profile fetch failed ->", err);
-          // No need to clear user; they still have basic auth
+      // Do NOT set loading to false yet. Wait for profile fetch.
+      // fetch additional profile data from MongoDB
+      try {
+        const response = await api.getCurrentUser();
+        if (response && response.user) {
+          console.log("AuthContext: MongoDB profile fetch successful");
+          const profileData = response.user;
+          setProfile(profileData);
+          setUser(prev => ({ ...prev, ...profileData, id: firebaseUser.uid }));
         }
-      })();
+      } catch (err) {
+        console.error("AuthContext: MongoDB profile fetch failed ->", err);
+        // Even if profile fetch fails, we have basic auth, so we should let them in.
+      } finally {
+        // NOW we are ready to show the UI
+        setLoading(false);
+      }
     });
 
     return () => unsubscribe();
@@ -171,6 +174,8 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = async () => {
     localStorage.removeItem("token");
+    setProfile(null);
+    setUser(null);
     await firebaseSignOut(auth);
   };
 
