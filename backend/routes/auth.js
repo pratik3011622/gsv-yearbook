@@ -101,17 +101,26 @@ router.post('/login', (req, res) => {
 
 // Get current user
 router.get('/me', auth, async (req, res) => {
-  // req.user is already populated from token in middleware
-  res.json({
-    user: {
-      id: req.user._id,
-      email: req.user.email,
-      fullName: req.user.fullName,
-      role: req.user.role,
-      avatarUrl: req.user.picture,
-      ...req.user
-    },
-  });
+  try {
+    const user = await User.findOne({ firebaseUid: req.user.firebaseUid });
+    if (user) {
+      res.json({ user });
+    } else {
+      res.json({
+        user: {
+          id: req.user._id,
+          email: req.user.email,
+          fullName: req.user.fullName,
+          role: req.user.role,
+          avatarUrl: req.user.picture,
+          ...req.user
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 module.exports = router;
