@@ -162,20 +162,18 @@ export const ProfilePage = ({ onNavigate, userId }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      if (profilePhotoFile) {
-        // TODO: Implement image upload to Firebase Storage if needed
-        alert('Image upload will be integrated with Firestore updates soon.');
-        await updateProfile(formData);
-      } else {
-        // Update Firestore via AuthContext action
-        await updateProfile(formData);
-      }
+      // Trigger update (optimistic state change happens inside AuthContext)
+      const updatePromise = updateProfile(formData);
 
+      // Close editing mode immediately for a faster feel
       setIsEditing(false);
-      alert('Profile updated successfully!');
+
+      // Wait for network in the background (prevents blocking the UI transition)
+      await updatePromise;
+      console.log('ProfilePage: Background sync completed');
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Error updating profile. Please try again.');
+      // Revert if critical, but for now we keep the optimistic state
     } finally {
       setLoading(false);
     }

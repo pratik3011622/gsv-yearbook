@@ -228,18 +228,29 @@ export const AuthProvider = ({ children }) => {
   const updateProfileData = async (updates) => {
     if (!user) return;
 
-    // Sync to Firestore
-    await syncProfile(user.uid, updates);
-
-    // Sync to MongoDB
-    try {
-      await api.updateProfile(updates);
-    } catch (err) {
-      console.error("AuthContext: MongoDB sync failed during profile update", err);
-    }
+    // 1. OPTIMISTIC UPDATE: Update UI state immediately
+    const previousProfile = profile;
+    const previousUser = user;
 
     setProfile(prev => ({ ...prev, ...updates }));
     setUser(prev => ({ ...prev, ...updates }));
+
+    try {
+      // 2. PARALLEL SYNC: Run Firestore and MongoDB updates concurrently
+      console.log("AuthContext: Starting parallel profile sync...");
+      const syncTasks = [
+        syncProfile(user.uid, updates), // Firestore
+        api.updateProfile(updates)      // MongoDB
+      ];
+
+      await Promise.all(syncTasks);
+      console.log("AuthContext: Parallel profile sync successful");
+    } catch (err) {
+      console.error("AuthContext: Profile sync failed ->", err);
+      // Optional: Revert on absolute failure if critical data is lost
+      // For now, we keep the UI optimistic but log the error
+      // alert("Some changes might not have synced. Please refresh.");
+    }
   };
 
   return (
