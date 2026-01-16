@@ -23,7 +23,10 @@ router.post('/register', verifyFirebase, async (req, res) => {
           ...otherFields,
         });
         await user.save();
-        console.log(`Synced new user ${email} to MongoDB`);
+        await user.save();
+        console.log(`Synced new user ${email} to MongoDB with UID: ${firebaseUid}`);
+      } else {
+        console.log(`User ${email} already exists in MongoDB during register. UID: ${firebaseUid}`);
       }
     } catch (dbError) {
       console.warn("MongoDB sync failed during register (non-fatal):", dbError.message);
@@ -102,10 +105,16 @@ router.post('/login', (req, res) => {
 // Get current user
 router.get('/me', auth, async (req, res) => {
   try {
-    const user = await User.findOne({ firebaseUid: req.user.firebaseUid });
+    const { firebaseUid } = req.user;
+    console.log(`[GET /me] Looking up user with UID: ${firebaseUid}`);
+
+    const user = await User.findOne({ firebaseUid });
+
     if (user) {
+      console.log(`[GET /me] Found user in DB: ${user.fullName}`);
       res.json({ user });
     } else {
+      console.warn(`[GET /me] User NOT found in DB for UID: ${firebaseUid}. Falling back to token data.`);
       res.json({
         user: {
           id: req.user._id,

@@ -103,7 +103,8 @@ router.get('/me/profile', auth, async (req, res) => {
 // Update own profile
 router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
   try {
-    console.log('Profile update request received');
+    console.log('Profile update request received for UID:', req.user.firebaseUid);
+    console.log('Request body:', req.body);
     console.log('File present:', !!req.file);
     if (req.file) {
       console.log('File details:', {
@@ -149,6 +150,9 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
       updates,
       { new: true, upsert: true }
     ).select('-password');
+
+    console.log('Profile updated successfully for UID:', req.user.firebaseUid);
+    console.log('Updated user:', user ? user.email : 'No user returned');
 
     res.json(user);
   } catch (error) {
