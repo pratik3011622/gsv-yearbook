@@ -162,11 +162,7 @@ export const ProfilePage = ({ onNavigate, userId }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      // Trigger update (optimistic state change happens inside AuthContext)
-      // We await it here to ensure backend success before considering it "saved"
       await updateProfile(formData);
-
-      // Close editing mode immediately for a faster feel
       setIsEditing(false);
       console.log('ProfilePage: Background sync completed');
       alert("Profile changes saved successfully!");
@@ -187,7 +183,6 @@ export const ProfilePage = ({ onNavigate, userId }) => {
       alert('Password must be at least 6 characters');
       return;
     }
-    // TODO: Implement password change API
     alert('Password change functionality will be available soon');
   };
 
@@ -210,13 +205,18 @@ export const ProfilePage = ({ onNavigate, userId }) => {
       'fullName', 'bio', 'batchYear', 'department',
       'company', 'jobTitle', 'location', 'skills'
     ];
-    const completedFields = fields.filter(field => {
+    // Adjust required fields based on role
+    const relevantFields = profile?.role === 'student'
+      ? ['fullName', 'bio', 'batchYear', 'department', 'skills']
+      : fields;
+
+    const completedFields = relevantFields.filter(field => {
       if (Array.isArray(formData[field])) {
         return formData[field].length > 0;
       }
       return formData[field];
     }).length;
-    return Math.round((completedFields / fields.length) * 100);
+    return Math.round((completedFields / relevantFields.length) * 100);
   };
 
   const handleLogout = async () => {
@@ -290,7 +290,8 @@ export const ProfilePage = ({ onNavigate, userId }) => {
   }
 
   const completionPercentage = calculateProfileCompletion();
-  const isAlumni = profile?.role === 'alumni';
+  // Is this user an alumni? Checks the profile role.
+  const isAlumni = (displayProfile.role === 'alumni');
 
   return (
     <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
@@ -348,28 +349,34 @@ export const ProfilePage = ({ onNavigate, userId }) => {
                   )}
                   {isEditing ? (
                     <div className="flex flex-col space-y-2 pt-2">
-                      <input
-                        type="text"
-                        value={formData.jobTitle}
-                        onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-                        placeholder="Job Title"
-                        className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
-                      />
-                      <input
-                        type="text"
-                        value={formData.company}
-                        onChange={(e) => handleInputChange('company', e.target.value)}
-                        placeholder="Company"
-                        className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
-                      />
+                      {isAlumni && (
+                        <>
+                          <input
+                            type="text"
+                            value={formData.jobTitle}
+                            onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                            placeholder="Job Title"
+                            className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                          />
+                          <input
+                            type="text"
+                            value={formData.company}
+                            onChange={(e) => handleInputChange('company', e.target.value)}
+                            placeholder="Company"
+                            className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                          />
+                        </>
+                      )}
                     </div>
                   ) : (
-                    <p className="text-lg text-slate-600 dark:text-slate-300 font-medium">
-                      {formData.jobTitle && formData.company
-                        ? `${formData.jobTitle} at ${formData.company}`
-                        : 'Professional Title'
-                      }
-                    </p>
+                    isAlumni && (
+                      <p className="text-lg text-slate-600 dark:text-slate-300 font-medium">
+                        {formData.jobTitle && formData.company
+                          ? `${formData.jobTitle} at ${formData.company}`
+                          : 'Professional Title'
+                        }
+                      </p>
+                    )
                   )}
                   {isEditing ? (
                     <div className="flex space-x-2 pt-2">
@@ -474,7 +481,6 @@ export const ProfilePage = ({ onNavigate, userId }) => {
           <div className="lg:col-span-2 space-y-6">
 
             {/* ABOUT SECTION */}
-            {/* ABOUT SECTION */}
             <div className="pb-8 border-b border-slate-200 dark:border-slate-800/50">
               <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">About</h3>
               {isEditing ? (
@@ -512,7 +518,6 @@ export const ProfilePage = ({ onNavigate, userId }) => {
               )}
             </div>
 
-            {/* EDUCATION DETAILS */}
             {/* EDUCATION DETAILS */}
             <div className="py-8 border-b border-slate-200 dark:border-slate-800/50">
               <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">Education</h3>
@@ -585,71 +590,71 @@ export const ProfilePage = ({ onNavigate, userId }) => {
               )}
             </div>
 
-            {/* PROFESSIONAL DETAILS */}
-            {/* PROFESSIONAL DETAILS */}
-            <div className="py-8 border-b border-slate-200 dark:border-slate-800/50">
-              <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">Experience</h3>
-              {isEditing ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Current Company</label>
-                    <input
-                      type="text"
-                      value={formData.currentCompany}
-                      onChange={(e) => handleInputChange('currentCompany', e.target.value)}
-                      className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-white transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Job Title</label>
-                    <input
-                      type="text"
-                      value={formData.jobTitle}
-                      onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-                      className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-white transition-colors"
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">History</label>
-                    <input
-                      type="text"
-                      value={formData.pastCompanies.join(', ')}
-                      onChange={(e) => handleArrayChange('pastCompanies', e.target.value)}
-                      placeholder="Previous companies separated by comma"
-                      className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-white transition-colors"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="flex items-start">
-                    <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center mr-4 shrink-0">
-                      <Briefcase className="w-6 h-6 text-slate-900 dark:text-white" />
+            {/* PROFESSIONAL DETAILS - ALUMNI ONLY */}
+            {isAlumni && (
+              <div className="py-8 border-b border-slate-200 dark:border-slate-800/50">
+                <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">Experience</h3>
+                {isEditing ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Current Company</label>
+                      <input
+                        type="text"
+                        value={formData.currentCompany}
+                        onChange={(e) => handleInputChange('currentCompany', e.target.value)}
+                        className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-white transition-colors"
+                      />
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold text-slate-900 dark:text-white">{formData.currentCompany || 'Not specified'}</h4>
-                      <p className="text-slate-600 dark:text-slate-400 font-medium">{formData.jobTitle || 'Role'}</p>
-                      <p className="text-slate-500 text-sm mt-1">{formData.industry}</p>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Job Title</label>
+                      <input
+                        type="text"
+                        value={formData.jobTitle}
+                        onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                        className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-white transition-colors"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">History</label>
+                      <input
+                        type="text"
+                        value={formData.pastCompanies.join(', ')}
+                        onChange={(e) => handleArrayChange('pastCompanies', e.target.value)}
+                        placeholder="Previous companies separated by comma"
+                        className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-white transition-colors"
+                      />
                     </div>
                   </div>
-
-                  {formData.pastCompanies.length > 0 && (
-                    <div className="pl-16">
-                      <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Previously</p>
-                      <div className="flex flex-wrap gap-2">
-                        {formData.pastCompanies.map((company, index) => (
-                          <span key={index} className="text-slate-600 dark:text-slate-400 text-sm font-medium bg-slate-50 dark:bg-slate-900 px-3 py-1 rounded">
-                            {company}
-                          </span>
-                        ))}
+                ) : (
+                  <div className="space-y-6">
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center mr-4 shrink-0">
+                        <Briefcase className="w-6 h-6 text-slate-900 dark:text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-slate-900 dark:text-white">{formData.currentCompany || 'Not specified'}</h4>
+                        <p className="text-slate-600 dark:text-slate-400 font-medium">{formData.jobTitle || 'Role'}</p>
+                        <p className="text-slate-500 text-sm mt-1">{formData.industry}</p>
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
 
-            {/* SKILLS SECTION */}
+                    {formData.pastCompanies.length > 0 && (
+                      <div className="pl-16">
+                        <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Previously</p>
+                        <div className="flex flex-wrap gap-2">
+                          {formData.pastCompanies.map((company, index) => (
+                            <span key={index} className="text-slate-600 dark:text-slate-400 text-sm font-medium bg-slate-50 dark:bg-slate-900 px-3 py-1 rounded">
+                              {company}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* SKILLS SECTION */}
             <div className="py-8 border-b border-slate-200 dark:border-slate-800/50">
               <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">Expertise</h3>
@@ -684,23 +689,31 @@ export const ProfilePage = ({ onNavigate, userId }) => {
             </div>
 
             {/* SOCIAL & LINKS */}
-            {/* SOCIAL & LINKS */}
             <div className="py-8">
               <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">Connect</h3>
               {isEditing ? (
                 <div className="space-y-4">
-                  <input
-                    type="url"
-                    value={formData.linkedinUrl}
-                    onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
-                    placeholder="LinkedIn URL"
-                    className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none"
-                  />
+                  {isAlumni && (
+                    <input
+                      type="url"
+                      value={formData.linkedinUrl}
+                      onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
+                      placeholder="LinkedIn URL"
+                      className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none"
+                    />
+                  )}
                   <input
                     type="url"
                     value={formData.githubUrl}
                     onChange={(e) => handleInputChange('githubUrl', e.target.value)}
                     placeholder="GitHub URL"
+                    className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none"
+                  />
+                  <input
+                    type="url"
+                    value={formData.websiteUrl}
+                    onChange={(e) => handleInputChange('websiteUrl', e.target.value)}
+                    placeholder="Website URL"
                     className="w-full p-3 bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white outline-none"
                   />
                 </div>
@@ -726,8 +739,6 @@ export const ProfilePage = ({ onNavigate, userId }) => {
             </div>
 
             {/* ACHIEVEMENTS & HIGHLIGHTS */}
-            {/* ACHIEVEMENTS & HIGHLIGHTS */}
-            {/* Reduced visibility as requested for clean layout, or kept minimal if data exists */}
             {formData.achievements.length > 0 && (
               <div className="py-8 border-b border-slate-200 dark:border-slate-800/50">
                 <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-6">Achievements</h3>
@@ -804,30 +815,32 @@ export const ProfilePage = ({ onNavigate, userId }) => {
                         />
                         <button
                           onClick={handlePasswordChange}
-                          className="w-full py-2.5 bg-slate-900 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 font-semibold"
+                          className="px-6 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-medium hover:opacity-90 transition-opacity"
                         >
                           Update Password
                         </button>
                       </div>
                     </div>
 
-                    <div className="p-6 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10">
-                      <h4 className="font-semibold text-red-600 dark:text-red-400 mb-2">Danger Zone</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        Deleting your account is permanent. All your data including connections and messages will be wiped out.
-                      </p>
-                      <button
-                        onClick={handleDeleteAccount}
-                        className="px-4 py-2 bg-white dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/40 text-sm font-semibold transition-colors"
-                      >
-                        Delete Account
-                      </button>
+                    <div className="bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border border-red-200 dark:border-red-900/50">
+                      <h4 className="font-semibold text-red-700 dark:text-red-400 mb-4">Danger Zone</h4>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-slate-700 dark:text-slate-300 font-medium">Delete Account</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">Permanently delete your account and all data</p>
+                        </div>
+                        <button
+                          onClick={handleDeleteAccount}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                          Delete Account
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
             )}
-
           </div>
         </div>
       </div>
