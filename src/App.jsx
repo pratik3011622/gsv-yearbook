@@ -86,7 +86,7 @@ function AppContent() {
     const page = currentPage.split('/')[0];
 
     // Public routes that anyone can see
-    const publicPages = ['home', 'login', 'register', 'vision-mission', 'leadership', 'team', 'magazine', 'photo-gallery', 'video-gallery'];
+    const publicPages = ['home', 'login', 'register', 'vision-mission', 'leadership', 'team', 'magazine', 'photo-gallery', 'video-gallery', 'forgot-password', 'verification-sent'];
     const isPublic = publicPages.includes(page);
 
     // 1. If not logged in and trying to access protected route -> Login

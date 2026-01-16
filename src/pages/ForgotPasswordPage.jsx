@@ -16,11 +16,29 @@ export const ForgotPasswordPage = ({ onNavigate }) => {
         setLoading(true);
 
         try {
+            // 1. Check if user exists in our DB (Intelligence Check)
+            const { api } = await import('../lib/api');
+            const { exists } = await api.checkEmail(email);
+
+            if (!exists) {
+                // Throw specific error to be caught below
+                throw new Error("USER_NOT_FOUND");
+            }
+
+            // 2. If exists, send reset email via Firebase
             await resetPassword(email);
             setMessage('Check your inbox for password reset instructions.');
         } catch (err) {
             console.error(err);
-            setError('Failed to reset password. Please check if the email is correct.');
+            if (err.message === 'USER_NOT_FOUND' || err.code === 'auth/user-not-found') {
+                setError(
+                    <span>
+                        Email not found. <button onClick={() => onNavigate('register')} className="underline font-bold hover:text-red-800">Create a new account?</button>
+                    </span>
+                );
+            } else {
+                setError('Failed to reset password. Please check if the email is correct.');
+            }
         } finally {
             setLoading(false);
         }

@@ -79,6 +79,15 @@ class ApiClient {
     return result.data;
   }
 
+  async checkEmail(email) {
+    const result = await this.request('/auth/check-email', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+      skipAuth: true // Important: Public endpoint
+    });
+    return result.data;
+  }
+
   async login(credentials) {
     const result = await this.request('/auth/login', {
       method: 'POST',

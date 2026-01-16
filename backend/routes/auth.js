@@ -125,6 +125,20 @@ router.post('/google', verifyFirebase, async (req, res) => {
   }
 });
 
+// Check if email exists (For Forgot Password flow)
+router.post('/check-email', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email required' });
+
+    const user = await User.findOne({ email });
+    res.json({ exists: !!user });
+  } catch (error) {
+    console.error('Check email error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Login - Deprecated/Unused
 router.post('/login', (req, res) => {
   res.status(404).json({ message: 'Use Firebase Auth on client side' });
