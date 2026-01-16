@@ -290,8 +290,14 @@ export const ProfilePage = ({ onNavigate, userId }) => {
   }
 
   const completionPercentage = calculateProfileCompletion();
-  // Is this user an alumni? Checks the profile role.
-  const isAlumni = (displayProfile.role === 'alumni');
+
+  // Safe role check (defaults to student if undefined, ensuring fields are hidden by default for safety, but we want Alumni to see fields)
+  // Actually, if we default to student, Alumni might miss fields. 
+  // But data should be correct.
+  const role = displayProfile.role ? displayProfile.role.toLowerCase() : 'student';
+  const isAlumni = role === 'alumni';
+
+  console.log("ProfilePage Render:", { role, isAlumni, displayProfile });
 
   return (
     <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
@@ -331,6 +337,17 @@ export const ProfilePage = ({ onNavigate, userId }) => {
                     onChange={handlePhotoChange}
                     className="hidden"
                   />
+                </div>
+
+                {/* Role Badge - Visual Debugger */}
+                <div className="mb-4">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase
+                    ${isAlumni
+                      ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                      : 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
+                    }`}>
+                    {isAlumni ? 'Alumni' : 'Student'}
+                  </span>
                 </div>
 
                 <div className="space-y-2">
