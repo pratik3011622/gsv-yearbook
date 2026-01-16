@@ -119,11 +119,9 @@ export const HomePage = ({ onNavigate }) => {
               className="flex overflow-x-auto h-full snap-x snap-mandatory scrollbar-hide scroll-smooth"
             >
               {[
-                { title: 'Campus Highlights', img: '/slide5.jpg', date: 'Dec 12, 2024', desc: 'Prastuti - Pratap Palace ' },
-                { title: 'Campus Highlights', img: '/Screenshot 2025-10-21 211940.png', date: 'Oct 21, 2025', desc: 'The vibrant energy of student life at GSV.' },
-                { title: 'Student Activities', img: '/Screenshot 2025-10-21 212003.png', date: 'Oct 21, 2025', desc: 'Engaging workshops and collaborative learning sessions.' },
-                { title: 'Academic Excellence', img: '/Screenshot 2025-10-22 100457.png', date: 'Oct 22, 2025', desc: 'Pushing the boundaries of knowledge and innovation.' },
-                { title: 'Community Moments', img: '/WhatsApp Image 2025-06-21 at 20.14.42_a21a8fec.jpg', date: 'Jun 21, 2025', desc: 'Building lifelong friendships and professional networks.' },
+                { title: 'Campus Highlights', img: 'https://gsv.ac.in/wp-content/uploads/slider/cache/8bef1522bf9985ed15004d1a5d70af15/BOSS0373-scaled.jpg', date: 'Dec 12, 2024', desc: 'Prastuti - Pratap Palace ' },
+                { title: 'Campus Highlights', img: 'https://currentaffairs.adda247.com/wp-content/uploads/multisite/sites/5/2022/07/15073800/ntri.jpg', date: 'Oct 21, 2025', desc: 'The vibrant energy of student life at GSV.' },
+                { title: 'Student Activities', img: 'https://cache.careers360.mobi/media/article_images/2022/7/13/nrti_gati_shakti_vishwavidyalaya.jpg', date: 'Oct 21, 2025', desc: 'Engaging workshops and collaborative learning sessions.' },
               ].map((item, idx) => (
                 <div key={idx} className="min-w-full h-full relative snap-center flex items-center justify-center bg-black">
                   <div className="absolute inset-0 overflow-hidden">
