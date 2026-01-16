@@ -65,6 +65,13 @@ function AppContent() {
     };
   }, []);
 
+  // FIX: Handle redirection via side effect, not during render
+  useEffect(() => {
+    if (user && (currentPage === 'login' || currentPage === 'register')) {
+      handleNavigate('home');
+    }
+  }, [user, currentPage]);
+
   const renderPage = () => {
     // FIX: Show global loading spinner to prevent redirect flashes
     if (loading) {
@@ -116,21 +123,30 @@ function AppContent() {
           </div>
         );
       case 'login':
+        // Redirect handled by useEffect, show spinner
         if (user) {
-          handleNavigate('home');
-          return null;
+          return (
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950">
+              <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          );
         }
         return <LoginPage onNavigate={handleNavigate} />;
       case 'register':
+        // Redirect handled by useEffect
         if (user) {
-          handleNavigate('home');
-          return null;
+          return (
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950">
+              <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          );
         }
         return (
           <div className="min-h-screen">
             <RegisterPage onNavigate={handleNavigate} />
           </div>
         );
+
       case 'verification-sent':
         return (
           <div className="min-h-screen">

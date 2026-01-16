@@ -123,7 +123,7 @@ export const AuthProvider = ({ children }) => {
       setUser(prev => ({ ...prev, ...newProfileData, id: newUser.uid }));
     } catch (err) {
       console.error("AuthContext: MongoDB registration failed", err);
-      // We still proceed to verification, but log the error
+      // We still proceed to verification, but log the error (and alert for visibility)
       alert(`Registration warning: Profile data sync failed (${err.message}). The account is created, but role/details might be default.`);
     }
 
@@ -148,7 +148,11 @@ export const AuthProvider = ({ children }) => {
 
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ hd: "gsv.ac.in" });
+    // FIX: prompt: 'select_account' forces the account chooser every time
+    provider.setCustomParameters({
+      hd: "gsv.ac.in",
+      prompt: "select_account"
+    });
 
     const { user: gUser } = await signInWithPopup(auth, provider);
 
