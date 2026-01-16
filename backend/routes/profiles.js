@@ -46,25 +46,6 @@ const upload = multer({
 
 const router = express.Router();
 
-// Test Cloudinary configuration (for debugging)
-router.get('/test-cloudinary', (req, res) => {
-  const hasCloudName = !!process.env.CLOUDINARY_CLOUD_NAME;
-  const hasApiKey = !!process.env.CLOUDINARY_API_KEY;
-  const hasApiSecret = !!process.env.CLOUDINARY_API_SECRET;
-
-  console.log('Cloudinary test endpoint called');
-  console.log('CLOUDINARY_CLOUD_NAME present:', hasCloudName);
-  console.log('CLOUDINARY_API_KEY present:', hasApiKey);
-  console.log('CLOUDINARY_API_SECRET present:', hasApiSecret);
-
-  res.json({
-    cloudinaryConfigured: hasCloudName && hasApiKey && hasApiSecret,
-    cloudName: hasCloudName ? 'Set' : 'Missing',
-    apiKey: hasApiKey ? 'Set' : 'Missing',
-    apiSecret: hasApiSecret ? 'Set' : 'Missing'
-  });
-});
-
 // Get all profiles (authenticated users only)
 router.get('/', auth, async (req, res) => {
   try {
@@ -104,17 +85,8 @@ router.get('/me/profile', auth, async (req, res) => {
 router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
   try {
     console.log('Profile update request received for UID:', req.user.firebaseUid);
-    console.log('Request body:', req.body);
-    console.log('File present:', !!req.file);
-    if (req.file) {
-      console.log('File details:', {
-        fieldname: req.file.fieldname,
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-        path: req.file.path
-      });
-    }
+
+    // 1. Prepare Updates Object
     const allowedFields = [
       'fullName', 'batchYear', 'department', 'company',
       'jobTitle', 'location', 'country', 'bio', 'avatarUrl',
@@ -129,7 +101,6 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
     const updates = {};
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
-        // Handle array fields
         if (['skills', 'pastCompanies', 'achievements', 'certifications'].includes(field)) {
           updates[field] = Array.isArray(req.body[field]) ? req.body[field] : JSON.parse(req.body[field] || '[]');
         } else {
@@ -138,42 +109,56 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
       }
     });
 
-    // Handle profile photo upload
     if (req.file) {
-      console.log('File uploaded to Cloudinary:', req.file.path);
-      updates.avatarUrl = req.file.path; // Cloudinary URL
-      console.log('Avatar URL set:', updates.avatarUrl);
+      updates.avatarUrl = req.file.path;
     }
 
-    // SELF-HEALING LOGIC:
-    // Ensure email is present in updates if it's a new record creation (upsert)
-    // We get the email securely from the token (req.user)
-    if (req.user.email && !updates.email) {
-      updates.email = req.user.email;
+    // 2. Resolve User (Robust Lookup)
+    // First try by firebaseUid
+    let user = await User.findOne({ firebaseUid: req.user.firebaseUid });
+
+    // If not found, try by email (to link existing disparate accounts)
+    if (!user && req.user.email) {
+      console.log(`User not found by UID ${req.user.firebaseUid}, trying email ${req.user.email}...`);
+      user = await User.findOne({ email: req.user.email });
+
+      if (user) {
+        console.log(`Found existing user by email. Linking UID: ${req.user.firebaseUid}`);
+        user.firebaseUid = req.user.firebaseUid; // Link the UID!
+        // Don't save yet, we'll do it in the update step
+      }
     }
 
-    // Use upsert: true to create the user if they don't exist
-    // Use $set to update specific fields
-    // Use $setOnInsert to set fields ONLY if a new document is created
-    const user = await User.findOneAndUpdate(
-      { firebaseUid: req.user.firebaseUid },
-      {
-        $set: updates,
-        $setOnInsert: {
-          email: req.user.email, // Backup explicit set just in case
-          role: 'student' // Default role
-        }
-      },
-      { new: true, upsert: true, runValidators: true }
-    ).select('-password');
+    // 3. Execute Update or Create
+    if (user) {
+      // Update existing user
+      // We manually merge updates to ensure we handle the document directly
+      Object.keys(updates).forEach(key => {
+        user[key] = updates[key];
+      });
+      // Ensure UID is set (in case we found by email)
+      user.firebaseUid = req.user.firebaseUid;
 
-    console.log('Profile updated/created successfully for UID:', req.user.firebaseUid);
-    console.log('Updated user:', user ? user.email : 'No user returned');
+      await user.save();
+      console.log('Profile updated successfully for:', user.email);
+    } else {
+      // Create NEW user
+      console.log('Creating new user for:', req.user.email);
+      user = new User({
+        ...updates,
+        email: req.user.email,
+        firebaseUid: req.user.firebaseUid,
+        role: 'student' // Default role
+      });
+      await user.save();
+      console.log('New profile created successfully.');
+    }
 
     res.json(user);
   } catch (error) {
     console.error('Error updating profile:', error);
-    res.status(500).json({ message: error.message });
+    // Return a clearer error message
+    res.status(500).json({ message: `Update failed: ${error.message}` });
   }
 });
 

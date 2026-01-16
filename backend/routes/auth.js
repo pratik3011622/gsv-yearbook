@@ -15,15 +15,24 @@ router.post('/register', verifyFirebase, async (req, res) => {
       // Try to sync to Mongo if available
       let existingUser = await User.findOne({ firebaseUid });
       if (!existingUser) {
-        const user = new User({
-          email,
-          fullName,
-          firebaseUid,
-          role: role || 'student',
-          ...otherFields,
-        });
-        await user.save();
-        console.log(`Synced new user ${email} to MongoDB with UID: ${firebaseUid}`);
+        // Check by email before creating to avoid duplicates
+        existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+          console.log(`User ${email} found by email during register. Linking UID: ${firebaseUid}`);
+          existingUser.firebaseUid = firebaseUid;
+          await existingUser.save();
+        } else {
+          const user = new User({
+            email,
+            fullName,
+            firebaseUid,
+            role: role || 'student',
+            ...otherFields,
+          });
+          await user.save();
+          console.log(`Synced new user ${email} to MongoDB with UID: ${firebaseUid}`);
+        }
       } else {
         console.log(`User ${email} already exists in MongoDB during register. UID: ${firebaseUid}`);
       }
@@ -110,19 +119,32 @@ router.get('/me', auth, async (req, res) => {
     // Try to find user
     let user = await User.findOne({ firebaseUid });
 
-    // If user missing, auto-create using token data (Self-Healing)
+    // If user missing, auto-create (or link) using token data (Self-Healing)
     if (!user) {
-      console.warn(`[GET /me] User NOT found for UID: ${firebaseUid}. Auto-creating...`);
+      console.warn(`[GET /me] User NOT found for UID: ${firebaseUid}. Checking by email...`);
+
       try {
-        user = new User({
-          email,
-          firebaseUid,
-          fullName: fullName || 'User',
-          avatarUrl: picture,
-          role: 'student'
-        });
-        await user.save();
-        console.log(`[GET /me] User auto-created successfully.`);
+        // Check by email first to avoid duplicate
+        if (email) {
+          user = await User.findOne({ email });
+        }
+
+        if (user) {
+          console.log(`[GET /me] Found user by email ${email}. Linking UID...`);
+          user.firebaseUid = firebaseUid;
+          await user.save();
+        } else {
+          console.log(`[GET /me] User not found by email. Creating new...`);
+          user = new User({
+            email,
+            firebaseUid,
+            fullName: fullName || 'User',
+            avatarUrl: picture,
+            role: 'student'
+          });
+          await user.save();
+          console.log(`[GET /me] User auto-created successfully.`);
+        }
       } catch (createError) {
         console.error(`[GET /me] Failed to auto-create user: ${createError.message}`);
         // Fallback to minimal token data if DB fails
