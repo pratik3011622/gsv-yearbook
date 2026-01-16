@@ -7,6 +7,7 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
   sendEmailVerification,
+  sendPasswordResetEmail,
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
@@ -199,6 +200,10 @@ export const AuthProvider = ({ children }) => {
     await sendEmailVerification(auth.currentUser);
   };
 
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
   const updateProfileData = async (updates) => {
     if (!user) return;
 
@@ -241,6 +246,7 @@ export const AuthProvider = ({ children }) => {
         signOut,
         checkEmailVerification,
         resendVerificationEmail,
+        resetPassword,
         updateProfile: updateProfileData
       }}
     >

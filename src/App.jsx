@@ -21,6 +21,7 @@ import { VisionMissionPage } from './pages/VisionMissionPage';
 import { LeadershipPage } from './pages/LeadershipPage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { VerificationSentPage } from './pages/VerificationSentPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
 // Main App Content that uses Auth Context
 function AppContent() {
@@ -151,6 +152,12 @@ function AppContent() {
         return (
           <div className="min-h-screen">
             <VerificationSentPage onNavigate={handleNavigate} />
+          </div>
+        );
+      case 'forgot-password':
+        return (
+          <div className="min-h-screen">
+            <ForgotPasswordPage onNavigate={handleNavigate} />
           </div>
         );
       case 'directory':
