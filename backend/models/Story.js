@@ -20,8 +20,9 @@ const storySchema = new mongoose.Schema({
     default: 0,
   },
   authorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
+    required: true,
+    index: true, // For efficient queries
   },
   tags: {
     type: [String],
