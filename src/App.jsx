@@ -66,14 +66,20 @@ function AppContent() {
   }, []);
 
   const renderPage = () => {
+    // FIX: Show global loading spinner to prevent redirect flashes
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950 transition-colors duration-300">
+          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      );
+    }
+
     const page = currentPage.split('/')[0];
 
     // Public routes that anyone can see
     const publicPages = ['home', 'login', 'register', 'vision-mission', 'leadership', 'team', 'magazine', 'photo-gallery', 'video-gallery'];
     const isPublic = publicPages.includes(page);
-
-    // Non-blocking loading: Always proceed to render public or protected logic
-    // We rely on 'user' state which updates progressively
 
     // 1. If not logged in and trying to access protected route -> Login
     if (!user && !isPublic) {
@@ -255,9 +261,6 @@ function AppContent() {
         );
     }
   };
-
-  // Removed blocking loading spinner to allow immediate Guest land
-  // if (loading) { ... }
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">

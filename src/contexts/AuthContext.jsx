@@ -124,6 +124,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error("AuthContext: MongoDB registration failed", err);
       // We still proceed to verification, but log the error
+      alert(`Registration warning: Profile data sync failed (${err.message}). The account is created, but role/details might be default.`);
     }
 
     // Send verification email

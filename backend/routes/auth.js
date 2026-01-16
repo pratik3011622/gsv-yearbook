@@ -20,8 +20,16 @@ router.post('/register', verifyFirebase, async (req, res) => {
         existingUser = await User.findOne({ email });
 
         if (existingUser) {
-          console.log(`User ${email} found by email during register. Linking UID: ${firebaseUid}`);
+          console.log(`User ${email} found by email during register. Linking UID and Updating Profile: ${firebaseUid}`);
           existingUser.firebaseUid = firebaseUid;
+
+          // FIX: Force update of profile fields on re-registration/linking
+          existingUser.fullName = fullName;
+          existingUser.role = role; // Update role to match new registration
+
+          // Assign other fields like batchYear, company, etc.
+          Object.assign(existingUser, otherFields);
+
           await existingUser.save();
         } else {
           const user = new User({
@@ -36,9 +44,13 @@ router.post('/register', verifyFirebase, async (req, res) => {
         }
       } else {
         console.log(`User ${email} already exists in MongoDB during register. UID: ${firebaseUid}`);
+        // Optional: Update details here too if we want registration to be "upsert" always
       }
     } catch (dbError) {
       console.warn("MongoDB sync failed during register (non-fatal):", dbError.message);
+      // If validation fails (e.g. data mismatch), we should probably let frontend know?
+      // Re-throwing allows AuthContext to alert the user
+      throw dbError;
     }
 
     // Return success based on valid token
@@ -54,6 +66,10 @@ router.post('/register', verifyFirebase, async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
+    // Send specifically if it was a validation error from Mongo
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(500).json({ message: 'Internal server error' });
   }
 });
