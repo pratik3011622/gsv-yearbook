@@ -145,19 +145,29 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
       console.log('Avatar URL set:', updates.avatarUrl);
     }
 
-    // FIX: Using $set and disabling upsert to prevent duplicate creation
-    const user = await User.findOneAndUpdate(
-      { firebaseUid: req.user.firebaseUid },
-      { $set: updates },
-      { new: true, runValidators: true }
-    ).select('-password');
-
-    if (!user) {
-      console.warn('Update failed: User not found for UID:', req.user.firebaseUid);
-      return res.status(404).json({ message: 'User not found in database. Please register first.' });
+    // SELF-HEALING LOGIC:
+    // Ensure email is present in updates if it's a new record creation (upsert)
+    // We get the email securely from the token (req.user)
+    if (req.user.email && !updates.email) {
+      updates.email = req.user.email;
     }
 
-    console.log('Profile updated successfully for UID:', req.user.firebaseUid);
+    // Use upsert: true to create the user if they don't exist
+    // Use $set to update specific fields
+    // Use $setOnInsert to set fields ONLY if a new document is created
+    const user = await User.findOneAndUpdate(
+      { firebaseUid: req.user.firebaseUid },
+      {
+        $set: updates,
+        $setOnInsert: {
+          email: req.user.email, // Backup explicit set just in case
+          role: 'student' // Default role
+        }
+      },
+      { new: true, upsert: true, runValidators: true }
+    ).select('-password');
+
+    console.log('Profile updated/created successfully for UID:', req.user.firebaseUid);
     console.log('Updated user:', user ? user.email : 'No user returned');
 
     res.json(user);

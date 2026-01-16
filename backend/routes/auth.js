@@ -23,7 +23,6 @@ router.post('/register', verifyFirebase, async (req, res) => {
           ...otherFields,
         });
         await user.save();
-        await user.save();
         console.log(`Synced new user ${email} to MongoDB with UID: ${firebaseUid}`);
       } else {
         console.log(`User ${email} already exists in MongoDB during register. UID: ${firebaseUid}`);
@@ -102,32 +101,66 @@ router.post('/login', (req, res) => {
   res.status(404).json({ message: 'Use Firebase Auth on client side' });
 });
 
-// Get current user
+// Get current user (Read) - Auto-creates if missing
 router.get('/me', auth, async (req, res) => {
   try {
-    const { firebaseUid } = req.user;
+    const { firebaseUid, email, fullName, picture } = req.user;
     console.log(`[GET /me] Looking up user with UID: ${firebaseUid}`);
 
-    const user = await User.findOne({ firebaseUid });
+    // Try to find user
+    let user = await User.findOne({ firebaseUid });
+
+    // If user missing, auto-create using token data (Self-Healing)
+    if (!user) {
+      console.warn(`[GET /me] User NOT found for UID: ${firebaseUid}. Auto-creating...`);
+      try {
+        user = new User({
+          email,
+          firebaseUid,
+          fullName: fullName || 'User',
+          avatarUrl: picture,
+          role: 'student'
+        });
+        await user.save();
+        console.log(`[GET /me] User auto-created successfully.`);
+      } catch (createError) {
+        console.error(`[GET /me] Failed to auto-create user: ${createError.message}`);
+        // Fallback to minimal token data if DB fails
+        return res.json({
+          user: {
+            id: req.user._id,
+            email: req.user.email,
+            fullName: req.user.fullName,
+            role: req.user.role,
+            avatarUrl: req.user.picture,
+            ...req.user
+          }
+        });
+      }
+    }
 
     if (user) {
-      console.log(`[GET /me] Found user in DB: ${user.fullName}`);
+      console.log(`[GET /me] Returning user from DB: ${user.fullName}`);
       res.json({ user });
-    } else {
-      console.warn(`[GET /me] User NOT found in DB for UID: ${firebaseUid}. Falling back to token data.`);
-      res.json({
-        user: {
-          id: req.user._id,
-          email: req.user.email,
-          fullName: req.user.fullName,
-          role: req.user.role,
-          avatarUrl: req.user.picture,
-          ...req.user
-        },
-      });
     }
+
   } catch (error) {
     console.error('Error fetching current user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Delete current user (Delete)
+router.delete('/me', auth, async (req, res) => {
+  try {
+    const { firebaseUid } = req.user;
+    const result = await User.findOneAndDelete({ firebaseUid });
+    if (!result) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });

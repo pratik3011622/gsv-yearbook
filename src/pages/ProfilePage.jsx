@@ -191,10 +191,17 @@ export const ProfilePage = ({ onNavigate, userId }) => {
     alert('Password change functionality will be available soon');
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      // TODO: Implement account deletion
-      alert('Account deletion functionality will be available soon');
+      try {
+        await api.deleteAccount();
+        await signOut();
+        onNavigate('home');
+        alert('Your account has been deleted successfully.');
+      } catch (error) {
+        console.error('Failed to delete account:', error);
+        alert('Failed to delete account. Please try again.');
+      }
     }
   };
 

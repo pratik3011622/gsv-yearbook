@@ -92,6 +92,13 @@ class ApiClient {
     return result.data;
   }
 
+  async deleteAccount() {
+    const result = await this.request('/auth/me', {
+      method: 'DELETE'
+    });
+    return result.data;
+  }
+
   // Profile endpoints
   async getProfiles() {
     const result = await this.request('/profiles');
