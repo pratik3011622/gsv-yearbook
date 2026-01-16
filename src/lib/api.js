@@ -71,9 +71,10 @@ class ApiClient {
     return result.data;
   }
 
-  async syncGoogle() {
+  async syncGoogle(role) {
     const result = await this.request('/auth/google', {
       method: 'POST',
+      body: JSON.stringify({ role }), // FIX: Pass role to backend
     });
     return result.data;
   }
@@ -295,6 +296,7 @@ class ApiClient {
   async updatePlatformStats() {
     const result = await this.request('/stats/update', {
       method: 'POST',
+      body: JSON.stringify({}),
     });
     return result.data;
   }

@@ -78,6 +78,7 @@ router.post('/register', verifyFirebase, async (req, res) => {
 router.post('/google', verifyFirebase, async (req, res) => {
   try {
     const { uid: firebaseUid, name, picture, email } = req.firebaseUser;
+    const { role } = req.body; // FIX: Accept role from request body
 
     try {
       // Optional Sync
@@ -89,6 +90,8 @@ router.post('/google', verifyFirebase, async (req, res) => {
       if (user) {
         if (!user.firebaseUid) {
           user.firebaseUid = firebaseUid;
+          // FIX: If we are linking an account, UPDATE the role if provided
+          if (role) user.role = role;
           await user.save();
         }
       } else {
@@ -98,7 +101,7 @@ router.post('/google', verifyFirebase, async (req, res) => {
           fullName: name || 'User',
           firebaseUid,
           avatarUrl: picture,
-          role: 'student',
+          role: role || 'student', // Use provided role or default
         });
         await user.save();
       }

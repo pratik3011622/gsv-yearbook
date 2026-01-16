@@ -146,7 +146,7 @@ export const AuthProvider = ({ children }) => {
     return existingUser;
   };
 
-  const googleSignIn = async () => {
+  const googleSignIn = async (role) => {
     const provider = new GoogleAuthProvider();
     // FIX: prompt: 'select_account' forces the account chooser every time
     provider.setCustomParameters({
@@ -163,7 +163,7 @@ export const AuthProvider = ({ children }) => {
 
     // Sync to MongoDB
     try {
-      await api.syncGoogle();
+      await api.syncGoogle(role); // FIX: Pass role selection to backend
       // Fetch fresh profile after sync
       const response = await api.getCurrentUser();
       if (response && response.user) {

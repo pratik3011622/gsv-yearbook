@@ -9,6 +9,7 @@ export const LoginPage = ({ onNavigate }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [role, setRole] = useState('student'); // Default to student
   const { signIn, googleSignIn } = useAuth();
 
   const handleGoogleSignIn = async () => {
@@ -16,7 +17,7 @@ export const LoginPage = ({ onNavigate }) => {
     setError('');
 
     try {
-      await googleSignIn();
+      await googleSignIn(role); // Pass selected role
       onNavigate('home');
     } catch (err) {
       console.error(err);
@@ -67,6 +68,32 @@ export const LoginPage = ({ onNavigate }) => {
               {error}
             </div>
           )}
+
+          {/* Role Selection for Google Sign-In */}
+          <div className="mb-4 flex justify-center">
+            <div className="bg-slate-100 dark:bg-slate-900 p-1 rounded-full inline-flex">
+              <button
+                type="button"
+                onClick={() => setRole('student')}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${role === 'student'
+                    ? 'bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                  }`}
+              >
+                Student
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole('alumni')}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${role === 'alumni'
+                    ? 'bg-white dark:bg-slate-700 text-amber-600 dark:text-amber-400 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                  }`}
+              >
+                Alumni
+              </button>
+            </div>
+          </div>
 
           {/* Google Sign-In Button */}
           <div className="mb-6">
