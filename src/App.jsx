@@ -242,7 +242,7 @@ function AppContent() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <ProfilePage onNavigate={handleNavigate} userId={currentPage.includes('/') ? currentPage.split('/')[1] : user?.id} />
+              <ProfilePage onNavigate={handleNavigate} userId={currentPage.includes('/') ? currentPage.split('/')[1] : null} />
             </div>
           </div>
         );

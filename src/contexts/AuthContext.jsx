@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase.config";
+import { api } from "../lib/api";
 
 /* ================= CONTEXT ================= */
 
@@ -133,7 +134,8 @@ export const AuthProvider = ({ children }) => {
       console.error("AuthContext: Firestore profile creation failed during signup", err);
     }
 
-    // Sync to MongoDB
+    // Sync to MongoDB -> REMOVED: This now happens in VerifyEmailPage after verification
+    /* 
     try {
       await api.register({
         ...profileData,
@@ -144,6 +146,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error("AuthContext: MongoDB sync failed during signup", err);
     }
+    */
 
     return newUser;
   };

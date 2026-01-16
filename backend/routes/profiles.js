@@ -80,7 +80,12 @@ router.get('/', auth, async (req, res) => {
 // Get profile by ID
 router.get('/:id', async (req, res) => {
   try {
-    const profile = await User.findById(req.params.id).select('-password');
+    // Try to find by Mongo ID first, then fallback to firebaseUid
+    let profile = await User.findById(req.params.id).select('-password');
+    if (!profile) {
+      profile = await User.findOne({ firebaseUid: req.params.id }).select('-password');
+    }
+
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });
     }
@@ -139,10 +144,10 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
       console.log('Avatar URL set:', updates.avatarUrl);
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
+    const user = await User.findOneAndUpdate(
+      { firebaseUid: req.user.firebaseUid },
       updates,
-      { new: true }
+      { new: true, upsert: true }
     ).select('-password');
 
     res.json(user);

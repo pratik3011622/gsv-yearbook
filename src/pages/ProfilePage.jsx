@@ -55,6 +55,33 @@ export const ProfilePage = ({ onNavigate, userId }) => {
     certifications: [],
     isProfilePublic: true
   });
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  // Fetch remote user profile if userId is provided
+  useEffect(() => {
+    const fetchRemoteProfile = async () => {
+      if (!userId) {
+        setInitialLoading(false);
+        return;
+      }
+
+      setViewLoading(true);
+      setError(null);
+      try {
+        console.log("ProfilePage: Fetching remote profile for", userId);
+        const data = await api.getProfile(userId);
+        setViewProfile(data);
+      } catch (err) {
+        console.error("ProfilePage: Error fetching profile", err);
+        setError("Could not load user profile.");
+      } finally {
+        setViewLoading(false);
+        setInitialLoading(false);
+      }
+    };
+
+    fetchRemoteProfile();
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
@@ -209,6 +236,37 @@ export const ProfilePage = ({ onNavigate, userId }) => {
     document.getElementById('profilePhotoInput').click();
   };
 
+  if (initialLoading || (userId && viewLoading)) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400 font-medium">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (userId && error) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div className="text-center max-w-md px-4">
+          <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <X className="w-10 h-10 text-red-600 dark:text-red-400" />
+          </div>
+          <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-2">Profile Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-8">{error}</p>
+          <button
+            onClick={() => onNavigate('directory')}
+            className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold transition-all shadow-md"
+          >
+            Back to Directory
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
@@ -271,24 +329,85 @@ export const ProfilePage = ({ onNavigate, userId }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white">
-                    {formData.fullName || 'Your Name'}
-                  </h1>
-                  <p className="text-lg text-slate-600 dark:text-slate-300 font-medium">
-                    {formData.jobTitle && formData.currentCompany
-                      ? `${formData.jobTitle} at ${formData.currentCompany}`
-                      : 'Professional Title'
-                    }
-                  </p>
-                  <p className="text-sm text-slate-500 uppercase tracking-widest font-semibold">
-                    Batch of {formData.batchYear || '20XX'} • {formData.department || 'Department'}
-                  </p>
-
-                  {formData.location && (
-                    <div className="flex items-center justify-center lg:justify-start text-slate-500 pt-2">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <span>{formData.location}, {formData.country}</span>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={formData.fullName}
+                      onChange={(e) => handleInputChange('fullName', e.target.value)}
+                      placeholder="Your Full Name"
+                      className="w-full text-3xl font-serif font-bold bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                    />
+                  ) : (
+                    <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white">
+                      {formData.fullName || user.displayName || user.email?.split('@')[0] || 'Member'}
+                    </h1>
+                  )}
+                  {isEditing ? (
+                    <div className="flex flex-col space-y-2 pt-2">
+                      <input
+                        type="text"
+                        value={formData.jobTitle}
+                        onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                        placeholder="Job Title"
+                        className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                      />
+                      <input
+                        type="text"
+                        value={formData.currentCompany}
+                        onChange={(e) => handleInputChange('currentCompany', e.target.value)}
+                        placeholder="Company"
+                        className="w-full text-lg bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                      />
                     </div>
+                  ) : (
+                    <p className="text-lg text-slate-600 dark:text-slate-300 font-medium">
+                      {formData.jobTitle && formData.currentCompany
+                        ? `${formData.jobTitle} at ${formData.currentCompany}`
+                        : 'Professional Title'
+                      }
+                    </p>
+                  )}
+                  {isEditing ? (
+                    <div className="flex space-x-2 pt-2">
+                      <input
+                        type="number"
+                        value={formData.batchYear}
+                        onChange={(e) => handleInputChange('batchYear', e.target.value)}
+                        placeholder="Year"
+                        className="w-20 text-sm bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                      />
+                      <input
+                        type="text"
+                        value={formData.department}
+                        onChange={(e) => handleInputChange('department', e.target.value)}
+                        placeholder="Department"
+                        className="flex-1 text-sm bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-sm text-slate-500 uppercase tracking-widest font-semibold">
+                      Batch of {formData.batchYear || '20XX'} • {formData.department || 'Department'}
+                    </p>
+                  )}
+
+                  {isEditing ? (
+                    <div className="flex items-center pt-2">
+                      <MapPin className="w-4 h-4 mr-2 text-slate-400" />
+                      <input
+                        type="text"
+                        value={formData.location}
+                        onChange={(e) => handleInputChange('location', e.target.value)}
+                        placeholder="Location"
+                        className="w-full text-sm bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-black dark:focus:border-white outline-none transition-colors"
+                      />
+                    </div>
+                  ) : (
+                    formData.location && (
+                      <div className="flex items-center justify-center lg:justify-start text-slate-500 pt-2">
+                        <MapPin className="w-4 h-4 mr-2" />
+                        <span>{formData.location}, {formData.country}</span>
+                      </div>
+                    )
                   )}
                 </div>
               </div>
