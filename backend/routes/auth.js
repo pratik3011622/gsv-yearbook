@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User'); // Kept if we want to sync optionally, but we'll try/catch around it
 const { auth, verifyFirebase } = require('../middleware/auth');
+const admin = require('../config/firebase');
 
 const router = express.Router();
 
@@ -176,11 +177,24 @@ router.get('/me', auth, async (req, res) => {
 router.delete('/me', auth, async (req, res) => {
   try {
     const { firebaseUid } = req.user;
+
+    // 1. Delete from MongoDB
     const result = await User.findOneAndDelete({ firebaseUid });
-    if (!result) {
-      return res.status(404).json({ message: 'User not found' });
+
+    // 2. Delete from Firebase Auth
+    try {
+      await admin.auth().deleteUser(firebaseUid);
+      console.log(`Deleted Firebase user: ${firebaseUid}`);
+    } catch (firebaseError) {
+      console.error('Error deleting user from Firebase:', firebaseError);
+      // We continue even if Firebase fails, as the "profile" is gone.
     }
-    res.json({ message: 'User deleted successfully' });
+
+    if (!result) {
+      // Even if Mongo record was missing, if we deleted from Firebase, it's a success
+      return res.json({ message: 'User account deleted (Mongo record was missing)' });
+    }
+    res.json({ message: 'User account fully deleted' });
   } catch (error) {
     console.error('Error deleting user:', error);
     res.status(500).json({ message: 'Internal server error' });
