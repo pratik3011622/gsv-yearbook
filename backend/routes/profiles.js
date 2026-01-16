@@ -145,17 +145,24 @@ router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
       console.log('Avatar URL set:', updates.avatarUrl);
     }
 
+    // FIX: Using $set and disabling upsert to prevent duplicate creation
     const user = await User.findOneAndUpdate(
       { firebaseUid: req.user.firebaseUid },
-      updates,
-      { new: true, upsert: true }
+      { $set: updates },
+      { new: true, runValidators: true }
     ).select('-password');
+
+    if (!user) {
+      console.warn('Update failed: User not found for UID:', req.user.firebaseUid);
+      return res.status(404).json({ message: 'User not found in database. Please register first.' });
+    }
 
     console.log('Profile updated successfully for UID:', req.user.firebaseUid);
     console.log('Updated user:', user ? user.email : 'No user returned');
 
     res.json(user);
   } catch (error) {
+    console.error('Error updating profile:', error);
     res.status(500).json({ message: error.message });
   }
 });

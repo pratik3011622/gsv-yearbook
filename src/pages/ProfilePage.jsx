@@ -169,6 +169,7 @@ export const ProfilePage = ({ onNavigate, userId }) => {
       // Close editing mode immediately for a faster feel
       setIsEditing(false);
       console.log('ProfilePage: Background sync completed');
+      alert("Profile changes saved successfully!");
     } catch (error) {
       console.error('Error updating profile:', error);
       alert("Failed to save profile changes. Please try again.");

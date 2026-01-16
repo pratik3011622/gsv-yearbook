@@ -48,6 +48,11 @@ class ApiClient {
         // We throw the text as error message, which is useful for debugging (e.g. 404 HTML pages)
         throw new Error(`Invalid JSON response: ${text.substring(0, 100)}...`);
       }
+
+      if (!response.ok) {
+        throw new Error(data.message || `API Error: ${response.status} ${response.statusText}`);
+      }
+
       return { response, data };
     } catch (error) {
       console.error('API request failed:', error);
