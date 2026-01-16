@@ -39,8 +39,9 @@ const jobSchema = new mongoose.Schema({
     required: false,
   },
   postedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
+    required: true,
+    index: true, // For efficient queries
   },
   isFeatured: {
     type: Boolean,
