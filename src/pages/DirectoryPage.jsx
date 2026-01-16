@@ -361,12 +361,26 @@ export const DirectoryPage = ({ onNavigate }) => {
 
                   {/* Actions */}
                   <div className="mt-auto flex items-center gap-3 w-full pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                    <button
-                      onClick={() => onNavigate('profile', profile._id)}
-                      className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                    >
-                      View Profile
-                    </button>
+                    {/* Primary Action: View Profile -> LinkedIn if available */}
+                    {profile.linkedinUrl ? (
+                      <a
+                        href={profile.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 text-center py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      >
+                        View Profile
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => onNavigate('profile', profile._id)}
+                        className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      >
+                        View Profile
+                      </button>
+                    )}
+
+                    {/* Secondary Icon: Keep it for clarity or duplicate access */}
                     {profile.linkedinUrl && (
                       <a
                         href={profile.linkedinUrl}

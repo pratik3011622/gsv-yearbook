@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, Lock, User, GraduationCap, Building, MapPin, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, GraduationCap, Building, MapPin, Eye, EyeOff, Linkedin } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const RegisterPage = ({ onNavigate }) => {
@@ -14,6 +14,7 @@ export const RegisterPage = ({ onNavigate }) => {
     company: '',
     jobTitle: '',
     location: '',
+    linkedinUrl: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -47,12 +48,26 @@ export const RegisterPage = ({ onNavigate }) => {
       return;
     }
 
+    // Alumni specific validation
+    if (formData.role === 'alumni') {
+      if (!formData.linkedinUrl) {
+        setError('LinkedIn profile is required for alumni registration');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
       const { confirmPassword, ...userData } = formData;
       userData.batchYear = parseInt(userData.batchYear) || null;
-      // userData.company is already in userData
+
+      // Clean up data based on role
+      if (userData.role === 'student') {
+        delete userData.company;
+        delete userData.jobTitle;
+        delete userData.linkedinUrl;
+      }
 
       await signUp(userData);
       setSuccess(true);
@@ -203,7 +218,7 @@ export const RegisterPage = ({ onNavigate }) => {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
-                    placeholder="you@example.com"
+                    placeholder="you@gsv.ac.in"
                     required
                   />
                 </div>
@@ -255,46 +270,49 @@ export const RegisterPage = ({ onNavigate }) => {
               </div>
             </div>
 
-            {(formData.role === 'alumni' || formData.role === 'student') && (
-              <>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Batch Year
-                    </label>
-                    <input
-                      type="number"
-                      name="batchYear"
-                      value={formData.batchYear}
-                      onChange={handleChange}
-                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
-                      placeholder="2020"
-                      required
-                    />
-                  </div>
+            {/* Common Fields */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Batch Year
+                </label>
+                <input
+                  type="number"
+                  name="batchYear"
+                  value={formData.batchYear}
+                  onChange={handleChange}
+                  className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
+                  placeholder="2020"
+                  required
+                />
+              </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Department
-                    </label>
-                    <input
-                      type="text"
-                      name="department"
-                      value={formData.department}
-                      onChange={handleChange}
-                      className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
-                      placeholder="Computer Science"
-                      required
-                    />
-                  </div>
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Department
+                </label>
+                <input
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
+                  placeholder="Computer Science"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Alumni Specific Fields */}
+            {formData.role === 'alumni' && (
+              <>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Job Title
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <BriefcaseIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <input
                         type="text"
                         name="jobTitle"
@@ -302,6 +320,7 @@ export const RegisterPage = ({ onNavigate }) => {
                         onChange={handleChange}
                         className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="e.g. Software Engineer"
+                        required
                       />
                     </div>
                   </div>
@@ -319,6 +338,7 @@ export const RegisterPage = ({ onNavigate }) => {
                         onChange={handleChange}
                         className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="Your company"
+                        required
                       />
                     </div>
                   </div>
@@ -338,6 +358,24 @@ export const RegisterPage = ({ onNavigate }) => {
                         onChange={handleChange}
                         className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                         placeholder="City, Country"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      LinkedIn Profile URL
+                    </label>
+                    <div className="relative">
+                      <Linkedin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type="url"
+                        name="linkedinUrl"
+                        value={formData.linkedinUrl}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
+                        placeholder="https://linkedin.com/in/username"
+                        required
                       />
                     </div>
                   </div>
@@ -382,3 +420,8 @@ export const RegisterPage = ({ onNavigate }) => {
     </div >
   );
 };
+
+// Helper for Briefcase icon without importing it if it's not already imported
+const BriefcaseIcon = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="7" rx="2" ry="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>
+);
