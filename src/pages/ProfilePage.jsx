@@ -163,17 +163,15 @@ export const ProfilePage = ({ onNavigate, userId }) => {
     setLoading(true);
     try {
       // Trigger update (optimistic state change happens inside AuthContext)
-      const updatePromise = updateProfile(formData);
+      // We await it here to ensure backend success before considering it "saved"
+      await updateProfile(formData);
 
       // Close editing mode immediately for a faster feel
       setIsEditing(false);
-
-      // Wait for network in the background (prevents blocking the UI transition)
-      await updatePromise;
       console.log('ProfilePage: Background sync completed');
     } catch (error) {
       console.error('Error updating profile:', error);
-      // Revert if critical, but for now we keep the optimistic state
+      alert("Failed to save profile changes. Please try again.");
     } finally {
       setLoading(false);
     }

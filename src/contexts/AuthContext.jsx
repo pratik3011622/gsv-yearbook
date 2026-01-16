@@ -202,13 +202,20 @@ export const AuthProvider = ({ children }) => {
     try {
       // Direct MongoDB update
       console.log("AuthContext: Starting profile update...");
-      await api.updateProfile(updates);
+      const updatedUser = await api.updateProfile(updates);
       console.log("AuthContext: Profile update successful");
+
+      // Update state with confirmed data from backend (optional, but safer)
+      // setProfile(updatedUser); 
+      // setUser(prev => ({ ...prev, ...updatedUser }));
+
+      return updatedUser;
     } catch (err) {
       console.error("AuthContext: Profile update failed ->", err);
-      // Optional: Revert on absolute failure if critical data is lost
-      // For now, we keep the UI optimistic but log the error
-      // alert("Some changes might not have synced. Please refresh.");
+      // Revert optimistic update on failure
+      setProfile(previousProfile);
+      setUser(previousUser);
+      throw err; // Propagate error to the component
     }
   };
 
