@@ -182,10 +182,12 @@ export const ProfilePage = ({ onNavigate, userId }) => {
       }
 
       // Use api directly to send FormData
+      // Import auth from firebase.config
+      const { auth } = await import('../firebase.config');
       const result = await fetch(`${api.baseURL}/profiles/me`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${await user.getIdToken()}`,
+          'Authorization': `Bearer ${await auth.currentUser.getIdToken()}`,
         },
         body: formDataToSend,
       });
