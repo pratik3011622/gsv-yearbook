@@ -162,8 +162,46 @@ export const ProfilePage = ({ onNavigate, userId }) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await updateProfile(formData);
+      // Create FormData to handle file upload
+      const formDataToSend = new FormData();
+
+      // Append all form data fields
+      Object.keys(formData).forEach(key => {
+        if (formData[key] !== null && formData[key] !== undefined) {
+          if (Array.isArray(formData[key])) {
+            formDataToSend.append(key, JSON.stringify(formData[key]));
+          } else {
+            formDataToSend.append(key, formData[key]);
+          }
+        }
+      });
+
+      // Append profile photo if selected
+      if (profilePhotoFile) {
+        formDataToSend.append('profilePhoto', profilePhotoFile);
+      }
+
+      // Use api directly to send FormData
+      const result = await fetch(`${api.baseURL}/profiles/me`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${await user.getIdToken()}`,
+        },
+        body: formDataToSend,
+      });
+
+      if (!result.ok) {
+        throw new Error('Failed to update profile');
+      }
+
+      const updatedUser = await result.json();
+
+      // Update local state
+      updateProfile(updatedUser);
+
       setIsEditing(false);
+      setProfilePhotoFile(null);
+      setProfilePhotoPreview(null);
       console.log('ProfilePage: Background sync completed');
       alert("Profile changes saved successfully!");
     } catch (error) {
