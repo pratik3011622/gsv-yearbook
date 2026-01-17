@@ -104,7 +104,7 @@ router.get('/featured', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const stories = await Story.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
+      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
       {
         $lookup: {
           from: 'users',
