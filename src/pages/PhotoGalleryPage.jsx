@@ -6,7 +6,7 @@ const photoData = [
     id: 1,
     title: 'Convocation Ceremony 2024',
     description: 'Graduates celebrating their achievement with pride and joy.',
-    image: '/WhatsApp Image 2025-10-21 at 23.04.13_24f84d84.jpg',
+    image: '',
     date: '2024-07-15',
     category: 'Events',
     location: 'Main Auditorium',
@@ -26,7 +26,7 @@ const photoData = [
     id: 3,
     title: 'Alumni Reunion 2023',
     description: 'Former students reconnecting and sharing memories from their college days.',
-    image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'C:\Users\prati\Documents\WhatsApp Image 2026-01-17 at 9.19.39 PM.jpeg',
     date: '2024-12-10',
     category: 'Alumni',
     location: 'Alumni Center',
@@ -64,12 +64,12 @@ const photoData = [
   },
   {
     id: 7,
-    title: 'Cultural Fest 2024',
+    title: 'Recent Photo 10',
     description: 'Vibrant celebrations showcasing diverse cultures and talents.',
-    image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: '/C1004T01.JPG',
     date: '2024-01-18',
     category: 'Events',
-    location: 'Open Air Theatre',
+    location: '',
     span: 'md:col-span-2 md:row-span-1'
   },
   {
@@ -81,6 +81,106 @@ const photoData = [
     category: 'Campus',
     location: 'Graduation Hall',
     span: 'md:col-span-2 md:row-span-1'
+  },
+  {
+    id: 9,
+    title: 'Recent Event Photo 1',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.50.56 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 10,
+    title: 'Recent Event Photo 2',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.50.57 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 11,
+    title: 'Recent Event Photo 3',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.50.58 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 12,
+    title: 'Recent Event Photo 4',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.51.09 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 13,
+    title: 'Recent Event Photo 5',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.51.10 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 14,
+    title: 'Recent Event Photo 6',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.58.36 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 15,
+    title: 'Recent Event Photo 7',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 9.04.29 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Alumni',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 16,
+    title: 'Recent Event Photo 8',
+    description: 'A memorable moment from recent activities.',
+    image: '/Copy of AGNEE 4.png',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 17,
+    title: 'Recent Event Photo 9',
+    description: 'A memorable moment from recent activities.',
+    image: '/WhatsApp Image 2026-01-17 at 8.51.11 PM.jpeg',
+    date: '2026-01-17',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-1 md:row-span-1'
+  },
+  {
+    id: 18,
+    title: 'Alumni Reunion 2025',
+    description: 'Former students reconnecting and sharing memories from their college days.',
+    image: '/WhatsApp Image 2026-01-17 at 9.19.39 PM.jpeg',
+    date: '2025-12-31',
+    category: 'Alumni',
+    location: '',
+    span: 'md:col-span-1 md:row-span-2'
   }
 ];
 

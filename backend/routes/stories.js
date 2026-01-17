@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Story = require('../models/Story');
 const { auth, isAlumni } = require('../middleware/auth');
 const { validateStory } = require('../middleware/validation');
