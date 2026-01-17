@@ -24,11 +24,11 @@ const teamMembers = [
   {
     name: 'Neeraj',
     role: 'Developer',
-    img: null,
+    img: '/neeraj.jpg',
     social: {
-      linkedin: 'https://www.linkedin.com/in/neeraj-random',
-      instagram: 'https://www.instagram.com/neeraj_random',
-      github: 'https://github.com/neeraj-random'
+      linkedin: 'https://www.linkedin.com/in/neerajkumar005/',
+      instagram: 'https://www.instagram.com/neeraj.kohli005/',
+      github: 'https://github.com/NeerajKohli05'
     }
   },
   {
@@ -36,9 +36,9 @@ const teamMembers = [
     role: 'Developer',
     img: '/vinamra.png',
     social: {
-      linkedin: 'https://www.linkedin.com/in/vinamra-random',
+      linkedin: 'https://www.linkedin.com/in/vinamra-tiwari-ba3653345?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       instagram: 'https://www.instagram.com/vinamra_random',
-      github: 'https://github.com/vinamra-random'
+      github: 'https://github.com/Vinamra-tech'
     }
   }
 ];
