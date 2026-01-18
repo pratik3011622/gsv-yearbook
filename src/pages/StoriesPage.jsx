@@ -31,7 +31,7 @@ export const StoriesPage = ({ onNavigate }) => {
   // Calculate stats
   const totalStories = stories.length;
   const totalViews = stories.reduce((sum, story) => sum + (story.viewsCount || 0), 0);
-  const uniqueAuthors = new Set(stories.map(story => story.authorId?._id).filter(Boolean)).size;
+  const uniqueAuthors = new Set(stories.map(story => story.authorId).filter(Boolean)).size;
   const featuredCount = stories.filter(story => story.isFeatured).length;
 
   useEffect(() => {
@@ -434,15 +434,15 @@ export const StoriesPage = ({ onNavigate }) => {
                     <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm">
-                          {story.authorId?.fullName?.charAt(0)?.toUpperCase() || 'A'}
+                          {story.author?.fullName?.charAt(0)?.toUpperCase() || 'A'}
                         </div>
                         <div>
                           <p className="font-semibold text-slate-900 dark:text-white text-sm">
-                            {story.authorId?.fullName}
+                            {story.author?.fullName}
                           </p>
-                          {story.authorId?.batchYear && (
+                          {story.author?.batchYear && (
                             <p className="text-slate-500 dark:text-slate-400 text-xs">
-                              Batch {story.authorId.batchYear}
+                              Batch {story.author.batchYear}
                             </p>
                           )}
                         </div>

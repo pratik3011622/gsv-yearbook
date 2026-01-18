@@ -477,8 +477,8 @@ export const JobsPage = () => {
                   {/* Footer */}
                   <div className="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-700 mt-auto">
                     <div className="text-sm text-slate-500 dark:text-slate-400">
-                      {job.postedBy && (
-                        <span className="font-medium">Posted by {job.postedBy.fullName}</span>
+                      {job.poster && (
+                        <span className="font-medium">Posted by {job.poster.fullName}</span>
                       )}
                     </div>
 
