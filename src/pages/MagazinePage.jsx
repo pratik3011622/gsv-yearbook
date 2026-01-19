@@ -3,6 +3,17 @@ import { Download, Eye, Calendar, FileText, X } from 'lucide-react';
 
 const magazineData = [
   {
+    id: 4,
+    title: 'TechnoBytes',
+    description: 'Exploring the latest in technology, innovation, and digital trends from the GSV community.',
+    coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
+    pdfUrl: '/TechnoByte_Ed_2.pdf',
+    issue: 'Edition 2',
+    publishDate: '2026-01-19',
+    pages: 20,
+    featured: true
+  },
+  {
     id: 1,
     title: 'TechnoBytes',
     description: 'Exploring the latest in technology, innovation, and digital trends from the GSV community.',
