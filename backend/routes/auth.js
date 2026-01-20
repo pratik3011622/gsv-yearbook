@@ -47,10 +47,9 @@ router.post('/register', verifyFirebase, async (req, res) => {
         // Optional: Update details here too if we want registration to be "upsert" always
       }
     } catch (dbError) {
-      console.warn("MongoDB sync failed during register (non-fatal):", dbError.message);
-      // If validation fails (e.g. data mismatch), we should probably let frontend know?
-      // Re-throwing allows AuthContext to alert the user
-      // Don't throw - allow registration to succeed even if MongoDB is down
+      console.error("MongoDB sync failed during register:", dbError.message);
+      // Throw the error so registration fails if DB is not available
+      throw dbError;
     }
 
     // Return success based on valid token
@@ -106,7 +105,9 @@ router.post('/google', verifyFirebase, async (req, res) => {
         await user.save();
       }
     } catch (dbError) {
-      console.warn("MongoDB sync failed during google auth (non-fatal):", dbError.message);
+      console.error("MongoDB sync failed during google auth:", dbError.message);
+      // Throw the error so google sign-in fails if DB is not available
+      throw dbError;
     }
 
     res.json({
