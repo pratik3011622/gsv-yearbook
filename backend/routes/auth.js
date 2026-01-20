@@ -50,7 +50,7 @@ router.post('/register', verifyFirebase, async (req, res) => {
       console.warn("MongoDB sync failed during register (non-fatal):", dbError.message);
       // If validation fails (e.g. data mismatch), we should probably let frontend know?
       // Re-throwing allows AuthContext to alert the user
-      throw dbError;
+      // Don't throw - allow registration to succeed even if MongoDB is down
     }
 
     // Return success based on valid token
@@ -173,8 +173,8 @@ router.get('/me', auth, async (req, res) => {
             email,
             firebaseUid,
             fullName: fullName || 'User',
-            avatarUrl: picture,
-            role: 'student'
+            avatarUrl: picture
+            // role defaults to 'alumni' in model
           });
           await user.save();
           console.log(`[GET /me] User auto-created successfully.`);
