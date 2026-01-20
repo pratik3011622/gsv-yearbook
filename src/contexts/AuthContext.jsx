@@ -10,6 +10,7 @@ import {
   sendPasswordResetEmail,
   setPersistence,
   browserLocalPersistence,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase.config";
 import { api } from "../lib/api";
@@ -106,6 +107,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     const { user: newUser } = await createUserWithEmailAndPassword(auth, email, password);
+
+    // Update Firebase profile with display name
+    await updateProfile(newUser, { displayName: profileData.fullName });
 
     // Sync to MongoDB IMMEDIATELY
     try {
