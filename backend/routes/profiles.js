@@ -4,6 +4,7 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
+const admin = require('../config/firebase');
 
 // Configure Cloudinary
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
@@ -46,13 +47,30 @@ const upload = multer({
 
 const router = express.Router();
 
-// Get all profiles (authenticated users only)
+// Get all profiles (authenticated users only) - only verified users
 router.get('/', auth, async (req, res) => {
   try {
     const profiles = await User.find({})
       .select('-password')
       .sort({ createdAt: -1 });
-    res.json(profiles);
+
+    // Filter to only include users with verified emails
+    const verifiedProfiles = [];
+    for (const profile of profiles) {
+      try {
+        if (profile.firebaseUid) {
+          const firebaseUser = await admin.auth().getUser(profile.firebaseUid);
+          if (firebaseUser.emailVerified) {
+            verifiedProfiles.push(profile);
+          }
+        }
+      } catch (error) {
+        console.error(`Error checking verification for user ${profile.firebaseUid}:`, error.message);
+        // Skip users that can't be verified
+      }
+    }
+
+    res.json(verifiedProfiles);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
