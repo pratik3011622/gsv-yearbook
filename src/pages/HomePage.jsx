@@ -1,31 +1,82 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import { motion } from 'framer-motion';
 import { Facebook, Linkedin, Instagram, Twitter, Mail, Phone, MapPin, ExternalLink, Briefcase, Award, Search, Users, Calendar, Globe, Zap, Building2 } from 'lucide-react';
 
 export const HomePage = ({ onNavigate }) => {
-  const { isDark } = useTheme();
+   const { isDark } = useTheme();
+   const [videoLoaded, setVideoLoaded] = useState(false);
+   const [parallaxY, setParallaxY] = useState(0);
+   const videoRef = useRef(null);
 
-  return (
+   useEffect(() => {
+      const handleScroll = () => {
+         setParallaxY(window.scrollY * 0.5);
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+   }, []);
+
+   return (
     <div className="overflow-x-hidden font-sans bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-50">
       {/* Video Hero Section */}
       <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden bg-slate-900 text-white">
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover z-0 opacity-60"
+          poster="/cultural.jpg"
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`absolute top-0 left-0 w-full h-full object-cover z-0 transition-opacity duration-1000 ${videoLoaded ? 'opacity-80' : 'opacity-0'} brightness-[1.35] contrast-115 saturate-[1.35]`}
+          style={{ transform: `translateY(${parallaxY}px)`, filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.15))' }}
         >
           <source src="/final.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="absolute inset-0 z-10 bg-black/60"></div>
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,rgba(30,64,175,0.3),rgba(15,23,42,0.5))]"></div>
+        <div className="absolute inset-0 z-10 bg-black/50"></div>
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.6)_100%),linear-gradient(135deg,rgba(30,64,175,0.3),rgba(15,23,42,0.4))]"></div>
 
         <div className="relative z-30 max-w-7xl px-4 mt-0">
-          <h1 className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight text-white tracking-tight animate-[fadeIn_1s_ease-out_forwards]">
-            <span className="md:whitespace-nowrap">Connect, Celebrate, and Grow</span><br />Together
-          </h1>
+           <motion.h1
+             className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight text-white tracking-tight"
+             initial="hidden"
+             animate="visible"
+             variants={{
+               hidden: { opacity: 0 },
+               visible: {
+                 opacity: 1,
+                 transition: {
+                   staggerChildren: 0.1,
+                   delayChildren: 0.2,
+                 },
+               },
+             }}
+           >
+             {["Connect,", "Celebrate,", "and", "Grow"].map((word, index) => (
+               <motion.span
+                 key={index}
+                 className="inline-block md:whitespace-nowrap"
+                 variants={{
+                   hidden: { opacity: 0, y: 20 },
+                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+                 }}
+               >
+                 {word}{" "}
+               </motion.span>
+             ))}
+             <br />
+             <motion.span
+               className="inline-block"
+               variants={{
+                 hidden: { opacity: 0, y: 20 },
+                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4 } },
+               }}
+             >
+               Together
+             </motion.span>
+           </motion.h1>
           <p className="text-xl text-white/95 mb-12 font-normal max-w-[700px] mx-auto animate-[slideUp_1s_ease-out_0.3s_forwards] opacity-0 translate-y-5">
             Join a vibrant community where memories are made, careers accelerate, and support never stops.
           </p>

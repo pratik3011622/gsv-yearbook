@@ -6,7 +6,7 @@ const photoData = [
     id: 1,
     title: 'Convocation Ceremony 2024',
     description: 'Graduates celebrating their achievement with pride and joy.',
-    image: '',
+    image: '/gsv-logo.png',
     date: '2024-07-15',
     category: 'Events',
     location: 'Main Auditorium',
