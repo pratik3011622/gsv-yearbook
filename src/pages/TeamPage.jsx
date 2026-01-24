@@ -32,7 +32,7 @@ const teamMembers = [
     }
   },
   {
-    name: 'Vinamra',
+    name: 'Vinamra Tiwari',
     role: 'Developer',
     img: '/vinamra.png',
     social: {

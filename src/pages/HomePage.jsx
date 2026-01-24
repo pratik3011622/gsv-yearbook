@@ -371,10 +371,6 @@ export const HomePage = ({ onNavigate }) => {
             <p className="text-sm text-slate-500">
               © {new Date().getFullYear()} Gati Shakti Vishwavidyalaya. All rights reserved.
             </p>
-            <div className="flex gap-6 mt-4 sm:mt-0">
-              <span className="text-sm text-slate-500 hover:text-slate-300 cursor-pointer">Privacy Policy</span>
-              <span className="text-sm text-slate-500 hover:text-slate-300 cursor-pointer">Terms of Service</span>
-            </div>
           </div>
         </div>
       </footer>
