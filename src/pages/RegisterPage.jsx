@@ -56,7 +56,9 @@ export const RegisterPage = ({ onNavigate }) => {
       }
 
       // Check if trying to register as alumni with a student email pattern
-      const yearMatch = formData.email.match(/_btech(\d{2})@gsv\.ac\.in$/);
+      console.log('Checking alumni restriction for:', formData.email);
+      const yearMatch = formData.email.match(/_btech(\d{2})@gsv\.ac\.in$/i);
+      console.log('Year match result:', yearMatch);
       if (yearMatch) {
         const twoDigitYear = parseInt(yearMatch[1]);
         const startYear = 2000 + twoDigitYear;
