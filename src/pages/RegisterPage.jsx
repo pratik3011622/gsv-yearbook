@@ -54,6 +54,20 @@ export const RegisterPage = ({ onNavigate }) => {
         setError('LinkedIn profile is required for alumni registration');
         return;
       }
+
+      // Check if trying to register as alumni with a student email pattern
+      const yearMatch = formData.email.match(/_btech(\d{2})@gsv\.ac\.in$/);
+      if (yearMatch) {
+        const twoDigitYear = parseInt(yearMatch[1]);
+        const startYear = 2000 + twoDigitYear;
+        const currentYear = new Date().getFullYear();
+
+        // If strict difference is less than 4 years, they are likely still a student
+        if (currentYear - startYear < 4) {
+          setError('Current students cannot register as Alumni. Please register as a Student.');
+          return;
+        }
+      }
     }
 
     setLoading(true);
