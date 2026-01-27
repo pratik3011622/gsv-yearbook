@@ -54,7 +54,7 @@ export const HomePage = ({ onNavigate }) => {
                },
              }}
            >
-             {["Connect,", "Celebrate,", "and", "Grow"].map((word, index) => (
+             {["Connect,", "Celebrate,", "and Grow"].map((word, index) => (
                <motion.span
                  key={index}
                  className="inline-block md:whitespace-nowrap"
