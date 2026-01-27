@@ -34,7 +34,7 @@ const teamMembers = [
   {
     name: 'Vinamra Tiwari',
     role: 'Developer',
-    img: '/vinamra.png',
+    img: '/team-member-4.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/vinamra-tiwari-ba3653345?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       instagram: 'https://www.instagram.com/vinamra_random',

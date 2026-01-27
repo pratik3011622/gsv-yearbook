@@ -11,7 +11,7 @@ const magazineData = [
     pdfUrl: '/TechnoByte_Ed_2.pdf',
     issue: 'Edition 2',
     publishDate: '2026-01-19',
-    pages: 20,
+    pages: 5,
     featured: true
   },
   {
@@ -21,8 +21,8 @@ const magazineData = [
     coverImage: '/Screenshot 2026-01-24 162439.png',
     pdfUrl: '/technobytes.pdf',
     issue: 'Edition 1',
-    publishDate: '2024-12-01',
-    pages: 20,
+    publishDate: '2025-08-06',
+    pages: 5,
     featured: true
   }
  
@@ -70,9 +70,9 @@ export const MagazinePage = () => {
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-primary-600 text-white rounded-full text-xs font-bold tracking-wide uppercase shadow-sm">
-                      Latest
-                    </span>
+                    {/* <span className="px-3 py-1 bg-primary-600 text-white rounded-full text-xs font-bold tracking-wide uppercase shadow-sm">
+                      
+                    </span> */}
                   </div>
                 </div>
 
