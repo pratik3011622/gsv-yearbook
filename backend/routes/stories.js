@@ -36,6 +36,7 @@ router.get('/', async (req, res) => {
           publishedAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          authorId: 1, // Include authorId to check ownership
           author: {
             fullName: '$author.fullName',
             batchYear: '$author.batchYear'
@@ -83,6 +84,7 @@ router.get('/featured', async (req, res) => {
           publishedAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          authorId: 1,
           author: {
             fullName: '$author.fullName',
             batchYear: '$author.batchYear'
@@ -131,6 +133,7 @@ router.get('/:id', async (req, res) => {
           publishedAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          authorId: 1,
           author: {
             fullName: '$author.fullName'
           }
@@ -199,6 +202,7 @@ router.post('/', auth, validateStory, async (req, res) => {
           publishedAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          authorId: 1,
           author: {
             fullName: '$author.fullName',
             batchYear: '$author.batchYear'
@@ -265,6 +269,7 @@ router.put('/:id', auth, async (req, res) => {
           publishedAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          authorId: 1,
           author: {
             fullName: '$author.fullName'
           }

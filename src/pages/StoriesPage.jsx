@@ -75,7 +75,7 @@ export const StoriesPage = ({ onNavigate }) => {
   };
 
   const isAuthor = (story) => {
-    return user && user.id && story.authorId && story.authorId._id === user.id;
+    return user && user.id && story.authorId && story.authorId === user.id;
   };
 
 

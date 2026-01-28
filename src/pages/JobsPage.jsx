@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   MapPin, ExternalLink, Clock, Plus, Building2, Briefcase,
   Search, Filter, X, Star, Bookmark, BookmarkCheck, Users,
-  TrendingUp, DollarSign, Calendar, ChevronDown, ChevronUp
+  TrendingUp, DollarSign, Calendar, ChevronDown, ChevronUp, Trash2
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,6 +13,7 @@ export const JobsPage = () => {
   const [loading, setLoading] = useState(true);
   const [showPostJobModal, setShowPostJobModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     jobType: 'all',
@@ -122,6 +123,28 @@ export const JobsPage = () => {
     if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
     if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 604800)} weeks ago`;
     return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+  };
+
+  const isPoster = (job) => {
+    return user && user.id && job.postedBy === user.id;
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    if (!window.confirm('Are you sure you want to delete this job posting? This action cannot be undone.')) {
+      return;
+    }
+
+    setDeleteLoading(jobId);
+    try {
+      await api.deleteJob(jobId);
+      setJobs(prev => prev.filter(job => job._id !== jobId));
+      setFilteredJobs(prev => prev.filter(job => job._id !== jobId));
+    } catch (error) {
+      console.error('Error deleting job:', error);
+      alert('Failed to delete job. Please try again.');
+    } finally {
+      setDeleteLoading(null);
+    }
   };
 
 
@@ -427,6 +450,22 @@ export const JobsPage = () => {
                           <BookmarkCheck className="w-5 h-5" />
                         ) : (
                           <Bookmark className="w-5 h-5" />
+                        )}
+                      </button>
+                    )}
+
+                    {/* Delete Button for Poster */}
+                    {isPoster(job) && (
+                      <button
+                        onClick={() => handleDeleteJob(job._id)}
+                        disabled={deleteLoading === job._id}
+                        className="flex-shrink-0 ml-2 p-3 text-slate-400 hover:text-red-500 transition-colors rounded-xl hover:bg-slate-800/50"
+                        title="Delete Job"
+                      >
+                        {deleteLoading === job._id ? (
+                          <div className="w-5 h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <Trash2 className="w-5 h-5" />
                         )}
                       </button>
                     )}

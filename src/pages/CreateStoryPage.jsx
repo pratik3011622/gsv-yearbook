@@ -101,8 +101,13 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
     };
 
     const handlePublish = async () => {
-        if (!formData.title.trim() || !formData.content.trim()) {
-            alert('Title and Content are required!');
+        // Validation
+        if (!formData.title.trim()) {
+            alert('Please enter a Title for your story.');
+            return;
+        }
+        if (!formData.content.trim()) {
+            alert('Please write some Content for your story.');
             return;
         }
 
@@ -117,8 +122,18 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
             }
 
             const readTime = calculateReadTime(formData.content);
+
+            // Auto-generate excerpt if empty
+            let finalExcerpt = formData.excerpt.trim();
+            if (!finalExcerpt) {
+                // Strip HTML tags
+                const plainText = formData.content.replace(/<[^>]*>/g, '');
+                finalExcerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
+            }
+
             const storyData = {
                 ...formData,
+                excerpt: finalExcerpt,
                 coverImageUrl: finalCoverUrl,
                 readTime
             };
@@ -132,7 +147,8 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
             onNavigate('/stories');
         } catch (error) {
             console.error('Error publishing story:', error);
-            alert('Failed to publish story.');
+            const message = error.response?.data?.message || 'Failed to publish story. Please check your inputs and try again.';
+            alert(message);
         } finally {
             setLoading(false);
         }

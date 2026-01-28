@@ -44,6 +44,7 @@ router.get('/', async (req, res) => {
           expiresAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          postedBy: 1, // Include postedBy for ownership check
           poster: {
             fullName: '$poster.fullName',
             company: '$poster.company',
@@ -92,6 +93,7 @@ router.get('/:id', async (req, res) => {
           expiresAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          postedBy: 1,
           poster: {
             fullName: '$poster.fullName',
             company: '$poster.company',
@@ -159,6 +161,7 @@ router.post('/', auth, validateJob, async (req, res) => {
           expiresAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          postedBy: 1,
           poster: {
             fullName: '$poster.fullName',
             company: '$poster.company'
@@ -228,6 +231,7 @@ router.put('/:id', auth, async (req, res) => {
           expiresAt: 1,
           createdAt: 1,
           updatedAt: 1,
+          postedBy: 1,
           poster: {
             fullName: '$poster.fullName',
             company: '$poster.company',
