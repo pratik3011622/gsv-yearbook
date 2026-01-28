@@ -171,6 +171,7 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
         toolbar: {
             container: [
                 [{ 'header': [1, 2, 3, false] }],
+                [{ 'font': [] }],
                 ['bold', 'italic', 'underline', 'blockquote'],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                 ['link', 'image'],
@@ -339,10 +340,13 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
 
             {/* Global Styles for clean editor */}
             <style>{`
+        /* Global Editor Styles */
         .story-editor .ql-container {
           border: none !important;
-          font-family: 'Merriweather', serif; /* Or system fonts */
+          font-family: 'Merriweather', serif;
         }
+
+        /* Toolbar Styles */
         .story-editor .ql-toolbar {
           border: none !important;
           border-bottom: 1px solid rgba(0,0,0,0.05) !important;
@@ -354,20 +358,63 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
           margin-bottom: 2rem;
           border-radius: 8px;
         }
+
+        /* Dark Mode Toolbar */
         .dark .story-editor .ql-toolbar {
           background: rgba(15, 23, 42, 0.95);
           border-bottom: 1px solid rgba(255,255,255,0.05) !important;
         }
+        
+        /* Toolbar Content Colors */
+        .dark .story-editor .ql-toolbar .ql-stroke {
+          stroke: #cbd5e1 !important; /* slate-300 */
+        }
+        .dark .story-editor .ql-toolbar .ql-fill {
+          fill: #cbd5e1 !important;
+        }
+        .dark .story-editor .ql-toolbar .ql-picker {
+          color: #cbd5e1 !important;
+        }
+        .dark .story-editor .ql-toolbar .ql-picker-options {
+          background-color: #1e293b !important; /* slate-800 */
+          border: 1px solid #334155 !important; /* slate-700 */
+        }
+
+        /* Editor Content Styles */
         .story-editor .ql-editor {
           min-height: 400px;
           padding: 0 !important;
           font-size: 1.125rem;
         }
-        .story-editor .ql-editor p {
+        
+        /* Text Color - Light Mode */
+        .story-editor .ql-editor p,
+        .story-editor .ql-editor h1,
+        .story-editor .ql-editor h2,
+        .story-editor .ql-editor h3,
+        .story-editor .ql-editor ul,
+        .story-editor .ql-editor ol {
           margin-bottom: 1.5em;
           line-height: 1.8;
-          color: inherit;
+          color: #1e293b; /* slate-800 */
         }
+
+        /* Text Color - Dark Mode */
+        .dark .story-editor .ql-editor p,
+        .dark .story-editor .ql-editor h1,
+        .dark .story-editor .ql-editor h2,
+        .dark .story-editor .ql-editor h3,
+        .dark .story-editor .ql-editor ul,
+        .dark .story-editor .ql-editor ol {
+          color: #f1f5f9; /* slate-100 */
+        }
+
+        /* Blank/Placeholder Text Color Helper */
+        .story-editor .ql-editor.ql-blank::before {
+          color: #94a3b8; /* slate-400 */
+          font-style: italic;
+        }
+
         .story-editor .ql-editor img {
           border-radius: 8px;
           margin: 2rem 0;
