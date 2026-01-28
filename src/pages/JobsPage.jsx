@@ -548,19 +548,22 @@ export const JobsPage = () => {
 
         {/* Post Job Modal */}
         {showPostJobModal && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800 animate-slide-in-up">
               <div className="p-8">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-primary-50 dark:bg-slate-800 rounded-xl flex items-center justify-center">
-                      <Plus className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <div className="flex items-center justify-between mb-8 sticky top-0 bg-white dark:bg-slate-900 z-10 pb-4 border-b border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30">
+                      <Plus className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Share Career Opportunity</h2>
+                    <div>
+                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight">Share Opportunity</h2>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Post a new job for the alumni network</p>
+                    </div>
                   </div>
                   <button
                     onClick={() => setShowPostJobModal(false)}
-                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                   >
                     <X className="w-6 h-6" />
                   </button>
@@ -569,167 +572,173 @@ export const JobsPage = () => {
                 <form onSubmit={handlePostJob} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                        Job Title *
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Job Title <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={jobForm.title}
                         onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                        placeholder="e.g., Senior Software Engineer"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                        placeholder="e.g. Senior Software Engineer"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                        Company *
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Company <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={jobForm.company}
                         onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                        placeholder="e.g., Google, Microsoft"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                        placeholder="e.g. Google, Microsoft"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-3">
-                      Job Description *
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                      Job Description <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={jobForm.description}
                       onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })}
-                      rows={4}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
-                      placeholder="Describe the role, responsibilities, and what makes this opportunity exciting..."
+                      rows={5}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none hover:bg-white dark:hover:bg-slate-800"
+                      placeholder="Describe the role, key responsibilities, and requirements..."
                       required
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                        Location *
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Location <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={jobForm.location}
                         onChange={(e) => setJobForm({ ...jobForm, location: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                        placeholder="e.g., Mumbai, Remote"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                        placeholder="e.g. Mumbai, Remote"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Job Type
                       </label>
-                      <select
-                        value={jobForm.jobType}
-                        onChange={(e) => setJobForm({ ...jobForm, jobType: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                      >
-                        <option value="full-time">Full-Time</option>
-                        <option value="part-time">Part-Time</option>
-                        <option value="contract">Contract</option>
-                        <option value="internship">Internship</option>
-                        <option value="freelance">Freelance</option>
-                      </select>
+                      <div className="relative">
+                        <select
+                          value={jobForm.jobType}
+                          onChange={(e) => setJobForm({ ...jobForm, jobType: e.target.value })}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none cursor-pointer hover:bg-white dark:hover:bg-slate-800"
+                        >
+                          <option value="full-time">Full-Time</option>
+                          <option value="part-time">Part-Time</option>
+                          <option value="contract">Contract</option>
+                          <option value="internship">Internship</option>
+                          <option value="freelance">Freelance</option>
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                      </div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                        Domain *
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Domain <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={jobForm.domain}
                         onChange={(e) => setJobForm({ ...jobForm, domain: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                        placeholder="e.g., Technology, Engineering"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                        placeholder="e.g. Engineering, Marketing"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                        Salary Range
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Salary Range <span className="text-slate-400 font-normal text-xs ml-1">(Optional)</span>
                       </label>
                       <input
                         type="text"
                         value={jobForm.salaryRange}
                         onChange={(e) => setJobForm({ ...jobForm, salaryRange: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                        placeholder="e.g., ₹5-10 LPA, $50k-80k"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                        placeholder="e.g. ₹10-15 LPA"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                      Application URL *
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                      Application URL <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="url"
                       value={jobForm.applyUrl}
                       onChange={(e) => setJobForm({ ...jobForm, applyUrl: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                      placeholder="https://company.com/careers/job-id"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                      placeholder="https://company.com/careers/apply"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                      Required Skills
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                      Required Skills <span className="text-slate-400 font-normal text-xs ml-1">(Comma separated)</span>
                     </label>
                     <input
                       type="text"
                       value={jobForm.skillsRequired.join(', ')}
                       onChange={(e) => setJobForm({ ...jobForm, skillsRequired: e.target.value.split(',').map(s => s.trim()) })}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                      placeholder="e.g., JavaScript, React, Node.js, Python"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:bg-white dark:hover:bg-slate-800"
+                      placeholder="e.g. React, Node.js, TypeScript"
                     />
                   </div>
 
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
                     <input
                       type="checkbox"
                       id="isRemote"
                       checked={jobForm.isRemote}
                       onChange={(e) => setJobForm({ ...jobForm, isRemote: e.target.checked })}
-                      className="w-4 h-4 text-primary-600 bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-700 rounded focus:ring-primary-500 focus:ring-2"
+                      className="w-5 h-5 text-primary-600 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-primary-500 focus:ring-2 transition-all cursor-pointer"
                     />
-                    <label htmlFor="isRemote" className="text-sm text-slate-700 dark:text-slate-300">
+                    <label htmlFor="isRemote" className="text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none">
                       This is a remote work opportunity
                     </label>
                   </div>
 
-                  <div className="flex justify-end space-x-4 pt-6 border-t border-slate-200 dark:border-slate-700">
+                  <div className="flex justify-end space-x-4 pt-6 border-t border-slate-100 dark:border-slate-800">
                     <button
                       type="button"
                       onClick={() => setShowPostJobModal(false)}
-                      className="px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all duration-300"
+                      className="px-6 py-3 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all duration-300"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={posting}
-                      className="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                      className="px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-primary-500/30 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center space-x-2"
                     >
                       {posting ? (
-                        <div className="flex items-center space-x-2">
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                           <span>Posting...</span>
-                        </div>
+                        </>
                       ) : (
-                        'Share Opportunity'
+                        <>
+                          <Plus className="w-5 h-5" />
+                          <span>Post Opportunity</span>
+                        </>
                       )}
                     </button>
                   </div>
