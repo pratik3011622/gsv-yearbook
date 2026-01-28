@@ -9,7 +9,7 @@ export const StoryDetailPage = ({ onNavigate }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const isAuthor = story && user && user.id && story.authorId && story.authorId._id === user.id;
+  const isAuthor = story && user && user.id && story.authorId && story.authorId === user.id;
 
   useEffect(() => {
     const storyId = localStorage.getItem('selectedStoryId');
@@ -181,21 +181,23 @@ export const StoryDetailPage = ({ onNavigate }) => {
             </div>
 
             {/* Author Info */}
-            {story.authorId && (
+            {story.author && (
               <div className="flex items-center space-x-4 p-6 bg-slate-50 dark:bg-slate-700/50 rounded-xl mb-8 border border-slate-100 dark:border-slate-700">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md">
-                  {story.authorId.fullName?.charAt(0) || 'U'}
+                  {story.author.fullName?.charAt(0) || 'U'}
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900 dark:text-white text-lg">
-                    {story.authorId.fullName}
+                    {story.author.fullName}
                   </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Batch {story.authorId.batchYear}
-                  </p>
-                  {story.authorId.company && (
+                  {story.author.batchYear && (
                     <p className="text-sm text-slate-600 dark:text-slate-400">
-                      {story.authorId.company}
+                      Batch {story.author.batchYear}
+                    </p>
+                  )}
+                  {story.author.company && (
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      {story.author.company}
                     </p>
                   )}
                 </div>

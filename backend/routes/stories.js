@@ -135,7 +135,9 @@ router.get('/:id', async (req, res) => {
           updatedAt: 1,
           authorId: 1,
           author: {
-            fullName: '$author.fullName'
+            fullName: '$author.fullName',
+            batchYear: '$author.batchYear',
+            company: '$author.company'
           }
         }
       }
