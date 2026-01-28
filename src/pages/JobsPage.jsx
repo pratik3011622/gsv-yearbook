@@ -461,7 +461,7 @@ export const JobsPage = () => {
                           placeholder="Job Title *"
                           value={jobForm.title}
                           onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                           required
                         />
                         <input
@@ -469,7 +469,7 @@ export const JobsPage = () => {
                           placeholder="Company Name *"
                           value={jobForm.company}
                           onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                           required
                         />
                       </div>
@@ -480,7 +480,7 @@ export const JobsPage = () => {
                       value={jobForm.description}
                       onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })}
                       rows={5}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium resize-none"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium resize-none text-slate-900 dark:text-white"
                       required
                     />
 
@@ -492,14 +492,14 @@ export const JobsPage = () => {
                           placeholder="Location (e.g. Mumbai) *"
                           value={jobForm.location}
                           onChange={(e) => setJobForm({ ...jobForm, location: e.target.value })}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                           required
                         />
                         <div className="relative">
                           <select
                             value={jobForm.jobType}
                             onChange={(e) => setJobForm({ ...jobForm, jobType: e.target.value })}
-                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium appearance-none"
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium appearance-none text-slate-900 dark:text-white"
                           >
                             <option value="full-time">Full-Time</option>
                             <option value="part-time">Part-Time</option>
@@ -518,7 +518,7 @@ export const JobsPage = () => {
                         placeholder="Domain (e.g. Finance) *"
                         value={jobForm.domain}
                         onChange={(e) => setJobForm({ ...jobForm, domain: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                         required
                       />
                       <input
@@ -526,7 +526,7 @@ export const JobsPage = () => {
                         placeholder="Salary Range (Optional)"
                         value={jobForm.salaryRange}
                         onChange={(e) => setJobForm({ ...jobForm, salaryRange: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                       />
                     </div>
 
@@ -535,7 +535,7 @@ export const JobsPage = () => {
                       placeholder="Application Link *"
                       value={jobForm.applyUrl}
                       onChange={(e) => setJobForm({ ...jobForm, applyUrl: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                       required
                     />
 
@@ -544,7 +544,7 @@ export const JobsPage = () => {
                       placeholder="Required Skills (comma separated)"
                       value={jobForm.skillsRequired.join(', ')}
                       onChange={(e) => setJobForm({ ...jobForm, skillsRequired: e.target.value.split(',').map(s => s.trim()) })}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary-500 transition-all font-medium text-slate-900 dark:text-white"
                     />
 
                     <label className="flex items-center space-x-3 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
