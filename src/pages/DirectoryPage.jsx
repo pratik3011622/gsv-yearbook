@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, MapPin, Linkedin, Briefcase, GraduationCap, Filter, X, Users, Building2, Award, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, MapPin, Linkedin, Briefcase, GraduationCap, Filter, X, Users, Building2, Award, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -301,97 +301,88 @@ export const DirectoryPage = ({ onNavigate }) => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProfiles.map((profile) => (
               <div
                 key={profile._id || profile.id}
-                className="group flex flex-col bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col"
               >
-                <div className="p-6 flex flex-col items-center flex-1">
-                  {/* Avatar */}
-                  <div className="w-24 h-24 mb-4 relative">
-                    <div className="w-full h-full rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center">
                       {profile.avatarUrl ? (
                         <img
                           src={profile.avatarUrl}
                           alt={profile.fullName}
-                          className="w-full h-full object-cover bg-slate-100 dark:bg-slate-700"
+                          className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-2xl font-serif font-bold text-slate-400">
+                        <span className="text-xl font-bold text-slate-400">
                           {profile.fullName?.charAt(0)?.toUpperCase()}
-                        </div>
+                        </span>
                       )}
                     </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary-600 transition-colors line-clamp-1">
+                        {profile.fullName}
+                      </h3>
+                      <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
+                        {profile.company || 'Open to work'}
+                      </p>
+                    </div>
                   </div>
+                </div>
 
-                  {/* Info */}
-                  <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white text-center mb-1 line-clamp-1">
-                    {profile.fullName}
-                  </h3>
-
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase bg-slate-100 dark:bg-slate-700/50 px-2 py-0.5 rounded">
-                      {profile.batchYear}
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {profile.batchYear && (
+                    <span className="px-3 py-1 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-lg text-xs font-bold uppercase tracking-wide flex items-center">
+                      <GraduationCap className="w-3 h-3 mr-1.5" />
+                      Class of {profile.batchYear}
                     </span>
-                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 border-l border-slate-300 dark:border-slate-600 pl-2">
+                  )}
+                  {profile.department && (
+                    <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wide flex items-center">
+                      <Award className="w-3 h-3 mr-1.5" />
                       {profile.department}
                     </span>
-                  </div>
+                  )}
+                  {profile.location && (
+                    <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-lg text-xs font-bold uppercase tracking-wide flex items-center">
+                      <MapPin className="w-3 h-3 mr-1.5" />
+                      {profile.location}
+                    </span>
+                  )}
+                </div>
 
-                  <div className="w-full space-y-2 mb-4">
-                    {profile.company ? (
-                      <div className="flex items-center justify-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                        <Briefcase size={14} className="text-slate-400" />
-                        <span className="truncate max-w-[150px]">{profile.company}</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2 text-sm text-slate-400 italic">
-                        <span>Open to work</span>
-                      </div>
-                    )}
-
-                    {profile.location && (
-                      <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                        <MapPin size={14} className="text-slate-400" />
-                        <span className="truncate max-w-[150px]">{profile.location}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Actions */}
-                  <div className="mt-auto flex items-center gap-3 w-full pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                    {/* Primary Action: View Profile -> LinkedIn if available */}
+                {/* Footer */}
+                <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-5 mt-auto">
+                  <div className="flex items-center">
                     {profile.linkedinUrl ? (
                       <a
                         href={profile.linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 text-center py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                        className="p-2 text-slate-400 hover:text-[#0077b5] hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors"
+                        title="LinkedIn Profile"
                       >
-                        View Profile
+                        <Linkedin className="w-5 h-5" />
                       </a>
                     ) : (
-                      <button
-                        onClick={() => onNavigate('profile', profile._id)}
-                        className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                      >
-                        View Profile
-                      </button>
-                    )}
-
-                    {/* Secondary Icon: Keep it for clarity or duplicate access */}
-                    {profile.linkedinUrl && (
-                      <a
-                        href={profile.linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 text-slate-400 hover:text-[#0077b5] hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors"
-                      >
-                        <Linkedin size={18} />
-                      </a>
+                      <div className="p-2 text-slate-300 dark:text-slate-700">
+                        <Linkedin className="w-5 h-5" />
+                      </div>
                     )}
                   </div>
+
+                  <button
+                    onClick={() => onNavigate('profile', profile._id)}
+                    className="inline-flex items-center px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-primary-600 dark:hover:bg-slate-200 transition-all shadow-lg hover:shadow-primary-600/30 dark:hover:shadow-white/20"
+                  >
+                    View Profile
+                    <ExternalLink className="w-3 h-3 ml-2" />
+                  </button>
                 </div>
               </div>
             ))}
