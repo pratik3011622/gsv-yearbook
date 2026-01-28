@@ -48,7 +48,9 @@ router.get('/', async (req, res) => {
           poster: {
             fullName: '$poster.fullName',
             company: '$poster.company',
-            batchYear: '$poster.batchYear'
+            batchYear: '$poster.batchYear',
+            role: '$poster.role',
+            avatarUrl: '$poster.avatarUrl'
           }
         }
       },
@@ -97,7 +99,9 @@ router.get('/:id', async (req, res) => {
           poster: {
             fullName: '$poster.fullName',
             company: '$poster.company',
-            batchYear: '$poster.batchYear'
+            batchYear: '$poster.batchYear',
+            role: '$poster.role',
+            avatarUrl: '$poster.avatarUrl'
           }
         }
       }
@@ -164,7 +168,9 @@ router.post('/', auth, validateJob, async (req, res) => {
           postedBy: 1,
           poster: {
             fullName: '$poster.fullName',
-            company: '$poster.company'
+            company: '$poster.company',
+            role: '$poster.role',
+            avatarUrl: '$poster.avatarUrl'
           }
         }
       }

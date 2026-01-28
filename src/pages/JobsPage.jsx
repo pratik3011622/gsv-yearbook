@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   MapPin, ExternalLink, Clock, Plus, Building2, Briefcase,
   Search, Filter, X, Star, Bookmark, BookmarkCheck, Users,
@@ -421,8 +422,8 @@ export const JobsPage = () => {
           </div>
         )}
 
-        {showPostJobModal && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[9999] flex justify-center items-end sm:items-center p-0 sm:p-4 overflow-hidden">
+        {showPostJobModal && createPortal(
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[99999] flex justify-center items-end sm:items-center p-0 sm:p-4 overflow-hidden">
             <div
               className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[90vh] sm:max-h-[85vh] animate-slide-up"
               onClick={(e) => e.stopPropagation()}
@@ -565,7 +566,8 @@ export const JobsPage = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
       </div>
     </div>
