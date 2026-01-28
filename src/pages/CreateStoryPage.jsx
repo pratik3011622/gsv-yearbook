@@ -431,6 +431,26 @@ export const CreateStoryPage = ({ onNavigate, storyId }) => {
           font-style: italic;
         }
 
+        /* Force input text colors */
+        input, textarea {
+          color: inherit;
+        }
+        .dark input, .dark textarea {
+          color: #ffffff !important;
+        }
+        
+        /* Specific override for editor text in dark mode to be absolutely white */
+        .dark .story-editor .ql-editor p,
+        .dark .story-editor .ql-editor h1,
+        .dark .story-editor .ql-editor h2,
+        .dark .story-editor .ql-editor h3,
+        .dark .story-editor .ql-editor ul, 
+        .dark .story-editor .ql-editor ol,
+        .dark .story-editor .ql-editor li,
+        .dark .story-editor .ql-editor span {
+           color: #ffffff !important;
+        }
+
         .story-editor .ql-editor img {
           border-radius: 8px;
           margin: 2rem 0;

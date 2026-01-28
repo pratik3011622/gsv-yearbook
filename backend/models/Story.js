@@ -11,7 +11,7 @@ const storySchema = new mongoose.Schema({
   },
   excerpt: {
     type: String,
-    required: true,
+    // required: removed to make optional as per user
   },
   coverImageUrl: String,
   highlightQuote: String,

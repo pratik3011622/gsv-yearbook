@@ -47,16 +47,13 @@ const validateJob = (req, res, next) => {
 };
 
 const validateStory = (req, res, next) => {
-  const { title, content, excerpt } = req.body;
+  const { title, content } = req.body;
 
-  if (!title || !content || !excerpt) {
-    return res.status(400).json({ message: 'Title, content, and excerpt are required' });
+  if (!title || !content) {
+    return res.status(400).json({ message: 'Title and content are required' });
   }
 
-  if (content.length < 100) {
-    return res.status(400).json({ message: 'Content must be at least 100 characters long' });
-  }
-
+  // Removed strict length check and excerpt requirement
   next();
 };
 
