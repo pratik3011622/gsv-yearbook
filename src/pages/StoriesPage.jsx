@@ -95,13 +95,14 @@ export const StoriesPage = ({ onNavigate }) => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center">
               <BookOpen className="w-6 h-6 text-primary-600 dark:text-primary-400" />
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white">
-              Success Stories
-            </h1>
+            <span className="text-lg font-bold text-primary-600 dark:text-primary-400">Stories</span>
           </div>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
+            Success Stories
+          </h1>
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Inspiring journeys and success stories from our distinguished alumni community
           </p>
@@ -262,7 +263,7 @@ export const StoriesPage = ({ onNavigate }) => {
               {stories.filter(story => story._id !== featuredStory?._id).map((story) => (
                 <article
                   key={story._id || story.id}
-                  className="group bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                  className="group bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
                 >
                   {story.coverImageUrl && (
                     <div className="relative h-40 overflow-hidden flex-shrink-0">
@@ -356,7 +357,7 @@ export const StoriesPage = ({ onNavigate }) => {
         </div>
 
         {/* SHARE A STORY SECTION */}
-        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <div className="max-w-2xl mx-auto px-4">
             {isAlumni ? (
               <>

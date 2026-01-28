@@ -116,7 +116,7 @@ export const DirectoryPage = ({ onNavigate }) => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="font-serif text-5xl sm:text-6xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
             Alumni Directory
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
@@ -126,9 +126,9 @@ export const DirectoryPage = ({ onNavigate }) => {
 
         {/* Stats Bar */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 group">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
@@ -305,12 +305,12 @@ export const DirectoryPage = ({ onNavigate }) => {
             {filteredProfiles.map((profile) => (
               <div
                 key={profile._id || profile.id}
-                className="group flex flex-col bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-300 hover:-translate-y-1"
+                className="group flex flex-col bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="p-6 flex flex-col items-center flex-1">
                   {/* Avatar */}
                   <div className="w-24 h-24 mb-4 relative">
-                    <div className="w-full h-full rounded-2xl overflow-hidden shadow-md">
+                    <div className="w-full h-full rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
                       {profile.avatarUrl ? (
                         <img
                           src={profile.avatarUrl}

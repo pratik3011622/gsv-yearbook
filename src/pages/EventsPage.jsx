@@ -77,9 +77,9 @@ export const EventsPage = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 relative overflow-hidden transition-colors duration-300">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="mb-12 text-center">
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-4">
             Events & Reunions
           </h1>
 
@@ -90,18 +90,18 @@ export const EventsPage = ({ onNavigate }) => {
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => setFilter('upcoming')}
-              className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-300 ${filter === 'upcoming'
-                ? 'bg-primary-600 text-white shadow-md'
-                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+              className={`px-8 py-3 rounded-2xl font-bold transition-all duration-300 ${filter === 'upcoming'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg'
+                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
             >
               Upcoming Events
             </button>
             <button
               onClick={() => setFilter('past')}
-              className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-300 ${filter === 'past'
-                ? 'bg-primary-600 text-white shadow-md'
-                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+              className={`px-8 py-3 rounded-2xl font-bold transition-all duration-300 ${filter === 'past'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg'
+                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
             >
               Past Events
@@ -124,7 +124,7 @@ export const EventsPage = ({ onNavigate }) => {
             {filteredEvents.map((event) => (
               <div
                 key={event._id || event.id}
-                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 flex flex-col"
+                className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm overflow-hidden hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-800 flex flex-col group"
               >
                 {event.imageUrl && (
                   <div className="h-56 relative overflow-hidden group">
