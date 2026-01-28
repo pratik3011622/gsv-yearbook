@@ -4,20 +4,20 @@ import { motion } from 'framer-motion';
 import { Facebook, Linkedin, Instagram, Twitter, Mail, Phone, MapPin, ExternalLink, Briefcase, Award, Search, Users, Calendar, Globe, Zap, Building2 } from 'lucide-react';
 
 export const HomePage = ({ onNavigate }) => {
-   const { isDark } = useTheme();
-   const [videoLoaded, setVideoLoaded] = useState(false);
-   const [parallaxY, setParallaxY] = useState(0);
-   const videoRef = useRef(null);
+  const { isDark } = useTheme();
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [parallaxY, setParallaxY] = useState(0);
+  const videoRef = useRef(null);
 
-   useEffect(() => {
-      const handleScroll = () => {
-         setParallaxY(window.scrollY * 0.5);
-      };
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-   }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      setParallaxY(window.scrollY * 0.5);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-   return (
+  return (
     <div className="overflow-x-hidden font-sans bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-50">
       {/* Video Hero Section */}
       <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden bg-slate-900 text-white">
@@ -39,44 +39,44 @@ export const HomePage = ({ onNavigate }) => {
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.6)_100%),linear-gradient(135deg,rgba(30,64,175,0.3),rgba(15,23,42,0.4))]"></div>
 
         <div className="relative z-30 max-w-7xl px-4 mt-0">
-           <motion.h1
-             className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight text-white tracking-tight"
-             initial="hidden"
-             animate="visible"
-             variants={{
-               hidden: { opacity: 0 },
-               visible: {
-                 opacity: 1,
-                 transition: {
-                   staggerChildren: 0.1,
-                   delayChildren: 0.2,
-                 },
-               },
-             }}
-           >
-             {["Connect,", "Celebrate and Grow"].map((word, index) => (
-               <motion.span
-                 key={index}
-                 className="inline-block md:whitespace-nowrap"
-                 variants={{
-                   hidden: { opacity: 0, y: 20 },
-                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-                 }}
-               >
-                 {word}{" "}
-               </motion.span>
-             ))}
-             <br />
-             <motion.span
-               className="inline-block"
-               variants={{
-                 hidden: { opacity: 0, y: 20 },
-                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4 } },
-               }}
-             >
-               Together
-             </motion.span>
-           </motion.h1>
+          <motion.h1
+            className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight text-white tracking-tight"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
+                  delayChildren: 0.2,
+                },
+              },
+            }}
+          >
+            {["Connect,", "Celebrate and Grow"].map((word, index) => (
+              <motion.span
+                key={index}
+                className="inline-block md:whitespace-nowrap"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+                }}
+              >
+                {word}{" "}
+              </motion.span>
+            ))}
+            <br />
+            <motion.span
+              className="inline-block"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4 } },
+              }}
+            >
+              Together
+            </motion.span>
+          </motion.h1>
           <p className="text-xl text-white/95 mb-12 font-normal max-w-[700px] mx-auto animate-[slideUp_1s_ease-out_0.3s_forwards] opacity-0 translate-y-5">
             Join a vibrant community where memories are made, careers accelerate, and support never stops.
           </p>
@@ -247,13 +247,13 @@ export const HomePage = ({ onNavigate }) => {
             ].map((feat, idx) => (
               <a key={idx} href={`#${feat.nav}`} className="group relative h-[240px] rounded-2xl overflow-hidden cursor-pointer shadow-lg transition-transform duration-300 border border-white/10 block">
                 <img src={feat.img} alt={feat.title} className="absolute inset-0 w-full h-full object-cover z-0" />
-                <div className="absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.3)_100%)] backdrop-blur-[0px]"></div>
+                <div className={`absolute inset-0 z-10 backdrop-blur-[0px] ${feat.title === 'Career Hub' ? 'bg-white/60' : 'bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.3)_100%)]'}`}></div>
                 <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center">
                   <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-4 text-white border border-white/20">
                     <feat.icon size={24} />
                   </div>
-                  <h3 className="font-sans text-xl font-bold mb-2 text-white drop-shadow-md">{feat.title}</h3>
-                  <p className="text-white/90 leading-relaxed text-sm max-w-[90%] opacity-90">{feat.text}</p>
+                  <h3 className={`font-sans text-xl font-bold mb-2 drop-shadow-md ${feat.title === 'Career Hub' ? 'text-black' : 'text-white'}`}>{feat.title}</h3>
+                  <p className={`leading-relaxed text-sm max-w-[90%] opacity-90 ${feat.title === 'Career Hub' ? 'text-slate-900' : 'text-white/90'}`}>{feat.text}</p>
                 </div>
               </a>
             ))}

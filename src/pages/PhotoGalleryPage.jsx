@@ -218,10 +218,10 @@ export const PhotoGalleryPage = () => {
   const isBento = selectedCategory === 'All';
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="text-center mb-16">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             Photo Gallery
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
@@ -249,7 +249,7 @@ export const PhotoGalleryPage = () => {
           {filteredPhotos.map((photo) => (
             <div
               key={photo.id}
-              className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-slate-100 dark:border-slate-700/50"
+              className="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-slate-100 dark:border-slate-800"
               onClick={() => openPhotoModal(photo)}
             >
               <div className="relative aspect-[4/3] overflow-hidden">
@@ -290,7 +290,7 @@ export const PhotoGalleryPage = () => {
         </div>
 
         {filteredPhotos.length === 0 && (
-          <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+          <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-800">
             <p className="text-xl text-slate-500 dark:text-slate-400">
               No photos found in this category.
             </p>

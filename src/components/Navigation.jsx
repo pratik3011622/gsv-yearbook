@@ -111,7 +111,7 @@ export const Navigation = ({ onNavigate, currentPage }) => {
                 }`}>
                 गति शक्ति विश्वविद्यालय
               </span>
-              <p className={`text-[11px] font-brand font-semibold tracking-[0.15em] uppercase transition-colors duration-300 ${currentPage === 'home' && !isScrolled ? 'text-blue-200' : 'text-slate-500 dark:text-slate-400'
+              <p className={`text-[10px] sm:text-[11px] font-brand font-semibold tracking-normal sm:tracking-[0.15em] uppercase transition-colors duration-300 leading-tight ${currentPage === 'home' && !isScrolled ? 'text-blue-200' : 'text-slate-500 dark:text-slate-400'
                 }`}>
                 Gati Shakti Vishwavidyalaya
               </p>

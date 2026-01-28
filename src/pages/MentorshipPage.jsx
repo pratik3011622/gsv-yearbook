@@ -77,9 +77,9 @@ export const MentorshipPage = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="mb-12 text-center">
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-4">
             Mentorship Program
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
@@ -140,7 +140,7 @@ export const MentorshipPage = ({ onNavigate }) => {
                       {mentors.map((mentor) => (
                         <div
                           key={mentor._id}
-                          className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-all duration-300 group"
+                          className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
                         >
                           <div className="h-24 bg-gradient-to-r from-primary-500 to-primary-600"></div>
 
@@ -203,7 +203,7 @@ export const MentorshipPage = ({ onNavigate }) => {
 
             {activeTab === 'request' && isAlumni && (
               <div className="max-w-2xl mx-auto">
-                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8">
+                <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 p-8">
                   <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-6">
                     Request Mentorship
                   </h2>
@@ -303,7 +303,7 @@ export const MentorshipPage = ({ onNavigate }) => {
                     {mySessions.map((session) => (
                       <div
                         key={session._id}
-                        className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 hover:shadow-md transition-all duration-300 border border-slate-200 dark:border-slate-700"
+                        className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm p-6 hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-800"
                       >
                         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                           <div className="flex-1">
@@ -365,7 +365,7 @@ export const MentorshipPage = ({ onNavigate }) => {
             )}
 
             {!isAlumni && (
-              <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 max-w-3xl mx-auto">
+              <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 max-w-3xl mx-auto">
                 <div className="w-20 h-20 bg-primary-50 dark:bg-primary-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Users className="w-10 h-10 text-primary-600" />
                 </div>

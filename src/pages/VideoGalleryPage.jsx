@@ -120,10 +120,10 @@ export const VideoGalleryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-25 via-indigo-25 to-purple-25 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="text-center mb-16">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             Video Gallery
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
@@ -180,8 +180,8 @@ export const VideoGalleryPage = () => {
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide
-                      ? 'w-8 bg-white'
-                      : 'w-2 bg-white/50 hover:bg-white/70'
+                    ? 'w-8 bg-white'
+                    : 'w-2 bg-white/50 hover:bg-white/70'
                     }`}
                   aria-label={`Go to video ${index + 1}`}
                 ></button>
@@ -197,8 +197,8 @@ export const VideoGalleryPage = () => {
               key={category}
               onClick={() => setSelectedCategory(category)}
               className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${selectedCategory === category
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                  : 'bg-white dark:bg-slate-800 text-neutral-700 dark:text-neutral-300 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-neutral-200 dark:border-slate-700'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
+                : 'bg-white dark:bg-slate-800 text-neutral-700 dark:text-neutral-300 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-neutral-200 dark:border-slate-700'
                 }`}
             >
               {category}
@@ -211,7 +211,7 @@ export const VideoGalleryPage = () => {
           {filteredVideos.map((video) => (
             <div
               key={video.id}
-              className="group relative card-3d-tilt cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-slate-800 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 gpu-accelerated"
+              className="group relative card-3d-tilt cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-slate-100 dark:border-slate-800"
               onClick={() => openVideoModal(video)}
             >
               {/* Thumbnail */}

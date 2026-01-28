@@ -7,7 +7,7 @@ const magazineData = [
     title: 'TechnoBytes',
     description: 'Exploring the latest in technology, innovation, and digital trends from the GSV community.',
     coverImage: '/Screenshot 2026-01-24 162408.png',
-    
+
     pdfUrl: '/TechnoByte_Ed_2.pdf',
     issue: 'Edition 2',
     publishDate: '2026-01-19',
@@ -25,7 +25,7 @@ const magazineData = [
     pages: 5,
     featured: true
   }
- 
+
 ];
 
 export const MagazinePage = () => {
@@ -40,10 +40,10 @@ export const MagazinePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="text-center mb-16">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             Alumni Magazine
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
@@ -60,7 +60,7 @@ export const MagazinePage = () => {
             {magazineData.map((magazine) => (
               <div
                 key={magazine.id}
-                className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+                className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
               >
                 {/* Cover Image */}
                 <div className="relative h-64 overflow-hidden">
@@ -114,8 +114,8 @@ export const MagazinePage = () => {
 
       {/* Magazine Modal */}
       {selectedMagazine && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="fixed inset-0 bg-slate-900/60 z-[99999] flex items-center justify-center p-4 backdrop-blur-md">
+          <div className="relative w-full max-w-4xl bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl animate-fade-in-up">
             <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
               <div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">
