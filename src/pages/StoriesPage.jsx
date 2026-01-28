@@ -262,10 +262,10 @@ export const StoriesPage = ({ onNavigate }) => {
               {stories.filter(story => story._id !== featuredStory?._id).map((story) => (
                 <article
                   key={story._id || story.id}
-                  className="group bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  className="group bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col"
                 >
                   {story.coverImageUrl && (
-                    <div className="relative h-40 overflow-hidden">
+                    <div className="relative h-40 overflow-hidden flex-shrink-0">
                       <img
                         src={story.coverImageUrl}
                         alt={story.title}
@@ -275,59 +275,59 @@ export const StoriesPage = ({ onNavigate }) => {
                     </div>
                   )}
 
-                  <div className="p-4">
+                  <div className="p-6 flex flex-col flex-grow">
                     {/* Meta Info */}
-                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-1">
-                          <Clock className="w-3 h-3" />
-                          <span>{story.readTime || 5} min</span>
+                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+                          <Clock className="w-3.5 h-3.5" />
+                          <span className="font-medium">{story.readTime || 5} min</span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <Eye className="w-3 h-3" />
+                        <div className="flex items-center space-x-1.5">
+                          <Eye className="w-3.5 h-3.5" />
                           <span>{story.viewsCount || 0}</span>
                         </div>
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 leading-tight">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 leading-tight">
                       {story.title}
                     </h3>
 
-                    <p className="text-slate-600 dark:text-slate-400 mb-4 line-clamp-2 text-sm leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3 text-sm leading-relaxed flex-grow">
                       {story.excerpt}
                     </p>
 
                     {/* Author Info and Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm">
+                    <div className="flex items-center justify-between pt-5 border-t border-slate-100 dark:border-slate-700 mt-auto">
+                      <div className="flex items-center space-x-3 min-w-0 flex-1 mr-4">
+                        <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold text-white shadow-sm ring-2 ring-white dark:ring-slate-800">
                           {story.author?.fullName?.charAt(0)?.toUpperCase() || 'A'}
                         </div>
-                        <div>
-                          <p className="font-semibold text-slate-900 dark:text-white text-sm">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-bold text-slate-900 dark:text-white text-sm truncate">
                             {story.author?.fullName}
                           </p>
                           {story.author?.batchYear && (
-                            <p className="text-slate-500 dark:text-slate-400 text-xs">
+                            <p className="text-slate-500 dark:text-slate-400 text-xs truncate font-medium">
                               Batch {story.author.batchYear}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1 flex-shrink-0">
                         {isAuthor(story) && (
                           <>
                             <button
-                              onClick={() => handleEditStory(story)}
+                              onClick={(e) => { e.stopPropagation(); handleEditStory(story); }}
                               className="p-2 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"
                               title="Edit Story"
                             >
                               <Edit3 className="w-4 h-4" />
                             </button>
                             <button
-                              onClick={() => handleDeleteStory(story._id)}
+                              onClick={(e) => { e.stopPropagation(); handleDeleteStory(story._id); }}
                               className="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"
                               title="Delete Story"
                             >
@@ -341,10 +341,10 @@ export const StoriesPage = ({ onNavigate }) => {
                             localStorage.setItem('selectedStoryId', story._id || story.id);
                             onNavigate('story-detail');
                           }}
-                          className="inline-flex items-center px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-lg transition-colors text-sm"
+                          className="inline-flex items-center justify-center w-8 h-8 bg-slate-100 dark:bg-slate-700 hover:bg-primary-600 hover:text-white dark:hover:bg-primary-500 rounded-full transition-all duration-300 ml-1"
+                          title="Read Story"
                         >
-                          <span>Read</span>
-                          <ChevronRight className="w-4 h-4 ml-1" />
+                          <ChevronRight className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
@@ -393,9 +393,9 @@ export const StoriesPage = ({ onNavigate }) => {
             )}
           </div>
         </div>
-      </div>
+      </div >
 
 
-    </div>
+    </div >
   );
 };
