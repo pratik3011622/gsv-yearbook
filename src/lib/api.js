@@ -15,10 +15,15 @@ class ApiClient {
     const config = {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
         ...options.headers,
       },
     };
+
+    // Only set Content-Type to application/json if it's not FormData
+    // For FormData, let the browser set it (multipart/form-data; boundary=...)
+    if (!(options.body instanceof FormData) && !config.headers['Content-Type']) {
+      config.headers['Content-Type'] = 'application/json';
+    }
 
     const authUser = auth.currentUser;
     if (authUser && !options.skipAuth) {
