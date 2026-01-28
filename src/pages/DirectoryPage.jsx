@@ -377,7 +377,7 @@ export const DirectoryPage = ({ onNavigate }) => {
                   </div>
 
                   <button
-                    onClick={() => onNavigate('profile', profile._id)}
+                    onClick={() => profile.linkedinUrl ? window.open(profile.linkedinUrl, '_blank') : alert('LinkedIn profile not available')}
                     className="inline-flex items-center px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-primary-600 dark:hover:bg-slate-200 transition-all shadow-lg hover:shadow-primary-600/30 dark:hover:shadow-white/20"
                   >
                     View Profile
