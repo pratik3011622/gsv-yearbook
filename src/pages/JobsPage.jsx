@@ -388,16 +388,22 @@ export const JobsPage = () => {
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Posted By</span>
                     <div className="flex items-center space-x-2">
-                      {job.postedBy?.profileImage ? (
-                        <img src={job.postedBy.profileImage} alt={job.postedBy.fullName} className="w-5 h-5 rounded-full object-cover" />
+                      {job.poster?.avatarUrl ? (
+                        <img src={job.poster.avatarUrl} alt={job.poster.fullName} className="w-6 h-6 rounded-full object-cover border border-slate-200 dark:border-slate-700" />
                       ) : (
-                        <div className="w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-[10px] font-bold text-primary-600 dark:text-primary-400">
-                          {job.postedBy?.fullName?.charAt(0) || 'U'}
+                        <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-[10px] font-bold text-primary-600 dark:text-primary-400 border border-transparent">
+                          {job.poster?.fullName?.charAt(0) || 'U'}
                         </div>
                       )}
-                      <span className="text-xs font-medium text-slate-900 dark:text-white">
-                        {job.postedBy?.fullName || 'Alumni'}
-                      </span>
+                      <div className="flex flex-col leading-none">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">
+                          {job.poster?.fullName || 'Alumni'}
+                        </span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                          {job.poster?.role ? job.poster.role.charAt(0).toUpperCase() + job.poster.role.slice(1) : ''}
+                          {job.poster?.batchYear ? ` • '${job.poster.batchYear.toString().slice(-2)}` : ''}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
