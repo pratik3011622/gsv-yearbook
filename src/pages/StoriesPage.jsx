@@ -143,7 +143,7 @@ export const StoriesPage = ({ onNavigate }) => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
-              Success <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400">Stories</span>
+              Success Stories
             </h1>
             <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
               Inspiring journeys and success stories from our distinguished alumni community.

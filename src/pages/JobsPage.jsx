@@ -210,7 +210,7 @@ export const JobsPage = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
-              Career <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400">Hub</span>
+              Career Hub
             </h1>
             <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
               Explore exclusive opportunities from our alumni network or share a role to help fellow graduates grow.
