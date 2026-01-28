@@ -264,19 +264,19 @@ export const StoriesPage = ({ onNavigate }) => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredStories.map((story) => (
               <div
                 key={story._id || story.id}
-                className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col group h-full"
+                className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col group h-full"
               >
                 {/* Cover Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-40 overflow-hidden">
                   {story.coverImageUrl ? (
                     <img
                       src={story.coverImageUrl}
                       alt={story.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover transition-transform duration-500"
                     />
                   ) : (
                     <div className="w-full h-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center">
@@ -323,8 +323,7 @@ export const StoriesPage = ({ onNavigate }) => {
                     </span>
                   </div>
 
-                  {/* Title & Excerpt */}
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-primary-600 transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 leading-tight transition-colors line-clamp-2">
                     {story.title}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3 mb-6 flex-1">
@@ -355,7 +354,7 @@ export const StoriesPage = ({ onNavigate }) => {
                         localStorage.setItem('selectedStoryId', story._id || story.id);
                         onNavigate('story-detail');
                       }}
-                      className="inline-flex items-center px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-primary-600 dark:hover:bg-slate-200 transition-all shadow-lg hover:shadow-primary-600/30 dark:hover:shadow-white/20"
+                      className="inline-flex items-center px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-primary-600 dark:hover:bg-slate-200 transition-all shadow-lg"
                     >
                       Read
                       <ChevronRight className="w-3 h-3 ml-1.5" />

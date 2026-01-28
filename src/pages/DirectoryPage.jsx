@@ -305,7 +305,7 @@ export const DirectoryPage = ({ onNavigate }) => {
             {filteredProfiles.map((profile) => (
               <div
                 key={profile._id || profile.id}
-                className="group flex flex-col bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className="group flex flex-col bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden"
               >
                 <div className="p-6 flex flex-col items-center flex-1">
                   {/* Avatar */}

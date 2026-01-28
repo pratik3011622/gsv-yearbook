@@ -211,7 +211,7 @@ export const VideoGalleryPage = () => {
           {filteredVideos.map((video) => (
             <div
               key={video.id}
-              className="group relative card-3d-tilt cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-slate-100 dark:border-slate-800"
+              className="group relative card-3d-tilt cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-800"
               onClick={() => openVideoModal(video)}
             >
               {/* Thumbnail */}
@@ -219,7 +219,7 @@ export const VideoGalleryPage = () => {
                 <img
                   src={video.thumbnail}
                   alt={video.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">

@@ -140,7 +140,7 @@ export const MentorshipPage = ({ onNavigate }) => {
                       {mentors.map((mentor) => (
                         <div
                           key={mentor._id}
-                          className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
+                          className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden group"
                         >
                           <div className="h-24 bg-gradient-to-r from-primary-500 to-primary-600"></div>
 
@@ -303,7 +303,7 @@ export const MentorshipPage = ({ onNavigate }) => {
                     {mySessions.map((session) => (
                       <div
                         key={session._id}
-                        className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm p-6 hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-800"
+                        className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm p-6 border border-slate-100 dark:border-slate-800"
                       >
                         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                           <div className="flex-1">

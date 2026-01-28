@@ -124,14 +124,14 @@ export const EventsPage = ({ onNavigate }) => {
             {filteredEvents.map((event) => (
               <div
                 key={event._id || event.id}
-                className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm overflow-hidden hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-800 flex flex-col group"
+                className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col group"
               >
                 {event.imageUrl && (
                   <div className="h-56 relative overflow-hidden group">
                     <img
                       src={event.imageUrl}
                       alt={event.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500"
                     />
                   </div>
                 )}

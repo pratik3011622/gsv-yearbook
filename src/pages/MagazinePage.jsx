@@ -60,14 +60,14 @@ export const MagazinePage = () => {
             {magazineData.map((magazine) => (
               <div
                 key={magazine.id}
-                className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col"
               >
                 {/* Cover Image */}
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={magazine.coverImage}
                     alt={magazine.title}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
                     {/* <span className="px-3 py-1 bg-primary-600 text-white rounded-full text-xs font-bold tracking-wide uppercase shadow-sm">

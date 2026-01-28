@@ -249,14 +249,14 @@ export const PhotoGalleryPage = () => {
           {filteredPhotos.map((photo) => (
             <div
               key={photo.id}
-              className="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-slate-100 dark:border-slate-800"
+              className="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm cursor-pointer border border-slate-100 dark:border-slate-800"
               onClick={() => openPhotoModal(photo)}
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={photo.image}
                   alt={photo.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700"
                 />
                 <div className="absolute top-3 left-3">
                   <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm">
