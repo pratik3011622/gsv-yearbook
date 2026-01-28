@@ -164,6 +164,18 @@ class ApiClient {
     return result.data;
   }
 
+  async uploadImage(imageFile) {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    const result = await this.request('/upload', {
+      method: 'POST',
+      headers: {}, // Let browser set content-type for FormData
+      body: formData,
+    });
+    return result.data;
+  }
+
   async deleteMemory(memoryId) {
     const result = await this.request(`/memories/${memoryId}`, {
       method: 'DELETE',

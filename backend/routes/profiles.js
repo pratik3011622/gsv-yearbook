@@ -1,48 +1,6 @@
-const express = require('express');
-const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const User = require('../models/User');
 const { auth } = require('../middleware/auth');
-
-// Configure Cloudinary
-if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-  console.error('❌ Cloudinary environment variables not set!');
-} else {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
-  console.log('✅ Cloudinary configured successfully');
-}
-
-// Configure multer for Cloudinary storage
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'gsv-yearbook/profiles',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
-    transformation: [
-      { width: 500, height: 500, crop: 'fill', gravity: 'face' },
-      { quality: 'auto' }
-    ]
-  }
-});
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'));
-    }
-  }
-});
+const { profileUpload } = require('../middleware/upload');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -82,7 +40,7 @@ router.get('/me/profile', auth, async (req, res) => {
 });
 
 // Update own profile
-router.put('/me', auth, upload.single('profilePhoto'), async (req, res) => {
+router.put('/me', auth, profileUpload.single('profilePhoto'), async (req, res) => {
   try {
     console.log('Profile update request received for UID:', req.user.firebaseUid);
 

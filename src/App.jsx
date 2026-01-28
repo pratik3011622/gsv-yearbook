@@ -9,6 +9,7 @@ import { DirectoryPage } from './pages/DirectoryPage';
 import { EventsPage } from './pages/EventsPage';
 import { JobsPage } from './pages/JobsPage';
 import { StoriesPage } from './pages/StoriesPage';
+import { CreateStoryPage } from './pages/CreateStoryPage';
 import { StoryDetailPage } from './pages/StoryDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { VideoGalleryPage } from './pages/VideoGalleryPage';
@@ -84,6 +85,7 @@ function AppContent() {
     }
 
     const page = currentPage.split('/')[0];
+    const pageId = currentPage.split('/')[1];
 
     // Public routes that anyone can see
     const publicPages = ['home', 'login', 'register', 'vision-mission', 'leadership', 'team', 'magazine', 'photo-gallery', 'video-gallery', 'forgot-password', 'verification-sent'];
@@ -210,10 +212,35 @@ function AppContent() {
           <div className="min-h-screen">
             <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
             <div className="pt-20">
-              <StoryDetailPage onNavigate={handleNavigate} />
+              <StoryDetailPage onNavigate={handleNavigate} storyId={pageId} />
             </div>
           </div>
         );
+      case 'create-story':
+        return (
+          <div className="min-h-screen">
+            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
+            <div className="pt-20">
+              {/* No ID means create mode */}
+              <CreateStoryPage onNavigate={handleNavigate} />
+            </div>
+          </div>
+        );
+      case 'edit-story':
+        return (
+          <div className="min-h-screen">
+            <Navigation onNavigate={handleNavigate} currentPage={currentPage} />
+            <div className="pt-20">
+              {/* Pass ID for edit mode. The component uses useParams usually, 
+                  but since we are manual routing, we might need to pass it as prop 
+                  or the component needs to read hash. 
+                  Let's pass it as prop to be safe/consistent with StoryDetailPage approach.
+               */}
+              <CreateStoryPage onNavigate={handleNavigate} storyId={pageId} />
+            </div>
+          </div>
+        );
+
 
 
       case 'vision-mission':

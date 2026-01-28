@@ -118,6 +118,7 @@ app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/stories', require('./routes/stories'));
 app.use('/api/mentorship', require('./routes/mentorship'));
 app.use('/api/stats', require('./routes/stats'));
+app.use('/api/upload', require('./routes/upload'));
 
 const PORT = process.env.PORT || 5001;
 
