@@ -141,7 +141,8 @@ class ApiClient {
       formData.append(key, memoryData[key]);
     });
     if (imageFile) {
-      formData.append('image', imageFile);
+      const compressedFile = await this.compressImage(imageFile);
+      formData.append('image', compressedFile);
     }
 
     const result = await this.request('/memories', {
@@ -153,8 +154,9 @@ class ApiClient {
   }
 
   async uploadPhoto(imageFile) {
+    const compressedFile = await this.compressImage(imageFile);
     const formData = new FormData();
-    formData.append('image', imageFile);
+    formData.append('image', compressedFile);
 
     const result = await this.request('/memories/upload', {
       method: 'POST',
@@ -164,9 +166,77 @@ class ApiClient {
     return result.data;
   }
 
+  async compressImage(file) {
+    return new Promise((resolve, reject) => {
+      // If not an image, return original
+      if (!file.type.startsWith('image/')) {
+        return resolve(file);
+      }
+
+      // If small enough (< 1MB), return original
+      if (file.size < 1024 * 1024) {
+        return resolve(file);
+      }
+
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        // Max dimensions
+        const MAX_WIDTH = 1920;
+        const MAX_HEIGHT = 1080;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            console.error('Canvas to Blob failed');
+            return resolve(file); // Fallback
+          }
+          // specific file name with jpg extension
+          const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+          });
+          console.log(`Compressed image: ${file.size} -> ${newFile.size}`);
+          resolve(newFile);
+        }, 'image/jpeg', 0.8);
+      };
+
+      img.onerror = (err) => {
+        console.error('Image load failed during compression', err);
+        resolve(file); // Fallback
+      };
+
+      img.src = url;
+    });
+  }
+
   async uploadImage(imageFile) {
+    const compressedFile = await this.compressImage(imageFile);
     const formData = new FormData();
-    formData.append('image', imageFile);
+    formData.append('image', compressedFile);
 
     const result = await this.request('/upload', {
       method: 'POST',
