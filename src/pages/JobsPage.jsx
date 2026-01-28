@@ -326,10 +326,8 @@ export const JobsPage = () => {
             {filteredJobs.map((job) => (
               <div
                 key={job._id || job.id}
-                className="group relative bg-white dark:bg-slate-800 rounded-3xl p-6 hover:p-6 shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 dark:border-slate-800 overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden"
               >
-                {/* Decoration Gradient */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
 
                 {/* Header */}
                 <div className="flex items-start justify-between mb-6">
@@ -387,8 +385,19 @@ export const JobsPage = () => {
                 {/* Footer */}
                 <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-5 mt-auto">
                   <div className="flex flex-col">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Posted</span>
-                    <span className="text-xs font-medium text-slate-900 dark:text-white">{getRelativeTime(job.createdAt)}</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Posted By</span>
+                    <div className="flex items-center space-x-2">
+                      {job.postedBy?.profileImage ? (
+                        <img src={job.postedBy.profileImage} alt={job.postedBy.fullName} className="w-5 h-5 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-[10px] font-bold text-primary-600 dark:text-primary-400">
+                          {job.postedBy?.fullName?.charAt(0) || 'U'}
+                        </div>
+                      )}
+                      <span className="text-xs font-medium text-slate-900 dark:text-white">
+                        {job.postedBy?.fullName || 'Alumni'}
+                      </span>
+                    </div>
                   </div>
 
                   {job.applyUrl ? (
@@ -412,9 +421,8 @@ export const JobsPage = () => {
           </div>
         )}
 
-        {/* Improved Modal */}
         {showPostJobModal && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex justify-center items-end sm:items-center p-0 sm:p-4 overflow-hidden">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[9999] flex justify-center items-end sm:items-center p-0 sm:p-4 overflow-hidden">
             <div
               className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[90vh] sm:max-h-[85vh] animate-slide-up"
               onClick={(e) => e.stopPropagation()}
