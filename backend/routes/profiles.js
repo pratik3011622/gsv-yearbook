@@ -1,3 +1,4 @@
+const express = require('express');
 const { auth } = require('../middleware/auth');
 const { profileUpload } = require('../middleware/upload');
 const User = require('../models/User');
