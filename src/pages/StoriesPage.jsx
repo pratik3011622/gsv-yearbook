@@ -264,14 +264,14 @@ export const StoriesPage = ({ onNavigate }) => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredStories.map((story) => (
               <div
                 key={story._id || story.id}
                 className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col group h-full"
               >
                 {/* Cover Image */}
-                <div className="relative h-40 overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
                   {story.coverImageUrl ? (
                     <img
                       src={story.coverImageUrl}
@@ -332,20 +332,23 @@ export const StoriesPage = ({ onNavigate }) => {
 
                   {/* Footer */}
                   <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-5 mt-auto">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200 dark:border-slate-600">
-                        {/* Fallback avatar logic */}
-                        <div className="w-full h-full flex items-center justify-center bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400 font-bold text-sm">
-                          {story.author?.fullName?.charAt(0) || 'A'}
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Written By</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200 dark:border-slate-600">
+                          {/* Fallback avatar logic */}
+                          <div className="w-full h-full flex items-center justify-center bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400 font-bold text-[10px]">
+                            {story.author?.fullName?.charAt(0) || 'A'}
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">
-                          {story.author?.fullName || 'Alumni'}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          {story.author?.batchYear ? `Batch '${story.author.batchYear.toString().slice(-2)}` : 'Writer'}
-                        </p>
+                        <div className="flex flex-col leading-none">
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">
+                            {story.author?.fullName || 'Alumni'}
+                          </span>
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                            {story.author?.batchYear ? `Batch '${story.author.batchYear.toString().slice(-2)}` : 'Writer'}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
