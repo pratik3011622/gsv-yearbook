@@ -1,51 +1,31 @@
 import { useState } from 'react';
-import { Download, Eye, Calendar, FileText, X } from 'lucide-react';
+import { Eye, Calendar } from 'lucide-react';
 
 const magazineData = [
   {
     id: 4,
     title: 'TechnoBytes',
     description: 'Exploring the latest in technology, innovation, and digital trends from the GSV community.',
-    coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
+    coverImage: '/Screenshot 2026-01-24 162408.png',
+    
     pdfUrl: '/TechnoByte_Ed_2.pdf',
     issue: 'Edition 2',
     publishDate: '2026-01-19',
-    pages: 20,
+    pages: 5,
     featured: true
   },
   {
     id: 1,
     title: 'TechnoBytes',
     description: 'Exploring the latest in technology, innovation, and digital trends from the GSV community.',
-    coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
+    coverImage: '/Screenshot 2026-01-24 162439.png',
     pdfUrl: '/technobytes.pdf',
     issue: 'Edition 1',
-    publishDate: '2024-12-01',
-    pages: 20,
-    featured: true
-  },
-  {
-    id: 2,
-    title: 'GSV Connect - Winter 2024',
-    description: 'Celebrating achievements, sharing stories, and looking forward to new beginnings.',
-    coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
-    pdfUrl: '#',
-    issue: 'Vol. 1, Issue 1',
-    publishDate: '2024-12-15',
-    pages: 24,
-    featured: true
-  },
-  {
-    id: 3,
-    title: 'GSV Connect - Special Edition 2023',
-    description: 'Year-end recap, decade highlights, and vision for the future of GSV.',
-    coverImage: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600',
-    pdfUrl: '#',
-    issue: 'Special Edition',
-    publishDate: '2023-12-31',
-    pages: 32,
+    publishDate: '2025-08-06',
+    pages: 5,
     featured: true
   }
+ 
 ];
 
 export const MagazinePage = () => {
@@ -90,9 +70,9 @@ export const MagazinePage = () => {
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-primary-600 text-white rounded-full text-xs font-bold tracking-wide uppercase shadow-sm">
-                      Latest
-                    </span>
+                    {/* <span className="px-3 py-1 bg-primary-600 text-white rounded-full text-xs font-bold tracking-wide uppercase shadow-sm">
+                      
+                    </span> */}
                   </div>
                 </div>
 
@@ -116,21 +96,14 @@ export const MagazinePage = () => {
                     </p>
                   </div>
 
-                  <div className="mt-auto flex gap-4 pt-6 border-t border-slate-100 dark:border-slate-700">
+                  <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-700">
                     <button
-                      onClick={() => openMagazineModal(magazine)}
-                      className="flex-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-2"
+                      onClick={() => { if (magazine.pdfUrl && magazine.pdfUrl !== '#') window.open(magazine.pdfUrl, '_blank'); }}
+                      className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-2"
                     >
                       <Eye className="w-4 h-4" />
                       Read Now
                     </button>
-                    <a
-                      href={magazine.pdfUrl}
-                      download
-                      className="p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300 inline-block"
-                    >
-                      <Download className="w-5 h-5" />
-                    </a>
                   </div>
                 </div>
               </div>
@@ -162,25 +135,11 @@ export const MagazinePage = () => {
               </div>
             </div>
             <div className="relative bg-slate-100 dark:bg-slate-900 p-12 flex items-center justify-center min-h-[400px]">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                  <FileText className="w-10 h-10 text-slate-400 dark:text-slate-500" />
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
-                  Preview Unavailable
-                </h4>
-                <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm mx-auto">
-                  The PDF viewer requires a backend integration. You can download the file to view it.
-                </p>
-                <a
-                  href={selectedMagazine.pdfUrl}
-                  download
-                  className="bg-primary-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-primary-700 transition-all shadow-lg hover:shadow-primary-600/20 inline-flex items-center gap-2"
-                >
-                  <Download className="w-5 h-5" />
-                  Download PDF
-                </a>
-              </div>
+              <img
+                src={selectedMagazine.coverImage}
+                alt={selectedMagazine.title}
+                className="max-w-full max-h-[600px] object-contain rounded-lg shadow-lg"
+              />
             </div>
             <div className="p-8 bg-white dark:bg-slate-800">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">About this Issue</h4>

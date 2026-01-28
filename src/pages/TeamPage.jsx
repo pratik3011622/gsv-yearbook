@@ -14,7 +14,7 @@ const teamMembers = [
   {
     name: 'Pratik Ranjan',
     role: 'Developer',
-    img: '/team-pratik.jpg',
+    img: '/team-member-2.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/pratik-ranjan3011?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       instagram: 'https://www.instagram.com/pratik_ranjan_34?igsh=Z3R0aml4aWJlOHRs',
@@ -24,7 +24,7 @@ const teamMembers = [
   {
     name: 'Neeraj',
     role: 'Developer',
-    img: '/neeraj.jpg',
+    img: '/team-member-3-new.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/neerajkumar005/',
       instagram: 'https://www.instagram.com/neeraj.kohli005/',
@@ -34,7 +34,7 @@ const teamMembers = [
   {
     name: 'Vinamra Tiwari',
     role: 'Developer',
-    img: '/vinamra.png',
+    img: '/team-member-4.jpg',
     social: {
       linkedin: 'https://www.linkedin.com/in/vinamra-tiwari-ba3653345?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       instagram: 'https://www.instagram.com/vinamra_random',
@@ -65,7 +65,15 @@ export const TeamPage = () => {
               <div className="relative mb-6">
                 <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-white dark:border-slate-800">
                   {member.img ? (
-                    <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
+                    <img
+                      src={member.img}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                      style={{
+                        objectPosition: '50% 25%',
+                        transform: idx === 1 ? 'rotate(-2deg)' : 'none' // Rotate only the second member (index 1)
+                      }}
+                    />
                   ) : (
                     <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-4xl text-slate-400">
                       {member.name[0]}

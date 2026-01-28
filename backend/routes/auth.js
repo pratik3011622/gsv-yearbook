@@ -44,7 +44,11 @@ router.post('/register', verifyFirebase, async (req, res) => {
         }
       } else {
         console.log(`User ${email} already exists in MongoDB during register. UID: ${firebaseUid}`);
-        // Optional: Update details here too if we want registration to be "upsert" always
+        // Update role and other fields on re-registration
+        existingUser.role = role || 'student';
+        existingUser.fullName = fullName;
+        Object.assign(existingUser, otherFields);
+        await existingUser.save();
       }
     } catch (dbError) {
       console.error("MongoDB sync failed during register:", dbError.message);

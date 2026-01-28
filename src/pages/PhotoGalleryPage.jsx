@@ -2,89 +2,89 @@ import { useState } from 'react';
 import { X, Calendar, MapPin, Heart } from 'lucide-react';
 
 const photoData = [
-  {
-    id: 1,
-    title: 'Convocation Ceremony 2024',
-    description: 'Graduates celebrating their achievement with pride and joy.',
-    image: '',
-    date: '2024-07-15',
-    category: 'Events',
-    location: 'Main Auditorium',
-    span: 'md:col-span-2 md:row-span-2'
-  },
-  {
-    id: 2,
-    title: 'Campus Garden View',
-    description: 'The beautiful campus gardens in full bloom during spring.',
-    image: '/WhatsApp Image 2025-10-21 at 23.15.20_a3ba8370.jpg',
-    date: '2024-03-20',
-    category: 'Campus',
-    location: 'Central Garden',
-    span: 'md:col-span-1 md:row-span-1'
-  },
-  {
-    id: 3,
-    title: 'Alumni Reunion 2023',
-    description: 'Former students reconnecting and sharing memories from their college days.',
-    image: 'C:\Users\prati\Documents\WhatsApp Image 2026-01-17 at 9.19.39 PM.jpeg',
-    date: '2024-12-10',
-    category: 'Alumni',
-    location: 'Alumni Center',
-    span: 'md:col-span-1 md:row-span-2'
-  },
-  {
-    id: 4,
-    title: 'Research Lab',
-    description: 'Students working on innovative projects in our state-of-the-art research facilities.',
-    image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-09-15',
-    category: 'Academic',
-    location: 'Research Building',
-    span: 'md:col-span-1 md:row-span-1'
-  },
-  {
-    id: 5,
-    title: 'Sports Day 2024',
-    description: 'Athletes showcasing their skills and team spirit during the annual sports meet.',
-    image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-02-28',
-    category: 'Events',
-    location: 'Sports Complex',
-    span: 'md:col-span-1 md:row-span-1'
-  },
-  {
-    id: 6,
-    title: 'Library Study Area',
-    description: 'Students engaged in deep study and research in our modern library.',
-    image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-11-05',
-    category: 'Campus',
-    location: 'Central Library',
-    span: 'md:col-span-2 md:row-span-1'
-  },
-  {
-    id: 7,
-    title: 'Recent Photo 10',
-    description: 'Vibrant celebrations showcasing diverse cultures and talents.',
-    image: '/C1004T01.JPG',
-    date: '2024-01-18',
-    category: 'Events',
-    location: '',
-    span: 'md:col-span-2 md:row-span-1'
-  },
-  {
-    id: 8,
-    title: 'Graduation Hall',
-    description: 'The iconic graduation hall where dreams are realized and futures begin.',
-    image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-06-30',
-    category: 'Campus',
-    location: 'Graduation Hall',
-    span: 'md:col-span-2 md:row-span-1'
-  },
+  // {
+  //   id: 1,
+  //   title: 'Convocation Ceremony 2024',
+  //   description: 'Graduates celebrating their achievement with pride and joy.',
+  //   image: '/gsv-logo.png',
+  //   date: '2024-07-15',
+  //   category: 'Events',
+  //   location: 'Main Auditorium',
+  //   span: 'md:col-span-2 md:row-span-2'
+  // },
+  // {
+  //   id: 2,
+  //   title: 'Campus Garden View',
+  //   description: 'The beautiful campus gardens in full bloom during spring.',
+  //   image: '/WhatsApp Image 2025-10-21 at 23.15.20_a3ba8370.jpg',
+  //   date: '2024-03-20',
+  //   category: 'Campus',
+  //   location: 'Central Garden',
+  //   span: 'md:col-span-1 md:row-span-1'
+  // },
+  // {
+  //   id: 3,
+  //   title: 'Alumni Reunion 2023',
+  //   description: 'Former students reconnecting and sharing memories from their college days.',
+  //   image: 'C:\Users\prati\Documents\WhatsApp Image 2026-01-17 at 9.19.39 PM.jpeg',
+  //   date: '2024-12-10',
+  //   category: 'Alumni',
+  //   location: 'Alumni Center',
+  //   span: 'md:col-span-1 md:row-span-2'
+  // },
+  // {
+  //   id: 4,
+  //   title: 'Research Lab',
+  //   description: 'Students working on innovative projects in our state-of-the-art research facilities.',
+  //   image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
+  //   date: '2024-09-15',
+  //   category: 'Academic',
+  //   location: 'Research Building',
+  //   span: 'md:col-span-1 md:row-span-1'
+  // },
+  // {
+  //   id: 5,
+  //   title: 'Sports Day 2024',
+  //   description: 'Athletes showcasing their skills and team spirit during the annual sports meet.',
+  //   image: 'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=800',
+  //   date: '2024-02-28',
+  //   category: 'Events',
+  //   location: 'Sports Complex',
+  //   span: 'md:col-span-1 md:row-span-1'
+  // },
+  // {
+  //   id: 6,
+  //   title: 'Library Study Area',
+  //   description: 'Students engaged in deep study and research in our modern library.',
+  //   image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
+  //   date: '2024-11-05',
+  //   category: 'Campus',
+  //   location: 'Central Library',
+  //   span: 'md:col-span-2 md:row-span-1'
+  // },
+  // {
+  //   id: 7,
+  //   title: 'Recent Photo 10',
+  //   description: 'Vibrant celebrations showcasing diverse cultures and talents.',
+  //   image: '/C1004T01.JPG',
+  //   date: '2024-01-18',
+  //   category: 'Events',
+  //   location: '',
+  //   span: 'md:col-span-2 md:row-span-1'
+  // },
+  // {
+  //   id: 8,
+  //   title: 'Graduation Hall',
+  //   description: 'The iconic graduation hall where dreams are realized and futures begin.',
+  //   image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
+  //   date: '2024-06-30',
+  //   category: 'Campus',
+  //   location: 'Graduation Hall',
+  //   span: 'md:col-span-2 md:row-span-1'
+  // },
   {
     id: 9,
-    title: 'Recent Event Photo 1',
+    title: 'Photo 1',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.50.56 PM.jpeg',
     date: '2026-01-17',
@@ -94,7 +94,7 @@ const photoData = [
   },
   {
     id: 10,
-    title: 'Recent Event Photo 2',
+    title: ' Photo 2',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.50.57 PM.jpeg',
     date: '2026-01-17',
@@ -104,7 +104,7 @@ const photoData = [
   },
   {
     id: 11,
-    title: 'Recent Event Photo 3',
+    title: ' Photo 3',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.50.58 PM.jpeg',
     date: '2026-01-17',
@@ -114,7 +114,7 @@ const photoData = [
   },
   {
     id: 12,
-    title: 'Recent Event Photo 4',
+    title: ' Photo 4',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.51.09 PM.jpeg',
     date: '2026-01-17',
@@ -124,7 +124,7 @@ const photoData = [
   },
   {
     id: 13,
-    title: 'Recent Event Photo 5',
+    title: ' Photo 5',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.51.10 PM.jpeg',
     date: '2026-01-17',
@@ -134,7 +134,7 @@ const photoData = [
   },
   {
     id: 14,
-    title: 'Recent Event Photo 6',
+    title: ' Photo 6',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.58.36 PM.jpeg',
     date: '2026-01-17',
@@ -144,7 +144,7 @@ const photoData = [
   },
   {
     id: 15,
-    title: 'Recent Event Photo 7',
+    title: ' Photo 7',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 9.04.29 PM.jpeg',
     date: '2026-01-17',
@@ -154,7 +154,7 @@ const photoData = [
   },
   {
     id: 16,
-    title: 'Recent Event Photo 8',
+    title: ' Photo 8',
     description: 'A memorable moment from recent activities.',
     image: '/Copy of AGNEE 4.png',
     date: '2026-01-17',
@@ -164,7 +164,7 @@ const photoData = [
   },
   {
     id: 17,
-    title: 'Recent Event Photo 9',
+    title: ' Photo 9',
     description: 'A memorable moment from recent activities.',
     image: '/WhatsApp Image 2026-01-17 at 8.51.11 PM.jpeg',
     date: '2026-01-17',
@@ -172,6 +172,19 @@ const photoData = [
     location: '',
     span: 'md:col-span-1 md:row-span-1'
   },
+
+
+  {
+    id: 7,
+    title: ' Photo 10',
+    description: 'Vibrant celebrations showcasing diverse cultures and talents.',
+    image: '/C1004T01.JPG',
+    date: '2024-01-18',
+    category: 'Events',
+    location: '',
+    span: 'md:col-span-2 md:row-span-1'
+  },
+
   {
     id: 18,
     title: 'Alumni Reunion 2025',
