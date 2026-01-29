@@ -20,33 +20,33 @@ const eventData = [
     location: 'Tech Auditorium',
     event_type: 'Techfest'
   },
-  {
-    id: 3,
-    title: 'Alumni Reunion 2025',
-    description: 'Reconnect with old friends and reminisce about the good old days at GSV.',
-    imageUrl: '/cultural.jpg',
-    eventDate: '2025-12-15',
-    location: 'Main Auditorium',
-    event_type: 'Reunion'
-  },
-  {
-    id: 4,
-    title: 'Tech Conference 2025',
-    description: 'Latest trends in technology and networking opportunities.',
-    imageUrl: '/slide4.jpg',
-    eventDate: '2025-11-20',
-    location: 'Conference Hall',
-    event_type: 'Conference'
-  },
-  {
-    id: 5,
-    title: 'Cultural Fest 2024',
-    description: 'Celebrate diversity through music, dance, and cultural performances.',
-    imageUrl: '/cultural.jpg',
-    eventDate: '2024-10-10',
-    location: 'Open Air Theatre',
-    event_type: 'Cultural'
-  },
+  // {
+  //   id: 3,
+  //   title: 'Alumni Reunion 2025',
+  //   description: 'Reconnect with old friends and reminisce about the good old days at GSV.',
+  //   imageUrl: '/cultural.jpg',
+  //   eventDate: '2025-12-15',
+  //   location: 'Main Auditorium',
+  //   event_type: 'Reunion'
+  // },
+  // {
+  //   id: 4,
+  //   title: 'Tech Conference 2025',
+  //   description: 'Latest trends in technology and networking opportunities.',
+  //   imageUrl: '/slide4.jpg',
+  //   eventDate: '2025-11-20',
+  //   location: 'Conference Hall',
+  //   event_type: 'Conference'
+  // },
+  // {
+  //   id: 5,
+  //   title: 'Cultural Fest 2024',
+  //   description: 'Celebrate diversity through music, dance, and cultural performances.',
+  //   imageUrl: '/cultural.jpg',
+  //   eventDate: '2024-10-10',
+  //   location: 'Open Air Theatre',
+  //   event_type: 'Cultural'
+  // },
   {
     id: 6,
     title: 'AGNEE - Annual Cultural Fest',
@@ -56,15 +56,15 @@ const eventData = [
     location: 'Open Air Theatre',
     event_type: 'Cultural Fest'
   },
-  {
-    id: 7,
-    title: 'Induction Ceremony 2024',
-    description: 'Welcome new students to the GSV family.',
-    imageUrl: '/induction-video.mov',
-    eventDate: '2024-08-01',
-    location: 'Main Hall',
-    event_type: 'Ceremony'
-  }
+  // {
+  //   id: 7,
+  //   title: 'Induction Ceremony 2024',
+  //   description: 'Welcome new students to the GSV family.',
+  //   imageUrl: '/induction-video.mov',
+  //   eventDate: '2024-08-01',
+  //   location: 'Main Hall',
+  //   event_type: 'Ceremony'
+  // }
 ];
 
 export const EventsPage = ({ onNavigate }) => {
