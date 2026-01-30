@@ -299,6 +299,8 @@ export const RegisterPage = ({ onNavigate }) => {
                   onChange={handleChange}
                   className="w-full px-6 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
                   placeholder="2020"
+                  min="1000"
+                  max="9999"
                   required
                 />
               </div>
