@@ -357,25 +357,7 @@ export const DirectoryPage = ({ onNavigate }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-5 mt-auto">
-                  <div className="flex items-center">
-                    {profile.linkedinUrl ? (
-                      <a
-                        href={profile.linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 text-slate-400 hover:text-[#0077b5] hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors"
-                        title="LinkedIn Profile"
-                      >
-                        <Linkedin className="w-5 h-5" />
-                      </a>
-                    ) : (
-                      <div className="p-2 text-slate-300 dark:text-slate-700">
-                        <Linkedin className="w-5 h-5" />
-                      </div>
-                    )}
-                  </div>
-
+                <div className="flex items-center justify-end border-t border-slate-100 dark:border-slate-800 pt-5 mt-auto">
                   <button
                     onClick={() => profile.linkedinUrl ? window.open(profile.linkedinUrl, '_blank') : alert('LinkedIn profile not available')}
                     className="inline-flex items-center px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-primary-600 dark:hover:bg-slate-200 transition-all shadow-lg hover:shadow-primary-600/30 dark:hover:shadow-white/20"
