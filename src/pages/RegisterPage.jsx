@@ -2,6 +2,13 @@ import { useState } from 'react';
 import { Mail, Lock, User, GraduationCap, Building, MapPin, Eye, EyeOff, Linkedin } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
+// LinkedIn URL validation function
+const validateLinkedInUrl = (url) => {
+  // Validates LinkedIn profile URLs in format: https://linkedin.com/in/username
+  const linkedInRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
+  return linkedInRegex.test(url);
+};
+
 export const RegisterPage = ({ onNavigate }) => {
   const [formData, setFormData] = useState({
     email: '',
@@ -21,12 +28,23 @@ export const RegisterPage = ({ onNavigate }) => {
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
   const [success, setSuccess] = useState(false);
+  const [linkedinError, setLinkedinError] = useState('');
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Real-time LinkedIn URL validation for alumni
+    if (name === 'linkedinUrl' && formData.role === 'alumni') {
+      if (value && !validateLinkedInUrl(value)) {
+        setLinkedinError('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)');
+      } else {
+        setLinkedinError('');
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -52,6 +70,12 @@ export const RegisterPage = ({ onNavigate }) => {
     if (formData.role === 'alumni') {
       if (!formData.linkedinUrl) {
         setError('LinkedIn profile is required for alumni registration');
+        return;
+      }
+
+      // Validate LinkedIn URL format
+      if (formData.linkedinUrl && !validateLinkedInUrl(formData.linkedinUrl)) {
+        setError('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/username)');
         return;
       }
 
@@ -382,20 +406,29 @@ export const RegisterPage = ({ onNavigate }) => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      LinkedIn Profile URL
+                      LinkedIn Profile URL <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <Linkedin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <Linkedin className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${linkedinError ? 'text-red-400' : 'text-slate-400'}`} />
                       <input
                         type="url"
                         name="linkedinUrl"
                         value={formData.linkedinUrl}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all"
+                        className={`w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border rounded-full focus:ring-2 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400 transition-all ${
+                          linkedinError
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-slate-200 dark:border-slate-700 focus:ring-primary-500'
+                        }`}
                         placeholder="https://linkedin.com/in/username"
                         required
                       />
                     </div>
+                    {linkedinError && (
+                      <p className="mt-1 text-sm text-red-500 animate-pulse">
+                        {linkedinError}
+                      </p>
+                    )}
                   </div>
                 </div>
               </>
