@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Share2, Facebook, Twitter, Linkedin, Instagram, ChevronDown, Moon, Sun } from 'lucide-react';
+import { Share2, Facebook, Linkedin, Instagram, ChevronDown, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { ProfileSection } from './ProfileSection';

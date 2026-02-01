@@ -145,12 +145,8 @@ export const VideoGalleryPage = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-4 mx-auto">
-                      <Play className="w-10 h-10 text-white ml-1" fill="white" />
-                    </div>
-                    <h3 className="text-2xl lg:text-3xl font-bold mb-2 drop-shadow-lg">{video.title}</h3>
-                    <p className="text-lg text-white/90 drop-shadow-md max-w-md mx-auto">{video.description}</p>
+                  <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto">
+                    <Play className="w-10 h-10 text-white ml-1" fill="white" />
                   </div>
                 </div>
               </div>

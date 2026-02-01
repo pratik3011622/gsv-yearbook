@@ -1,4 +1,4 @@
-import { Linkedin, Instagram, Github, Twitter } from 'lucide-react';
+import { Linkedin, Instagram, Github } from 'lucide-react';
 
 const teamMembers = [
   {

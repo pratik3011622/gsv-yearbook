@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { motion } from 'framer-motion';
-import { Facebook, Linkedin, Instagram, Twitter, Mail, Phone, MapPin, ExternalLink, Briefcase, Award, Search, Users, Calendar, Globe, Zap, Building2 } from 'lucide-react';
+import { Facebook, Linkedin, Instagram, Mail, Phone, MapPin, ExternalLink, Briefcase, Award, Search, Users, Calendar, Globe, Zap, Building2 } from 'lucide-react';
+
+// Custom X (Twitter) logo component
+const XIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export const HomePage = ({ onNavigate }) => {
   const { isDark } = useTheme();
@@ -374,7 +381,7 @@ export const HomePage = ({ onNavigate }) => {
                   { Icon: Facebook, link: "https://www.facebook.com/gsv.ac.in/" },
                   { Icon: Linkedin, link: "https://www.linkedin.com/school/gatishaktivishwavidyalaya/" },
                   { Icon: Instagram, link: "https://www.instagram.com/gsv.vadodara/" },
-                  { Icon: Twitter, link: "https://x.com/gsv_vadodara" }
+                  { Icon: XIcon, link: "https://x.com/gsv_vadodara" }
                 ].map(({ Icon, link }, idx) => (
                   <a key={idx} href={link} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white transition-all duration-300 hover:bg-primary-600 hover:-translate-y-0.5">
                     <Icon size={18} />
