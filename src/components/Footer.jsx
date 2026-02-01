@@ -70,7 +70,7 @@ export const Footer = () => {
               </li>
               <li className="flex items-center gap-3 text-slate-400 text-sm">
                 <Mail size={18} className="flex-shrink-0 text-blue-500" />
-                <span>alumni@gsv.ac.in</span>
+                <a href="mailto:technocrats@gsv.ac.in" className="hover:text-white transition-colors">technocrats@gsv.ac.in</a>
               </li>
             </ul>
           </div>
