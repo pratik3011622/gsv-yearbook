@@ -23,7 +23,7 @@ export const Footer = () => {
               <div className="flex flex-col">
                 <span className="font-serif text-2xl font-bold text-white leading-none">GSVConnect</span>
                 <span className="text-sm text-slate-400 font-sans">गति शक्ति विश्वविद्यालय</span>
-                <span className="text-[11px] font-brand font-semibold tracking-[0.15em] uppercase text-slate-500 mt-1">Gati Shakti Vishwavidyalaya</span>
+                <span className="text-[11px] font-brand font-semibold tracking-[0.15em] uppercase text-slate-500 leading-tight">Gati Shakti Vishwavidyalaya</span>
               </div>
             </div>
             <p className="leading-relaxed text-slate-400 mb-6">
