@@ -76,8 +76,8 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between">
-          <p className="text-sm text-slate-500">
+        <div className="pt-4">
+          <p className="text-sm text-slate-500 text-center">
             © {new Date().getFullYear()} Gati Shakti Vishwavidyalaya. All rights reserved.
           </p>
         </div>
