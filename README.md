@@ -88,31 +88,6 @@ https://sampleyearbook-frontend.vercel.app/
 
 ---
 
-🏗️ Project Structure
-
-GSVConnect/
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ ├── assets/
-│ │ ├── services/
-│ │ └── App.jsx
-│ └── package.json
-│
-├── backend/
-│ ├── models/
-│ ├── routes/
-│ ├── controllers/
-│ ├── middleware/
-│ ├── server.js
-│ └── package.json
-│
-└── README.md
-
-
----
-
 
 🎯 Project Type
 College-only project
