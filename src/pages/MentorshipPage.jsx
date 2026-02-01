@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Users, MessageCircle, Calendar, Star, UserPlus, CheckCircle, Clock, Award } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { Footer } from '../components/Footer';
 
 export const MentorshipPage = ({ onNavigate }) => {
   const [mentors, setMentors] = useState([]);
@@ -386,6 +387,8 @@ export const MentorshipPage = ({ onNavigate }) => {
           </>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };

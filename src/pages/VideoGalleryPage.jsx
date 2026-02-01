@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Play, Calendar, User, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Calendar, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 const videoData = [
   {
@@ -288,6 +289,8 @@ export const VideoGalleryPage = () => {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 };

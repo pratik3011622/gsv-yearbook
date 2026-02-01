@@ -38,7 +38,7 @@ const validateJob = (req, res, next) => {
     return res.status(400).json({ message: 'All job fields are required' });
   }
 
-  const validJobTypes = ['full-time', 'part-time', 'internship', 'contract'];
+  const validJobTypes = ['full-time', 'part-time', 'internship', 'contract', 'freelance'];
   if (!validJobTypes.includes(jobType)) {
     return res.status(400).json({ message: 'Invalid job type' });
   }

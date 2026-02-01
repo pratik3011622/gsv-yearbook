@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Eye, Calendar } from 'lucide-react';
+import { Eye, Calendar, X } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 const magazineData = [
   {
@@ -150,6 +151,8 @@ export const MagazinePage = () => {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, MapPin, Linkedin, Briefcase, GraduationCap, Filter, X, Users, Building2, Award, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { Footer } from '../components/Footer';
 
 export const DirectoryPage = ({ onNavigate }) => {
   const { user } = useAuth();
@@ -46,27 +47,38 @@ export const DirectoryPage = ({ onNavigate }) => {
       filtered = filtered.filter(
         (profile) =>
           profile.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          profile.company?.toLowerCase().includes(searchTerm.toLowerCase())
+          profile.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          profile.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          profile.batchYear?.toString().includes(searchTerm) ||
+          profile.location?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Apply batch year filter
     if (batchYearFilter) {
-      filtered = filtered.filter((profile) => profile.batchYear === batchYearFilter);
+      filtered = filtered.filter((profile) => 
+        profile.batchYear?.toString() === batchYearFilter.toString()
+      );
     }
 
     // Apply department filter
     if (departmentFilter) {
-      filtered = filtered.filter((profile) => profile.department === departmentFilter);
+      filtered = filtered.filter((profile) => 
+        profile.department?.toLowerCase() === departmentFilter.toLowerCase()
+      );
     }
 
     // Apply location filter
     if (locationFilter) {
-      if (locationFilter === 'remote') {
-        filtered = filtered.filter(profile => profile.location?.toLowerCase().includes('remote'));
-      } else {
-        filtered = filtered.filter(profile => profile.location?.toLowerCase().includes(locationFilter));
-      }
+      filtered = filtered.filter((profile) => {
+        const profileLocation = profile.location?.toLowerCase() || '';
+        const filterLocation = locationFilter.toLowerCase();
+        
+        if (filterLocation === 'remote') {
+          return profileLocation.includes('remote');
+        }
+        return profileLocation.includes(filterLocation);
+      });
     }
 
     setFilteredProfiles(filtered);
@@ -371,6 +383,8 @@ export const DirectoryPage = ({ onNavigate }) => {
           </div>
         )}
       </div>
+
+      <Footer />
     </div >
   );
 };

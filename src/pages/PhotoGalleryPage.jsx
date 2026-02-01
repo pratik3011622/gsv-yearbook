@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, Calendar, MapPin, Heart } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 const photoData = [
   // {
@@ -367,6 +368,8 @@ export const PhotoGalleryPage = () => {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { Footer } from '../components/Footer';
 
 export const StoriesPage = ({ onNavigate }) => {
   const [stories, setStories] = useState([]);
@@ -369,6 +370,8 @@ export const StoriesPage = ({ onNavigate }) => {
           </div>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };

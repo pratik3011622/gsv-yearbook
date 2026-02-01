@@ -1,4 +1,5 @@
 import { Linkedin, Instagram, Github } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 const teamMembers = [
   {
@@ -45,7 +46,8 @@ const teamMembers = [
 
 export const TeamPage = () => {
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+      <div className="flex-1 pb-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Header */}
@@ -114,6 +116,8 @@ export const TeamPage = () => {
 
 
       </div>
+      </div>
+      <Footer />
     </div>
   );
 };

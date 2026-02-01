@@ -1,8 +1,10 @@
 import React from 'react';
+import { Footer } from '../components/Footer';
 
 export const VisionMissionPage = () => {
     return (
-        <div className="min-h-screen pt-24 pb-20 bg-white dark:bg-slate-900 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div className="flex-1 pb-8">
             {/* Hero Header */}
             <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-20 text-center">
                 <p className="text-slate-500 dark:text-slate-400 font-bold tracking-widest uppercase text-xs mb-4">Our Purpose</p>
@@ -89,6 +91,8 @@ export const VisionMissionPage = () => {
 
 
             </div>
+            </div>
+            <Footer />
         </div>
     );
 };

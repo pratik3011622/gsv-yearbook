@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 const eventData = [
   {
@@ -174,6 +175,7 @@ export const EventsPage = ({ onNavigate }) => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

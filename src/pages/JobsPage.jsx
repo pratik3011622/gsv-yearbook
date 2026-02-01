@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { Footer } from '../components/Footer';
 
 export const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -576,6 +577,8 @@ export const JobsPage = () => {
           document.body
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };
