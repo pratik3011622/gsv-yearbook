@@ -301,7 +301,9 @@ export const HomePage = ({ onNavigate }) => {
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 dark:text-white">Email Us</h4>
-                  <p className="text-slate-500 dark:text-slate-400">alumni@gsv.ac.in</p>
+                  <a href="mailto:technocrats@gsv.ac.in" className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    technocrats@gsv.ac.in
+                  </a>
                 </div>
               </div>
 
