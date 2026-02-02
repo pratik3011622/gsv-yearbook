@@ -185,4 +185,4 @@ For questions or support, reach out to:
 
 - Gati Shakti Vishwavidyalaya
 - All contributors and alumni
-- Open source community
+- TechnoCrats Club
