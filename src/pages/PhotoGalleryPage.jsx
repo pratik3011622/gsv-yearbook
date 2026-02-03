@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Calendar, MapPin, Heart } from 'lucide-react';
+import { X, Calendar, MapPin, Heart, Download, Share2 } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 const photoData = [
@@ -203,6 +203,60 @@ const categories = ['All', 'Events', 'Campus', 'Alumni', 'Academic'];
 export const PhotoGalleryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [likedPhotos, setLikedPhotos] = useState(new Set());
+
+  const handleLike = (photoId) => {
+    setLikedPhotos(prev => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(photoId)) {
+        newLiked.delete(photoId);
+      } else {
+        newLiked.add(photoId);
+      }
+      return newLiked;
+    });
+  };
+
+  const handleDownload = async (photo) => {
+    try {
+      const response = await fetch(photo.image);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = photo.title || 'photo';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
+  const handleShare = async (photo) => {
+    const shareData = {
+      title: photo.title,
+      text: photo.description,
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.error('Share cancelled:', error);
+      }
+    } else {
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      } catch (error) {
+        console.error('Clipboard copy failed:', error);
+      }
+    }
+  };
 
   const filteredPhotos = selectedCategory === 'All'
     ? photoData
@@ -355,13 +409,29 @@ export const PhotoGalleryPage = () => {
 
               <div className="mt-auto p-6 border-t border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50">
                 <div className="flex items-center justify-between">
-                  <button className="flex items-center space-x-2 text-slate-500 hover:text-red-500 transition-colors">
-                    <Heart className="w-5 h-5" />
-                    <span className="text-sm font-medium">Like</span>
+                  <button 
+                    onClick={() => handleLike(selectedPhoto.id)}
+                    className={`flex items-center space-x-2 transition-colors ${likedPhotos.has(selectedPhoto.id) ? 'text-red-500' : 'text-slate-500 hover:text-red-500'}`}
+                  >
+                    <Heart className={`w-5 h-5 ${likedPhotos.has(selectedPhoto.id) ? 'fill-current' : ''}`} />
+                    <span className="text-sm font-medium">{likedPhotos.has(selectedPhoto.id) ? 'Liked' : 'Like'}</span>
                   </button>
-                  <button className="text-sm font-semibold text-primary-600 hover:text-primary-700">
-                    Download / Share
-                  </button>
+                  <div className="flex items-center space-x-4">
+                    <button 
+                      onClick={() => handleDownload(selectedPhoto)}
+                      className="flex items-center space-x-1 text-slate-500 hover:text-primary-600 transition-colors"
+                    >
+                      <Download className="w-5 h-5" />
+                      <span className="text-sm font-medium">Download</span>
+                    </button>
+                    <button 
+                      onClick={() => handleShare(selectedPhoto)}
+                      className="flex items-center space-x-1 text-slate-500 hover:text-primary-600 transition-colors"
+                    >
+                      <Share2 className="w-5 h-5" />
+                      <span className="text-sm font-medium">Share</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
