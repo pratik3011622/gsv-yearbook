@@ -178,8 +178,8 @@ router.get('/me', auth, async (req, res) => {
             email,
             firebaseUid,
             fullName: fullName || 'User',
-            avatarUrl: picture
-            // role defaults to 'alumni' in model
+            avatarUrl: picture,
+            role: 'student' // Default to student to prevent auto-creation as alumni
           });
           await user.save();
           console.log(`[GET /me] User auto-created successfully.`);
