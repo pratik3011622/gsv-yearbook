@@ -128,9 +128,17 @@ export const AuthProvider = ({ children }) => {
       setUser(prev => ({ ...prev, ...newProfileData, id: newUser.uid }));
     } catch (err) {
       console.error("AuthContext: MongoDB registration failed", err);
-      // We still proceed to verification, but log the error (and alert for visibility)
-      console.warn(`Registration warning: Profile data sync failed (${err.message}). Self-healing will resolve this on next login.`);
-      // Suppress alert as it confuses users and self-healing handles role assignment now
+
+      // CRITICAL FIX: Rollback Firebase user creation if DB sync fails
+      // This prevents "User" name issues and inconsistent state
+      try {
+        await newUser.delete();
+        console.log("AuthContext: Rolled back Firebase user creation");
+      } catch (deleteErr) {
+        console.error("AuthContext: Failed to rollback Firebase user", deleteErr);
+      }
+
+      throw new Error(`Registration failed: ${err.message || "Database sync error"}. Please try again.`);
     }
 
     // Send verification email

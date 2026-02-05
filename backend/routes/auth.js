@@ -174,24 +174,37 @@ router.get('/me', auth, async (req, res) => {
           await user.save();
         } else {
           console.log(`[GET /me] User not found by email. Creating new...`);
+          // Fetch latest profile from Firebase to be sure
+          let latestName = fullName || 'User';
+          let latestPicture = picture;
+
+          try {
+            const fbRecord = await admin.auth().getUser(firebaseUid);
+            if (fbRecord.displayName) latestName = fbRecord.displayName;
+            if (fbRecord.photoURL) latestPicture = fbRecord.photoURL;
+            console.log(`[GET /me] Fetched fresh data from Firebase: ${latestName}`);
+          } catch (fbErr) {
+            console.warn(`[GET /me] Could not fetch fresh FB data: ${fbErr.message}`);
+          }
+
           user = new User({
             email,
             firebaseUid,
-            fullName: fullName || 'User',
-            avatarUrl: picture,
+            fullName: latestName,
+            avatarUrl: latestPicture,
             role: (() => {
-               // Auto-detect role based on email pattern
-               const yearMatch = email.match(/_btech(\d{2})@gsv\.ac\.in$/i);
-               if (yearMatch) {
-                 const startYear = 2000 + parseInt(yearMatch[1]);
-                 const currentYear = new Date().getFullYear();
-                 // If 4 or more years have passed since start year, likely alumni
-                 // e.g. 2020 start + 4 = 2024. In 2025, they are alumni.
-                 if (currentYear - startYear >= 4) return 'alumni';
-                 return 'student';
-               }
-               // Fallback for non-btech emails or parsing failures
-               return 'student'; 
+              // Auto-detect role based on email pattern
+              const yearMatch = email.match(/_btech(\d{2})@gsv\.ac\.in$/i);
+              if (yearMatch) {
+                const startYear = 2000 + parseInt(yearMatch[1]);
+                const currentYear = new Date().getFullYear();
+                // If 4 or more years have passed since start year, likely alumni
+                // e.g. 2020 start + 4 = 2024. In 2025, they are alumni.
+                if (currentYear - startYear >= 4) return 'alumni';
+                return 'student';
+              }
+              // Fallback for non-btech emails or parsing failures
+              return 'student';
             })()
           });
           await user.save();
