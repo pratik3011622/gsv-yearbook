@@ -179,7 +179,20 @@ router.get('/me', auth, async (req, res) => {
             firebaseUid,
             fullName: fullName || 'User',
             avatarUrl: picture,
-            role: 'student' // Default to student to prevent auto-creation as alumni
+            role: (() => {
+               // Auto-detect role based on email pattern
+               const yearMatch = email.match(/_btech(\d{2})@gsv\.ac\.in$/i);
+               if (yearMatch) {
+                 const startYear = 2000 + parseInt(yearMatch[1]);
+                 const currentYear = new Date().getFullYear();
+                 // If 4 or more years have passed since start year, likely alumni
+                 // e.g. 2020 start + 4 = 2024. In 2025, they are alumni.
+                 if (currentYear - startYear >= 4) return 'alumni';
+                 return 'student';
+               }
+               // Fallback for non-btech emails or parsing failures
+               return 'student'; 
+            })()
           });
           await user.save();
           console.log(`[GET /me] User auto-created successfully.`);
