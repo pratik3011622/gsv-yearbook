@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Play, Calendar, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Calendar, User, ChevronLeft, ChevronRight , X } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 const videoData = [
